@@ -346,6 +346,10 @@ class Shinwon:
     def clear_product_info(self):
         self.dic_product.clear()
 
+    def get_size_cnt(self):
+        return self.size_count
+
+
 """
 if __name__ == '__main__':
     # 판다스 Dataframe 많은 데이터 출력하기
