@@ -332,8 +332,13 @@ class Shinwon:
         #print(df_product_info.iloc[:, col_idx1].values[0])
         self.dic_product['상품특성 값'] = df_product_info.iloc[:, col_idx1].values[0]
 
-        print('사이즈 개수 : ', self.dic_product['기준\n사이즈'].count('/'))
-        self.size_count = self.dic_product['기준\n사이즈'].count('/') + 1     # /(슬래쉬)가 1개 이면 사이즈는 2개이다.
+        # 사이즈 개수 세기
+        token = ['/', ',']
+        self.size_count = 1     # 최소 1개이므로.
+        for tk in token:
+            self.size_count += self.dic_product['기준\n사이즈'].count(tk)
+        print('사이즈 개수 : ', self.size_count)
+
         for i in range(self.size_count):
             str_key = "사이즈%d" % i
             self.dic_product[str_key] = df_product_info.iloc[:, col_idx2+i].values[0]
