@@ -108,7 +108,10 @@ class WindowClass(QMainWindow, form_class):
         comp = re.compile('[^a-zA-Z/]')
         color = comp.sub('', value)
         color = color.split("/")
+        #색분류
         print(color)
+
+
 
         self.mkimg.setPath(self.path, self.poombun)
         self.mkimg.makeFV(self.poombun, color[0])
