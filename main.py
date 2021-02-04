@@ -8,16 +8,15 @@ class MakeImg:
         self.base_width = 700
         self.base_height = 5500
         self.area = (50, 150, 550, 550)
-        self.result = Image.new("RGB", (self.base_width, self.base_height), (255, 255, 255))
+        self.fullimage = Image.new("RGB",(self.base_width, self.base_height), (255, 255, 255))
 
     def setPath(self, path, itemnumber):
         self.path = f"{path}/{itemnumber}"
-        #self.path = 'D:\\GitHub\\ImageMaking\\01_data\\man\\PBJAX2032'
 
     def makeFV(self, itemnumber, color):
         self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
-        self.tag = Image.open("image/FullView.jpg")
+        self.tag = Image.open("01_data/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
@@ -48,7 +47,7 @@ class MakeImg:
         self.detailview.paste(self.tag, (0, 0))
         detail_ptr += 50
 
-        str_tmp = f"{self.path}\\{itemnumber}_{color}_4.jpg"
+        str_tmp = f"{self.path}/{itemnumber}_{color}_4.jpg"
         self.img = Image.open(str_tmp)
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
@@ -61,11 +60,12 @@ class MakeImg:
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 10
 
+        '''
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-
+        '''
         self.detailview.save("test_detail.jpg", quallity=95)
 
         return self.detailview
@@ -133,13 +133,18 @@ class MakeImg:
 
         return self.infoview
 
+    def combineImg(self):
+        self.fullimage.paste(self.fullview, (0,0))
+        self.fullimage.paste(self.detailview, (0, self.fullview.height))
+        self.fullimage.paste(self.infoview, (0, self.fullview.height + self.detailview.height))
+        self.fullimage.save("test_fullimage.jpg", quallity=95)
 
     def drawtext(self, image, text, x, y):
         ImageDraw.Draw(image).text((x, y), text, font=fnt, fill=(0, 0, 0))
 
 
 if __name__ == '__main__':
-    itemnumber = "PBPAX2032"
+    itemnumber = "PBJAX2032"
     color = "GY"
 
     mkImage = MakeImg()
@@ -149,4 +154,7 @@ if __name__ == '__main__':
     mkImage.setPath("D:/GitHub/ImageMaking/01_data/man", itemnumber)
     #mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
 
+    mkImage.makeFV("PBJAX2032", "GY")
     mkImage.makeDV("PBJAX2032", "GY")
+    mkImage.makeInfo()
+    mkImage.combineImg()

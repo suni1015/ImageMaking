@@ -105,15 +105,17 @@ class WindowClass(QMainWindow, form_class):
             self.tb_poombun_info.setPlainText("안내 : 품번체계는 9자 입니다.")
             return
         value = self.sw_obj.dic_product["컬러"]
-        comp = re.compile('[^a-zA-Z,]')
+        comp = re.compile('[^a-zA-Z/]')
         color = comp.sub('', value)
+        #color = color.split()
         print(color)
 
         self.mkimg.setPath(self.path, self.poombun)
-        self.mkimg.makeDV(self.edt_poombun.text(), self.poombun)
-        value = self.sw_obj.dic_product["사이즈5"]
-        text = value.split("\n")
-        print(text)
+        self.mkimg.makeFV(self.poombun, color)
+        self.mkimg.makeDV(self.poombun, color)
+        self.mkimg.makeInfo()
+        self.mkimg.combineImg()
+
         return
 
 
