@@ -107,12 +107,12 @@ class WindowClass(QMainWindow, form_class):
         value = self.sw_obj.dic_product["컬러"]
         comp = re.compile('[^a-zA-Z/]')
         color = comp.sub('', value)
-        #color = color.split()
+        color = color.split("/")
         print(color)
 
         self.mkimg.setPath(self.path, self.poombun)
-        self.mkimg.makeFV(self.poombun, color)
-        self.mkimg.makeDV(self.poombun, color)
+        self.mkimg.makeFV(self.poombun, color[0])
+        self.mkimg.makeDV(self.poombun, color[0])
         self.mkimg.makeInfo()
         self.mkimg.combineImg()
 
