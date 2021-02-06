@@ -8,7 +8,7 @@ class MakeImg:
         self.base_width = 700
         self.base_height = 5500
         self.area = (50, 150, 550, 550)
-        self.fullimage = Image.new("RGB",(self.base_width, self.base_height), (255, 255, 255))
+        self.fullimage = Image.new("RGB", (self.base_width, self.base_height), (255, 255, 255))
 
     def setPath(self, path, itemnumber):
         self.path = f"{path}/{itemnumber}"
@@ -134,7 +134,7 @@ class MakeImg:
         return self.infoview
 
     def combineImg(self):
-        self.fullimage.paste(self.fullview, (0,0))
+        self.fullimage.paste(self.fullview, (0, 0))
         self.fullimage.paste(self.detailview, (0, self.fullview.height))
         self.fullimage.paste(self.infoview, (0, self.fullview.height + self.detailview.height))
         self.fullimage.save("test_fullimage.jpg", quallity=95)
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     path = "D:\\GitHub\\ImageMaking\\01_data\\man"
 
     mkImage.setPath("D:/GitHub/ImageMaking/01_data/man", itemnumber)
-    #mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
+    # mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
 
     mkImage.makeFV("PBJAX2032", "GY")
     mkImage.makeDV("PBJAX2032", "GY")
