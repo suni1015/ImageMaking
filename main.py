@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
 
+pdt_name = ImageFont.truetype("01_data/NanumGothic.ttf", 17, encoding="UTF-8")
 fnt = ImageFont.truetype("01_data/NanumGothic.ttf", 15, encoding="UTF-8")
+fnt_tip = ImageFont.truetype("01_data/NanumGothic.ttf", 12, encoding="UTF-8")
 
 
 class MakeImg:
@@ -13,7 +16,7 @@ class MakeImg:
     def setPath(self, path, itemnumber):
         self.path = f"{path}/{itemnumber}"
 
-    def makeFV(self, itemnumber, color):
+    def makeFV1(self, itemnumber, color):
         self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
@@ -31,6 +34,31 @@ class MakeImg:
 
         self.full_ptr += self.img.height + 100
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_3.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.fullview.save("test.jpg", quality=95)
+
+        return self.fullview
+
+    def makeFV2(self, itemnumber, color1, color2):
+        self.full_ptr = 0
+        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
+        self.tag = Image.open("01_data/image/FullView.jpg")
+        self.fullview.paste(self.tag, (0, 20))
+
+        self.full_ptr += 50
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_1.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.full_ptr += self.img.height + 100
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.full_ptr += self.img.height + 100
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_2.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
@@ -118,20 +146,63 @@ class MakeImg:
             self.drawtext(self.infoview, list[i], 50 + (i * 160), self.info_ptr + 15)
         self.info_ptr += 100
 
-        self.img = Image.open("01_data/image/SizeSpec.jpg")
-        self.infoview.paste(self.img, (0, self.info_ptr))
-
-        self.info_ptr += 50
-
-        for i in range(0, 4):
-            self.infoview.paste(self.size_table, (0, self.info_ptr))
-            self.info_ptr += 40
-
-        ImageDraw.Draw(self.infoview).text((45, self.info_ptr + 10), "test", font=fnt, fill=(0, 0, 0))
-
         self.infoview.save("test_info.jpg", quallity=95)
 
         return self.infoview
+
+    def info_size(self):
+
+        # 사이즈 고시할 공간
+        # value = "사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이"
+        value_list = value.split("/n")
+
+        self.size_table = Image.new("RGB", (self.base_width - 200, 40), (244, 244, 244))  # (500, 40)
+        self.grey = Image.new("RGB", (self.base_width - 200, 40), (244, 244, 244))
+        self.img = Image.new("RGB", (self.base_width - 200, 38), (255, 255, 255))
+        self.size_table.paste(self.img, (1, 0))
+
+        self.img = Image.open("01_data/image/SizeSpec.jpg")
+        self.infoview.paste(self.img, (0, self.info_ptr))
+
+        self.info_ptr += 80
+
+        self.infoview.save("test_info2.jpg", quallity=95)
+
+    def size_insert(self, value):
+        value_list = value.split("/n")
+
+        self.infoview.paste(self.grey, (0, self.info_ptr))
+        num = 1
+        for n in value_list:  # 사이즈 어깨넓이 등
+            w, h = fnt.getsize(n)
+            ImageDraw.Draw(self.infoview).text(
+                ((((500 / len(value_list) * num) - (500 / len(value_list) / 2)) - w / 2), (self.info_ptr + 25 - h)), n,
+                font=fnt, fill=(0, 0, 0))
+            num += 1
+        self.info_ptr += 40
+
+
+    def info_tip(self):
+
+        self.info_ptr += 100
+
+        self.tag = Image.open("01_data/image/Tip.jpg")
+        self.infoview.paste(self.tag, (0, self.info_ptr))
+        self.info_ptr += 60
+
+        ImageDraw.Draw(self.infoview).text((20, self.info_ptr), "-사이즈 스펙은 실측 사이즈 기준입니다.(가슴둘레는 라벨사이즈 기준)", font=fnt_tip,
+                                           fill=(60, 60, 60))
+        self.info_ptr += 25
+        ImageDraw.Draw(self.infoview).text((20, self.info_ptr), "-사이즈는 측정 방법과 생산 과정에 따라 약간의 오차가 발생할 수 있습니다.",
+                                           font=fnt_tip, fill=(60, 60, 60))
+        self.info_ptr += 25
+        ImageDraw.Draw(self.infoview).text((20, self.info_ptr),
+                                           "-제품 안쪽 라벨에 표기된 사이즈는 표준 신체 사이즈를 표기한 것이므로, 실측사이즈와 차이가 있을 수 있습니다.",
+                                           font=fnt_tip, fill=(60, 60, 60))
+
+        self.infoview.save("test_info3.jpg", quallity=95)
+
+    # def info_product(self):
 
     def combineImg(self):
         self.fullimage.paste(self.fullview, (0, 0))
@@ -154,7 +225,9 @@ if __name__ == '__main__':
     mkImage.setPath("D:/GitHub/ImageMaking/01_data/man", itemnumber)
     # mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
 
-    mkImage.makeFV("PBJAX2032", "GY")
+    mkImage.makeFV1("PBJAX2032", "GY")
     mkImage.makeDV("PBJAX2032", "GY")
     mkImage.makeInfo()
+    mkImage.info_size()
+    mkImage.info_tip()
     mkImage.combineImg()
