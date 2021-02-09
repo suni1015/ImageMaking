@@ -28,8 +28,8 @@ import numpy as np
 
 # from PIL import Image
 
-from data_shinwon import Shinwon
-from main import MakeImg
+from shinwon_data import Shinwon
+from shinwon_making import MakeImg
 
 form_class = uic.loadUiType("ui_imageMaking.ui")[0]
 
