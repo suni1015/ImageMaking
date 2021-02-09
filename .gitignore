@@ -1,0 +1,14 @@
+
+*.xml
+*.iml
+*.pyc
+02_release/
+dist/
+build/
+view_main.spec
+view_main.exe
+test_info.jpg
+test_fullimage.jpg
+test_detail.jpg
+test.jpg
+pyinstaller_test_ver.spec
