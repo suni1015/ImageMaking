@@ -99,27 +99,43 @@ class WindowClass(QMainWindow, form_class):
 
     @pyqtSlot()
     def Makeimg(self):
+            if len(self.poombun) != 9:
+                # self.tb_poombun_info.clear()
+                self.tb_poombun_info.setPlainText("안내 : 품번체계는 9자 입니다.")
+                return
+            value = self.sw_obj.dic_product["컬러"]
+            comp = re.compile('[^a-zA-Z/]')
+            color = comp.sub('', value)
+            color = color.split("/")
+            #색분류
+            print(color)
 
-        if len(self.poombun) != 9:
-            # self.tb_poombun_info.clear()
-            self.tb_poombun_info.setPlainText("안내 : 품번체계는 9자 입니다.")
+
+
+            self.mkimg.setPath(self.path, self.poombun)
+
+            if color[1]:
+                self.mkimg.makeFV2(self.poombun, color[0], color[1])
+            else:
+                self.mkimg.makeFV1(self.poombun, color[0])
+
+            self.mkimg.makeDV(self.poombun, color[0])
+            self.mkimg.makeInfo()
+
+            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
+            self.mkimg.info_product(self.poombun)
+            self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
+            self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+            self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+            self.mkimg.combineImg()
+
             return
-        value = self.sw_obj.dic_product["컬러"]
-        comp = re.compile('[^a-zA-Z/]')
-        color = comp.sub('', value)
-        color = color.split("/")
-        #색분류
-        print(color)
 
 
-
-        self.mkimg.setPath(self.path, self.poombun)
-        self.mkimg.makeFV(self.poombun, color[0])
-        self.mkimg.makeDV(self.poombun, color[0])
-        self.mkimg.makeInfo()
-        self.mkimg.combineImg()
-
-        return
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
 
-pdt_name = ImageFont.truetype("01_data/NanumGothic.ttf", 17, encoding="UTF-8")
+pdt_name = ImageFont.truetype("01_data/NanumGothic.ttf", 20, encoding="UTF-8")
 fnt = ImageFont.truetype("01_data/NanumGothic.ttf", 15, encoding="UTF-8")
 fnt_tip = ImageFont.truetype("01_data/NanumGothic.ttf", 12, encoding="UTF-8")
 
@@ -12,6 +12,33 @@ class MakeImg:
         self.base_height = 5500
         self.area = (50, 150, 550, 550)
         self.fullimage = Image.new("RGB", (self.base_width, self.base_height), (255, 255, 255))
+
+        self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
+        self.tag = Image.open("01_data/image/Product.jpg")
+        self.product_info.paste(self.tag, (0, 20))
+        draw = ImageDraw.Draw(self.product_info)
+
+        self.prd_ptr = 150
+        draw.text((20, 150), "품번", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 180), "색상", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 210), "사이즈", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 240), "시즌", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 270), "세박방법", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 300), "원산지", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 330), "소재", fill=(80, 80, 80), font=fnt)
+
+    def info_product_name(self, text):
+        draw = ImageDraw.Draw(self.product_info)
+        draw.text((20, 80), text, fill=(0, 0, 0), font=pdt_name)
+
+    def info_product(self, text):
+
+        draw = ImageDraw.Draw(self.product_info)
+
+        draw.text((135, self.prd_ptr), text, fill=(0, 0, 0), font=fnt)
+        self.prd_ptr += 30
+
+        self.product_info.save("test1.jpg", quallity=95)
 
     def setPath(self, path, itemnumber):
         self.path = f"{path}/{itemnumber}"
@@ -31,17 +58,17 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_2.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        '''
         self.full_ptr += self.img.height + 100
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_3.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        '''
         self.fullview.save("test.jpg", quality=95)
 
         return self.fullview
 
-    def makeFV2(self, itemnumber, color1, color2):
+    def makeFV2(self, itemnumber, color2, color1):
         self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
@@ -75,8 +102,14 @@ class MakeImg:
         self.detailview.paste(self.tag, (0, 0))
         detail_ptr += 50
 
-        str_tmp = f"{self.path}/{itemnumber}_{color}_4.jpg"
+        str_tmp = f"{self.path}/{itemnumber}_{color}_3.jpg"
         self.img = Image.open(str_tmp)
+        self.img = self.img.resize((600, 600))
+        self.img = self.img.crop(self.area)
+        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        detail_ptr += self.img.height + 10
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_4.jpg")
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
@@ -86,14 +119,7 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 10
 
-        '''
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
-        self.img = self.img.resize((600, 600))
-        self.img = self.img.crop(self.area)
-        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        '''
         self.detailview.save("test_detail.jpg", quallity=95)
 
         return self.detailview
@@ -153,7 +179,7 @@ class MakeImg:
     def info_size(self):
 
         # 사이즈 고시할 공간
-        # value = "사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이"
+        value = "사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이"
         value_list = value.split("/n")
 
         self.size_table = Image.new("RGB", (self.base_width - 200, 40), (244, 244, 244))  # (500, 40)
@@ -181,7 +207,6 @@ class MakeImg:
             num += 1
         self.info_ptr += 40
 
-
     def info_tip(self):
 
         self.info_ptr += 100
@@ -202,12 +227,12 @@ class MakeImg:
 
         self.infoview.save("test_info3.jpg", quallity=95)
 
-    # def info_product(self):
-
     def combineImg(self):
         self.fullimage.paste(self.fullview, (0, 0))
         self.fullimage.paste(self.detailview, (0, self.fullview.height))
-        self.fullimage.paste(self.infoview, (0, self.fullview.height + self.detailview.height))
+        self.fullimage.paste(self.product_info, (0, self.fullview.height + self.detailview.height))
+        self.fullimage.paste(self.infoview, (0, self.fullview.height + self.detailview.height + self.product_info.height))
+
         self.fullimage.save("test_fullimage.jpg", quallity=95)
 
     def drawtext(self, image, text, x, y):
@@ -230,4 +255,13 @@ if __name__ == '__main__':
     mkImage.makeInfo()
     mkImage.info_size()
     mkImage.info_tip()
+    mkImage.info_product("TXBAA4403")
+    mkImage.info_product("IV(아이보리)/NA(네이비)")
+    mkImage.info_product("55/66")
+    mkImage.info_product("봄/여름")
+    mkImage.info_product("본 제품은 반드시 드라이크리닝 하십시오.(세탁라벨참고)")
+    mkImage.info_product("중국")
+    mkImage.info_product("[겉감]폴리에스터100%")
+    mkImage.info_product("[배색]폴리에스터100%")
+
     mkImage.combineImg()
