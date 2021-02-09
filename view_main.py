@@ -43,11 +43,13 @@ class WindowClass(QMainWindow, form_class):
         self.sw_obj = Shinwon()  # sw_obj = Shinwon('BYJAX1234-0')
         self.mkimg = MakeImg()
 
+        self.poombun = None
+
         self.setupUi(self)
         self.setStyleSheet("background-color: white;")
 
         self.btn_file_open.clicked.connect(self.OnfileOpen)
-        self.btn_file_img.clicked.connect(self.Makeimg)
+        self.btn_file_img.clicked.connect(self.Makeimage)
         self.edt_poombun.returnPressed.connect(self.OnEnterPoombun)
         self.edt_poombun.textChanged[str].connect(self.onChangedPoombun)
 
@@ -98,26 +100,26 @@ class WindowClass(QMainWindow, form_class):
             self.tb_poombun_info.append(str_pf)
 
     @pyqtSlot()
-    def Makeimg(self):
-            if len(self.poombun) != 9:
-                # self.tb_poombun_info.clear()
-                self.tb_poombun_info.setPlainText("안내 : 품번체계는 9자 입니다.")
-                return
+    def Makeimage(self):
+
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
+            return
+        else:
             value = self.sw_obj.dic_product["컬러"]
             comp = re.compile('[^a-zA-Z/]')
             color = comp.sub('', value)
             color = color.split("/")
-            #색분류
+            # 색분류
             print(color)
 
-
-
             self.mkimg.setPath(self.path, self.poombun)
-
-            if color[1]:
-                self.mkimg.makeFV2(self.poombun, color[0], color[1])
-            else:
+            len(color)
+            if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0])
+            else:
+                self.mkimg.makeFV2(self.poombun, color[0], color[1])
 
             self.mkimg.makeDV(self.poombun, color[0])
             self.mkimg.makeInfo()
@@ -134,8 +136,6 @@ class WindowClass(QMainWindow, form_class):
             self.mkimg.combineImg()
 
             return
-
-
 
 
 if __name__ == "__main__":

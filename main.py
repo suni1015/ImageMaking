@@ -45,7 +45,7 @@ class MakeImg:
 
     def makeFV1(self, itemnumber, color):
         self.full_ptr = 0
-        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
