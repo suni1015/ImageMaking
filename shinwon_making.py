@@ -1,3 +1,7 @@
+"""
+실제 이미지를 만드는 클래스
+
+"""
 # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
 

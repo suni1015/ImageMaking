@@ -1,7 +1,8 @@
-# import libraries
-import numpy as np
+"""
+엑셀 데이터 파싱 클래스
+
+"""
 import pandas as pd
-import os
 
 # 신원 코드구분 dictionary
 dic_codeFormat = {
@@ -171,6 +172,7 @@ class Shinwon:
     # df_product_info = None
     dic_product = {}  # 빈 딕셔너리 만들기. 의류정보 결과물을 저장할 공간이다.
     size_count = None       # 이 제품의 사이즈 개수를 저장한다. (55사이즈, 66사이즈 --> 2개)
+    list_poombun = None
 
     def __init__(self, ):
         return
@@ -281,8 +283,16 @@ class Shinwon:
                                          thousands=',',
                                          nrows=100,     # 정보고시 파일은 100개까지만 읽어들인다.
                                          comment='#')
-
         #print(self.df_all_data)
+
+        print('Info : 엑셀에 기록된 품번 리스트 출력')
+        self.list_poombun = self.df_all_data['품번']
+        print(len(self.list_poombun))
+        for poombun in self.list_poombun:
+            print(poombun)
+
+        return
+
 
     def parse_excel_data(self):
         # 품번이 입력되었는지 예외처리할것
@@ -304,8 +314,6 @@ class Shinwon:
         if df_product_info.empty:
             print('ERR : 입력한 품번은 정보고시 파일에 존재하지 않습니다.')
             return False
-
-
 
         self.dic_product['상품명'] = df_all.loc[row_condition == self.str_poombun, '상품명'].values[0]
         self.dic_product['컬러'] = df_all.loc[row_condition == self.str_poombun, '컬러'].values[0]
@@ -353,6 +361,9 @@ class Shinwon:
 
     def get_size_cnt(self):
         return self.size_count
+
+    def get_list_poombun(self):
+        return self.list_poombun
 
 
 """

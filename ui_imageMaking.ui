@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>793</width>
-    <height>751</height>
+    <height>693</height>
    </rect>
   </property>
   <property name="font">
@@ -26,9 +26,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>87</y>
+      <y>67</y>
       <width>171</width>
-      <height>41</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -49,7 +49,7 @@
      <rect>
       <x>20</x>
       <y>140</y>
-      <width>271</width>
+      <width>351</width>
       <height>20</height>
      </rect>
     </property>
@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>250</y>
+      <y>610</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -93,9 +93,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>300</y>
-      <width>271</width>
-      <height>401</height>
+      <y>220</y>
+      <width>351</width>
+      <height>381</height>
      </rect>
     </property>
    </widget>
@@ -129,13 +129,38 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_file_img">
+   <widget class="QPushButton" name="btn_img_make_single">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>190</y>
+      <x>200</x>
+      <y>610</y>
       <width>171</width>
       <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string extracomment="Select excel file"/>
+    </property>
+    <property name="text">
+     <string>For debug</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_img_make_multi">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>69</y>
+      <width>171</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -151,7 +176,7 @@
      <string extracomment="Select excel file"/>
     </property>
     <property name="text">
-     <string>IMG Maker</string>
+     <string>Make All</string>
     </property>
    </widget>
   </widget>

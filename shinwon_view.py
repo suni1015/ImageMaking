@@ -1,32 +1,13 @@
-import errno
-import sys
-# import urllib.request
-# from typing import Any, Union
+"""
+View 클래스
 
+"""
+import sys
 from PyQt5 import QtGui, QtCore, uic, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
-"""
-from docx import Document
-from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-
-from docx.shared import Pt
-from docx.shared import Inches
-
-import cv2
-import threading
-"""
 import os
-import logging
-import time
 import re
-import numpy as np
-
-# from PIL import Image
 
 from shinwon_data import Shinwon
 from shinwon_making import MakeImg
@@ -49,7 +30,8 @@ class WindowClass(QMainWindow, form_class):
         self.setStyleSheet("background-color: white;")
 
         self.btn_file_open.clicked.connect(self.OnfileOpen)
-        self.btn_file_img.clicked.connect(self.Makeimage)
+        self.btn_img_make_single.clicked.connect(self.Makeimage_single)
+        self.btn_img_make_multi.clicked.connect(self.Makeimage_multi)
         self.edt_poombun.returnPressed.connect(self.OnEnterPoombun)
         self.edt_poombun.textChanged[str].connect(self.onChangedPoombun)
 
@@ -99,8 +81,70 @@ class WindowClass(QMainWindow, form_class):
             str_pf = '*' + key + '-' + value
             self.tb_poombun_info.append(str_pf)
 
-    @pyqtSlot()
     def Makeimage(self):
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
+            return
+        else:
+            value = self.sw_obj.dic_product["컬러"]
+            comp = re.compile('[^a-zA-Z/]')
+            color = comp.sub('', value)
+            color = color.split("/")
+            # 색분류
+            print(color)
+
+            self.mkimg.setPath(self.path, self.poombun)
+            len(color)
+            if len(color) == 1:
+                self.mkimg.makeFV1(self.poombun, color[0])
+            else:
+                self.mkimg.makeFV2(self.poombun, color[0], color[1])
+
+            self.mkimg.makeDV(self.poombun, color[0])
+            self.mkimg.makeInfo()
+
+            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
+            self.mkimg.info_product(self.poombun)
+            self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
+            self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+            self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+            self.mkimg.combineImg()
+
+            return
+
+    @pyqtSlot()
+    def Makeimage_multi(self):
+        # exception : 품번 리스트가 열려 있는가
+        list_poombun = self.sw_obj.get_list_poombun()
+        if list_poombun is None:
+            print('품번 리스트가 없습니다. 엑셀 파일을 다시 열어주세요.')
+            return
+
+        for poombun in list_poombun:
+            print(poombun)
+            self.poombun = poombun
+            self.sw_obj.set_poombun(poombun)
+            self.sw_obj.clear_product_info()  # 이전 품번 정보를 클리어한다.
+            self.sw_obj.decode_poombun()  # 품번 정보 디코딩(파싱)
+
+            if self.filename:
+                ret = self.sw_obj.parse_excel_data()  # 품번 기반으로 엑셀에서 정보를 가져온다.
+                if not ret:
+                    self.tb_poombun_info.setPlainText("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
+                    return
+
+            dic_prod_info = self.sw_obj.get_product_info()
+            self.Makeimage()
+
+        return
+
+    @pyqtSlot()
+    def Makeimage_single(self):
 
         if len(self.poombun) != 9:
             # self.tb_poombun_info.clear()
