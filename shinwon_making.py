@@ -54,7 +54,7 @@ class MakeImg:
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_B.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_1.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
@@ -79,12 +79,37 @@ class MakeImg:
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_B.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_1.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
         self.full_ptr += self.img.height + 100
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_B.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.full_ptr += self.img.height + 100
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_2.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.fullview.save("test.jpg", quality=95)
+
+        return self.fullview
+
+    def makeFV3(self, itemnumber, color2, color1):
+        self.full_ptr = 0
+        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
+        self.tag = Image.open("01_data/image/FullView.jpg")
+        self.fullview.paste(self.tag, (0, 20))
+
+        self.full_ptr += 50
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_1.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+
+        self.full_ptr += self.img.height + 100
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
@@ -128,13 +153,13 @@ class MakeImg:
 
         return self.detailview
 
-    def makeInfo(self):
+    def makeInfo(self, column1, column2):
         self.info_ptr = 0
 
-        column1 = "비침/n안감/n신축성/n두께감/n탈부착가능여부"
-        column2 = "없음/n있음/n없음/n보통/n없음"
-        column1_list = column1.split("/n")
-        column2_list = column2.split("/n")
+        #column1 = "비침/n안감/n신축성/n두께감/n탈부착가능여부"
+        #column2 = "없음/n있음/n없음/n보통/n없음"
+        column1_list = column1.split("\n")
+        column2_list = column2.split("\n")
 
         box = Image.new("RGB", (10, 10), (0, 0, 0))
         black = Image.new("RGB", (10, 10), (0, 0, 0))
@@ -236,11 +261,7 @@ class MakeImg:
         return self.infoview
 
     def info_size(self, size_count):
-
         self.sizeview = Image.new("RGB", (self.base_width, 80 + (40 * size_count)), (255, 255, 255))
-
-        value = "사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이"
-        value_list = value.split("/n")
 
         self.grey = True
         # 사이즈 고시할 공간
@@ -257,7 +278,7 @@ class MakeImg:
         self.sizeview.save("test_size.jpg", quallity=95)
 
     def size_insert(self, value):
-        value_list = value.split("/n")
+        value_list = value.split("\n")
 
         if self.grey:
             self.sizeview.paste(self.size_table_grey, (0, self.size_ptr))
@@ -294,17 +315,18 @@ class MakeImg:
         self.tip_view.save("test_tip.jpg", quallity=95)
 
     def combineImg(self):
+        self.fullimage = Image.new("RGB",(self.base_width, self.fullview.height + self.detailview.height + self.info_full.height + self.product_info.height),(255,255,255))
         self.fullimage.paste(self.fullview, (0, 0))
         self.fullimage.paste(self.detailview, (0, self.fullview.height))
         self.fullimage.paste(self.product_info, (0, self.fullview.height + self.detailview.height))
-        self.fullimage.paste(self.infoview,
+        self.fullimage.paste(self.info_full,
                              (0, self.fullview.height + self.detailview.height + self.product_info.height))
-        self.fullimage.paste(self.sizeview,
-                             (0, self.fullview.height + self.detailview.height + self.product_info.height + self.infoview))
 
         self.fullimage.save("test_fullimage.jpg", quallity=95)
 
     def combineInfo(self):
+        self.info_tip()
+
         self.info_full = Image.new("RGB", (self.base_width, self.infoview.height + self.sizeview.height + self.tip_view.height + 200),(255,255,255))
 
         self.info_full.paste(self.infoview, (0, 0))
@@ -325,24 +347,6 @@ if __name__ == '__main__':
     mkImage.setPath("D:/GitHub/ImageMaking/01_data/man", itemnumber)
     # mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
 
-    '''
-    mkImage.makeFV1("PBJAX2032", "GY")
-    mkImage.makeDV("PBJAX2032", "GY")
-    mkImage.makeInfo()
-    mkImage.info_size()
-    mkImage.info_tip()
-    mkImage.info_product("TXBAA4403")
-    mkImage.info_product("IV(아이보리)/NA(네이비)")
-    mkImage.info_product("55/66")
-    mkImage.info_product("봄/여름")
-    mkImage.info_product("본 제품은 반드시 드라이크리닝 하십시오.(세탁라벨참고)")
-    mkImage.info_product("중국")
-    mkImage.info_product("[겉감]폴리에스터100%")
-    mkImage.info_product("[배색]폴리에스터100%")
-    
-
-    
-    '''
     mkImage.makeInfo()
     mkImage.info_size(2)
     mkImage.size_insert("사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이")

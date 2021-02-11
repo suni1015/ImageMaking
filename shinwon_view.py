@@ -162,21 +162,32 @@ class WindowClass(QMainWindow, form_class):
             len(color)
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0])
-            else:
+            elif len(color) == 2:
                 self.mkimg.makeFV2(self.poombun, color[0], color[1])
 
             self.mkimg.makeDV(self.poombun, color[0])
-            self.mkimg.makeInfo()
 
-            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"].split("(")[0])
             self.mkimg.info_product(self.poombun)
             self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
             self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
-            self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
+            self.mkimg.info_product(season)
             self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
             self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
             self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(self.sw_obj.dic_product[f"사이즈{n}"])
+
+            self.mkimg.combineInfo()
             self.mkimg.combineImg()
 
             return
