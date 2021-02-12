@@ -119,6 +119,9 @@ class WindowClass(QMainWindow, form_class):
 
             return
 
+    def isNaN(self, num):
+        return num != num
+
     @pyqtSlot()
     def Makeimage_multi(self):
 
@@ -128,10 +131,23 @@ class WindowClass(QMainWindow, form_class):
         list_poombun = self.sw_obj.get_list_poombun()
         if list_poombun is None:
             print('품번 리스트가 없습니다. 엑셀 파일을 다시 열어주세요.')
+            self.tb_poombun_info.append('품번 리스트가 없습니다. 엑셀 파일을 다시 열어주세요.')
             return
 
+        count = 0
+        self.tb_poombun_info.append("\nInfo : 이미지화를 시작합니다.")
         for poombun in list_poombun:
-            print(poombun)
+            count = count + 1
+            self.tb_poombun_info.append("\nImage making" + str(count))
+            var_tf = self.isNaN(poombun)
+            if var_tf:
+                self.tb_poombun_info.append("ERR : 품번체계 오류(NaN)")
+                continue
+            if len(poombun) != 9:
+                self.tb_poombun_info.append("ERR : 품번체계는 9자 입니다.")
+                continue
+            self.tb_poombun_info.append("품번 : " + poombun)
+
             self.poombun = poombun
             self.sw_obj.set_poombun(poombun)
             self.sw_obj.clear_product_info()  # 이전 품번 정보를 클리어한다.
@@ -140,7 +156,7 @@ class WindowClass(QMainWindow, form_class):
             if self.filename:
                 ret = self.sw_obj.parse_excel_data()  # 품번 기반으로 엑셀에서 정보를 가져온다.
                 if not ret:
-                    self.tb_poombun_info.setPlainText("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
+                    self.tb_poombun_info.append("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
                     return
 
             dic_prod_info = self.sw_obj.get_product_info()
@@ -156,7 +172,8 @@ class WindowClass(QMainWindow, form_class):
             if self.mkimg.checkfile(self.poombun, color):
                 self.Makeimage_single()
             else:
-                self.tb_poombun_info.setPlainText(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}")
+                self.tb_poombun_info.append(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}")
+        self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
 
         return
 

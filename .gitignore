@@ -3,6 +3,7 @@
 *.iml
 *.pyc
 02_release/
+04_result
 dist/
 build/
 view_main.spec
