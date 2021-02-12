@@ -27,23 +27,17 @@ class MakeImg:
         self.area = (50, 150, 550, 550)
         self.fullimage = Image.new("RGB", (self.base_width, self.base_height), (255, 255, 255))
 
-        self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
-        self.tag = Image.open("01_data/image/Product.jpg")
-        self.product_info.paste(self.tag, (0, 20))
-        draw = ImageDraw.Draw(self.product_info)
+        self.no_file = ""
+        self.no_file_itemnumber = ""
 
         # ini
         self.ini_config = configparser.ConfigParser()
         self.init_INI()
 
-        self.prd_ptr = 150
-        draw.text((20, 150), "품번", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 180), "색상", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 210), "사이즈", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 240), "시즌", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 270), "세박방법", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 300), "원산지", fill=(80, 80, 80), font=fnt)
-        draw.text((20, 330), "소재", fill=(80, 80, 80), font=fnt)
+    def clear_data(self):
+        self.no_file = ""
+        self.no_file_itemnumber = ""
+
 
     def init_INI(self):
         if os.path.isfile(ini_filepath):
@@ -54,6 +48,8 @@ class MakeImg:
             self.A3 = self.ini_config['IMG_ORDER']['A3']
             self.A4 = self.ini_config['IMG_ORDER']['A4']
             self.A5 = self.ini_config['IMG_ORDER']['A5']
+
+            self.A_list = [self.A1, self.A2, self.A3, self.A4, self.A5]
 
         else:
             print('info : make default ini file')
@@ -69,9 +65,22 @@ class MakeImg:
         with open(ini_filepath, 'w') as configfile:
             self.ini_config.write(configfile)
 
-    def info_product_name(self, text):
+    def info_product_name(self, name):
+        self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
+        self.tag = Image.open("01_data/image/Product.jpg")
+        self.product_info.paste(self.tag, (0, 20))
         draw = ImageDraw.Draw(self.product_info)
-        draw.text((20, 80), text, fill=(0, 0, 0), font=pdt_name)
+
+        self.prd_ptr = 150
+        draw.text((20, 150), "품번", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 180), "색상", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 210), "사이즈", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 240), "시즌", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 270), "세박방법", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 300), "원산지", fill=(80, 80, 80), font=fnt)
+        draw.text((20, 330), "소재", fill=(80, 80, 80), font=fnt)
+
+        draw.text((20, 80), name, fill=(0, 0, 0), font=pdt_name)
 
     def info_product(self, text):
         draw = ImageDraw.Draw(self.product_info)
@@ -79,10 +88,33 @@ class MakeImg:
         draw.text((135, self.prd_ptr), text, fill=(0, 0, 0), font=fnt)
         self.prd_ptr += 30
 
-        self.product_info.save("test1.jpg", quallity=95)
+        #self.product_info.save("test1.jpg", quallity=95)
 
     def setPath(self, path, itemnumber):
         self.path = f"{path}/{itemnumber}"
+
+    def checkfile(self, itemnumber, color):
+        for number in self.A_list:
+            check = os.path.isfile(f"{self.path}/{itemnumber}_{color[0]}_{number}.jpg")
+            file_name = f"{itemnumber}_{color[0]}_{number}.jpg"
+            if not check:
+                print(f'Err : there is no {file_name}')
+                self.no_file = self.no_file + file_name + "\n"
+                self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
+                print(self.no_file)
+                return False
+
+        if not len(color) == 1:
+            for n in color:
+                check = os.path.isfile(f"{self.path}/{itemnumber}_{n}_{self.A1}.jpg")
+                file_name = f"{itemnumber}_{n}_{self.A1}.jpg"
+                if not check:
+                    print(f'Err : there is no {file_name}')
+                    self.no_file = self.no_file + file_name + "\n"
+                    self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
+                    print(self.no_file)
+                    return False
+        return True
 
     def makeFV1(self, itemnumber, color):
         self.full_ptr = 0
@@ -96,6 +128,9 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
+        w, h = fnt.getsize(color)
+        ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color,font=fnt, fill=(0,0,0))
+
         self.full_ptr += self.img.height + 100
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A2}.jpg")
         self.img = self.img.resize((600, 600))
@@ -106,34 +141,35 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         '''
-        self.fullview.save("test.jpg", quality=95)
+        self.fullview.save("./04_result/fv.jpg", quallity=100)
 
         return self.fullview
 
     def makeFV2(self, itemnumber, color2, color1):
-        self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
-        self.full_ptr += 50
+        self.full_ptr = 80
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
-
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        w, h = fnt.getsize(color1)
+        ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color1,font=fnt, fill=(0,0,0))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        w, h = fnt.getsize(color2)
+        ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color2,font=fnt, fill=(0,0,0))
         self.full_ptr += self.img.height + 100
+
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_2.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
-        self.fullview.save("test.jpg", quality=95)
+        self.fullview.save("./04_result/fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -158,7 +194,7 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
-        self.fullview.save("test.jpg", quality=95)
+        self.fullview.save("./04_result/fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -189,15 +225,15 @@ class MakeImg:
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
-        self.detailview.save("test_detail.jpg", quallity=95)
+        self.detailview.save("./04_result/dv.jpg", quallity=100)
 
         return self.detailview
 
     def makeInfo(self, column1, column2):
         self.info_ptr = 0
 
-        #column1 = "비침/n안감/n신축성/n두께감/n탈부착가능여부"
-        #column2 = "없음/n있음/n없음/n보통/n없음"
+        # column1 = "비침/n안감/n신축성/n두께감/n탈부착가능여부"
+        # column2 = "없음/n있음/n없음/n보통/n없음"
         column1_list = column1.split("\n")
         column2_list = column2.split("\n")
 
@@ -207,7 +243,7 @@ class MakeImg:
         box.paste(white, (1, 1))
 
         # 태그
-        self.infoview = Image.new("RGB", (self.base_width, 70 +(len(column1_list)*45)), (255, 255, 255))
+        self.infoview = Image.new("RGB", (self.base_width, 70 + (len(column1_list) * 45)), (255, 255, 255))
         self.tag = Image.open("01_data/image/DetailInfo.jpg")
         self.infoview.paste(self.tag, (0, 0))
         self.info_ptr += 70
@@ -230,7 +266,7 @@ class MakeImg:
                 for n in range(0, 3):
                     self.infoview.paste(box, (210 + (n * 120), self.info_ptr + 20))
 
-            textdraw.text(((76 - (w / 2)), self.info_ptr+16), column1_list[i], font=fnt, fill=(0, 0, 0,))
+            textdraw.text(((76 - (w / 2)), self.info_ptr + 16), column1_list[i], font=fnt, fill=(0, 0, 0,))
             if column1_list[i] == "비침":
                 textdraw.text((230, self.info_ptr + 16), "있음", font=fnt, fill=(0, 0, 0,))
                 textdraw.text((350, self.info_ptr + 16), "약간", font=fnt, fill=(0, 0, 0,))
@@ -296,7 +332,7 @@ class MakeImg:
                     self.infoview.paste(black, (570, self.info_ptr + 20))
             self.info_ptr += 45
 
-        self.infoview.save("test_info.jpg", quallity=95)
+        # self.infoview.save("test_info.jpg", quallity=95)
 
         return self.infoview
 
@@ -315,7 +351,7 @@ class MakeImg:
 
         self.size_ptr = 70
 
-        self.sizeview.save("test_size.jpg", quallity=95)
+        # self.sizeview.save("test_size.jpg", quallity=95)
 
     def size_insert(self, value):
         value_list = value.split("\n")
@@ -329,12 +365,12 @@ class MakeImg:
         for n in value_list:  # 사이즈 어깨넓이 등
             w, h = fnt.getsize(n)
             ImageDraw.Draw(self.sizeview).text(
-                (((500 / len(value_list) * num) - (500 / len(value_list) / 2) - (w/2)), (self.size_ptr + 25 - h)),
+                (((500 / len(value_list) * num) - (500 / len(value_list) / 2) - (w / 2)), (self.size_ptr + 25 - h)),
                 n, font=fnt, fill=(0, 0, 0))
             num += 1
         self.size_ptr += 40
 
-        self.sizeview.save("test_size2.jpg", quallity=95)
+        # self.sizeview.save("test_size2.jpg", quallity=95)
 
     def info_tip(self):
         self.tip_view = Image.new("RGB", (self.base_width, 150), (255, 255, 255))
@@ -352,28 +388,30 @@ class MakeImg:
                                            "-제품 안쪽 라벨에 표기된 사이즈는 표준 신체 사이즈를 표기한 것이므로, 실측사이즈와 차이가 있을 수 있습니다.",
                                            font=fnt_tip, fill=(60, 60, 60))
 
-        self.tip_view.save("test_tip.jpg", quallity=95)
+        # self.tip_view.save("test_tip.jpg", quallity=95)
 
-    def combineImg(self):
-        self.fullimage = Image.new("RGB",(self.base_width, self.fullview.height + self.detailview.height + self.info_full.height + self.product_info.height),(255,255,255))
+    def combineImg(self, item_code):
+        self.fullimage = Image.new("RGB", (self.base_width,
+                                           self.fullview.height + self.detailview.height + self.info_full.height + self.product_info.height),
+                                   (255, 255, 255))
         self.fullimage.paste(self.fullview, (0, 0))
         self.fullimage.paste(self.detailview, (0, self.fullview.height))
         self.fullimage.paste(self.product_info, (0, self.fullview.height + self.detailview.height))
         self.fullimage.paste(self.info_full,
                              (0, self.fullview.height + self.detailview.height + self.product_info.height))
 
-        self.fullimage.save("test_fullimage.jpg", quallity=95)
+        self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
 
     def combineInfo(self):
         self.info_tip()
 
-        self.info_full = Image.new("RGB", (self.base_width, self.infoview.height + self.sizeview.height + self.tip_view.height + 200),(255,255,255))
+        self.info_full = Image.new("RGB", (self.base_width, self.infoview.height + self.sizeview.height + self.tip_view.height + 200), (255, 255, 255))
 
         self.info_full.paste(self.infoview, (0, 0))
         self.info_full.paste(self.sizeview, (0, self.infoview.height + 100))
         self.info_full.paste(self.tip_view, (0, self.infoview.height + self.sizeview.height + 200))
 
-        self.info_full.save("test_info_full.jpg", quallity= 95)
+        self.info_full.save(f"./04_result/di.jpg", quallity=100)
 
 
 if __name__ == '__main__':

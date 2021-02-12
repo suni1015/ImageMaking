@@ -39,7 +39,9 @@ class WindowClass(QMainWindow, form_class):
     def OnfileOpen(self):
         self.filename = QFileDialog.getOpenFileName(self, 'Open File', '', 'Excel File(*.xls *.xlsx)')
         if self.filename[0]:
-            self.label_file_path.setText(self.filename[0])
+
+            xl_name = self.filename[0].split("/")
+            self.label_file_path.setText(xl_name[-1])
             self.path = os.path.dirname(self.filename[0])
         else:
             self.tb_poombun_info.setPlainText("안내 : 파일 선택을 취소하셨습니다.")
@@ -113,12 +115,15 @@ class WindowClass(QMainWindow, form_class):
             self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
             self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
-            self.mkimg.combineImg()
+            self.mkimg.combineImg(self.poombun)
 
             return
 
     @pyqtSlot()
     def Makeimage_multi(self):
+
+        self.mkimg.clear_data()
+
         # exception : 품번 리스트가 열려 있는가
         list_poombun = self.sw_obj.get_list_poombun()
         if list_poombun is None:
@@ -140,12 +145,23 @@ class WindowClass(QMainWindow, form_class):
 
             dic_prod_info = self.sw_obj.get_product_info()
             #self.Makeimage()
-            self.Makeimage_single()
+            self.mkimg.setPath(self.path, self.poombun)
+
+            value = self.sw_obj.dic_product["컬러"]
+            comp = re.compile('[^a-zA-Z/]')
+            color = comp.sub('', value)
+            color = color.split("/")
+
+            if self.mkimg.checkfile(self.poombun, color):
+                self.Makeimage_single()
+            else:
+                self.tb_poombun_info.setPlainText(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}")
 
         return
 
     @pyqtSlot()
     def Makeimage_single(self):
+
         if len(self.poombun) != 9:
             # self.tb_poombun_info.clear()
             self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
@@ -155,10 +171,8 @@ class WindowClass(QMainWindow, form_class):
             comp = re.compile('[^a-zA-Z/]')
             color = comp.sub('', value)
             color = color.split("/")
-            # 색분류
-            print(color)
 
-            self.mkimg.setPath(self.path, self.poombun)
+
             len(color)
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0])
@@ -172,7 +186,10 @@ class WindowClass(QMainWindow, form_class):
             else:
                 season = "가을/겨울"
 
-            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"].split("(")[0])
+            product_name = self.sw_obj.dic_product["상품명"].split("(")
+
+
+            self.mkimg.info_product_name(product_name[0])
             self.mkimg.info_product(self.poombun)
             self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
             self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
@@ -188,7 +205,7 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.size_insert(self.sw_obj.dic_product[f"사이즈{n}"])
 
             self.mkimg.combineInfo()
-            self.mkimg.combineImg()
+            self.mkimg.combineImg(self.poombun)
 
             return
 
