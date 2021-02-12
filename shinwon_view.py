@@ -148,6 +148,7 @@ class WindowClass(QMainWindow, form_class):
             self.mkimg.setPath(self.path, self.poombun)
 
             value = self.sw_obj.dic_product["컬러"]
+            self.color_full = value.split("/")
             comp = re.compile('[^a-zA-Z/]')
             color = comp.sub('', value)
             color = color.split("/")
@@ -175,9 +176,9 @@ class WindowClass(QMainWindow, form_class):
 
             len(color)
             if len(color) == 1:
-                self.mkimg.makeFV1(self.poombun, color[0])
+                self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
             elif len(color) == 2:
-                self.mkimg.makeFV2(self.poombun, color[0], color[1])
+                self.mkimg.makeFV2(self.poombun, color[0], color[1], self.color_full)
 
             self.mkimg.makeDV(self.poombun, color[0])
 
