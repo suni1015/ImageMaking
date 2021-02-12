@@ -4,6 +4,8 @@
 """
 # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
+import configparser
+import os
 
 pdt_name = ImageFont.truetype("01_data/NanumGothic.ttf", 20, encoding="UTF-8")
 fnt = ImageFont.truetype("01_data/NanumGothic.ttf", 15, encoding="UTF-8")
@@ -31,6 +33,30 @@ class MakeImg:
         draw.text((20, 300), "원산지", fill=(80, 80, 80), font=fnt)
         draw.text((20, 330), "소재", fill=(80, 80, 80), font=fnt)
 
+    def init_INI(self):
+        if os.path.isfile(ini_filepath):
+            print('info : load ini file')
+            self.ini_config.read(ini_filepath)
+            self.A1 = self.ini_config['IMG_ORDER']['A1']
+            self.A2 = self.ini_config['IMG_ORDER']['A2']
+            self.A3 = self.ini_config['IMG_ORDER']['A3']
+            self.A4 = self.ini_config['IMG_ORDER']['A4']
+            self.A5 = self.ini_config['IMG_ORDER']['A5']
+
+        else:
+            print('info : make default ini file')
+            self.make_default_ini()
+
+    def make_default_ini(self):
+        # Dictionary 포맷으로 ini 저장하는 방법
+        self.ini_config['IMG_ORDER'] = {'A1': '_B',
+                                        'A2': '_2',
+                                        'A3': '_3',
+                                        'A4': '_4',
+                                        'A5': '_5'}
+        with open(ini_filepath, 'w') as configfile:
+            self.ini_config.write(configfile)
+
     def info_product_name(self, text):
         draw = ImageDraw.Draw(self.product_info)
         draw.text((20, 80), text, fill=(0, 0, 0), font=pdt_name)
@@ -54,12 +80,13 @@ class MakeImg:
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_1.jpg")
+        str_img_file = f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg"
+        self.img = Image.open(str_img_file)
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
         self.full_ptr += self.img.height + 100
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_2.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A2}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         '''
@@ -79,11 +106,13 @@ class MakeImg:
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_1.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
+
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
         self.full_ptr += self.img.height + 100
+
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
@@ -114,7 +143,7 @@ class MakeImg:
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
         self.full_ptr += self.img.height + 100
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_2.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A2}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
@@ -131,20 +160,20 @@ class MakeImg:
         self.detailview.paste(self.tag, (0, 0))
         detail_ptr += 50
 
-        str_tmp = f"{self.path}/{itemnumber}_{color}_3.jpg"
+        str_tmp = f"{self.path}/{itemnumber}_{color}_{self.A3}.jpg"
         self.img = Image.open(str_tmp)
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 10
 
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_4.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A4}.jpg")
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 10
 
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_5.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A5}.jpg")
         self.img = self.img.resize((600, 600))
         self.img = self.img.crop(self.area)
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
