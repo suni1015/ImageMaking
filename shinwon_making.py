@@ -124,7 +124,7 @@ class MakeImg:
 
         self.full_ptr += self.img.height + 100
 
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 

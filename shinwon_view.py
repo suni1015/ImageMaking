@@ -102,7 +102,7 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.makeFV2(self.poombun, color[0], color[1])
 
             self.mkimg.makeDV(self.poombun, color[0])
-            self.mkimg.makeInfo()
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
 
             self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
             self.mkimg.info_product(self.poombun)
@@ -139,13 +139,13 @@ class WindowClass(QMainWindow, form_class):
                     return
 
             dic_prod_info = self.sw_obj.get_product_info()
-            self.Makeimage()
+            #self.Makeimage()
+            self.Makeimage_single()
 
         return
 
     @pyqtSlot()
     def Makeimage_single(self):
-
         if len(self.poombun) != 9:
             # self.tb_poombun_info.clear()
             self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
