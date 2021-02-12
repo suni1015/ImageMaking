@@ -7,9 +7,17 @@ from PIL import Image, ImageDraw, ImageFont
 import configparser
 import os
 
-pdt_name = ImageFont.truetype("01_data/NanumGothic.ttf", 20, encoding="UTF-8")
-fnt = ImageFont.truetype("01_data/NanumGothic.ttf", 15, encoding="UTF-8")
-fnt_tip = ImageFont.truetype("01_data/NanumGothic.ttf", 12, encoding="UTF-8")
+pdt_name = ImageFont.truetype("03_resource/NanumGothic.ttf", 20, encoding="UTF-8")
+fnt = ImageFont.truetype("03_resource/NanumGothic.ttf", 15, encoding="UTF-8")
+fnt_tip = ImageFont.truetype("03_resource/NanumGothic.ttf", 12, encoding="UTF-8")
+ini_filepath = f'./03_resource/setting.ini'
+
+result_path = f'./04_result/'
+result_all = f'./04_result/all.jpg'
+result_fv = f'./04_result/fv.jpg'
+result_dv = f'./04_result/dv.jpg'
+result_di = f'./04_result/di.jpg'
+result_top = f'./04_result/top.jpg'
 
 
 class MakeImg:
@@ -23,6 +31,10 @@ class MakeImg:
         self.tag = Image.open("01_data/image/Product.jpg")
         self.product_info.paste(self.tag, (0, 20))
         draw = ImageDraw.Draw(self.product_info)
+
+        # ini
+        self.ini_config = configparser.ConfigParser()
+        self.init_INI()
 
         self.prd_ptr = 150
         draw.text((20, 150), "품번", fill=(80, 80, 80), font=fnt)
@@ -62,7 +74,6 @@ class MakeImg:
         draw.text((20, 80), text, fill=(0, 0, 0), font=pdt_name)
 
     def info_product(self, text):
-
         draw = ImageDraw.Draw(self.product_info)
 
         draw.text((135, self.prd_ptr), text, fill=(0, 0, 0), font=fnt)
