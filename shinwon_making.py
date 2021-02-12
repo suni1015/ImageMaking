@@ -67,7 +67,7 @@ class MakeImg:
 
     def info_product_name(self, name):
         self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
-        self.tag = Image.open("01_data/image/Product.jpg")
+        self.tag = Image.open("03_resource/image/Product.jpg")
         self.product_info.paste(self.tag, (0, 20))
         draw = ImageDraw.Draw(self.product_info)
 
@@ -119,7 +119,7 @@ class MakeImg:
     def makeFV1(self, itemnumber, color, color_full):
         self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
-        self.tag = Image.open("01_data/image/FullView.jpg")
+        self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
@@ -147,7 +147,7 @@ class MakeImg:
 
     def makeFV2(self, itemnumber, color1, color2, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
-        self.tag = Image.open("01_data/image/FullView.jpg")
+        self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr = 80
@@ -176,7 +176,7 @@ class MakeImg:
     def makeFV3(self, itemnumber, color2, color1):
         self.full_ptr = 0
         self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
-        self.tag = Image.open("01_data/image/FullView.jpg")
+        self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr += 50
@@ -203,7 +203,7 @@ class MakeImg:
         detail_ptr = 0
         self.area = (50, 150, 550, 550)
         self.detailview = Image.new("RGB", (self.base_width, 1300), (255, 255, 255))
-        self.tag = Image.open("01_data/image/DetailVeiw.jpg")
+        self.tag = Image.open("03_resource/image/DetailVeiw.jpg")
         self.detailview.paste(self.tag, (0, 0))
         detail_ptr += 50
 
@@ -244,7 +244,7 @@ class MakeImg:
 
         # 태그
         self.infoview = Image.new("RGB", (self.base_width, 70 + (len(column1_list) * 45)), (255, 255, 255))
-        self.tag = Image.open("01_data/image/DetailInfo.jpg")
+        self.tag = Image.open("03_resource/image/DetailInfo.jpg")
         self.infoview.paste(self.tag, (0, 0))
         self.info_ptr += 70
 
@@ -346,7 +346,7 @@ class MakeImg:
         self.img = Image.new("RGB", (self.base_width - 200, 38), (255, 255, 255))
         self.size_table.paste(self.img, (1, 0))
 
-        self.img = Image.open("01_data/image/SizeSpec.jpg")
+        self.img = Image.open("03_resource/image/SizeSpec.jpg")
         self.sizeview.paste(self.img, (0, 0))
 
         self.size_ptr = 70
@@ -374,7 +374,7 @@ class MakeImg:
 
     def info_tip(self):
         self.tip_view = Image.new("RGB", (self.base_width, 150), (255, 255, 255))
-        self.tag = Image.open("01_data/image/Tip.jpg")
+        self.tag = Image.open("03_resource/image/Tip.jpg")
         self.tip_view.paste(self.tag, (0, 0))
         self.tip_ptr = 70
 

@@ -2,6 +2,7 @@
 *.xml
 *.iml
 *.pyc
+*.spec
 02_release/
 04_result
 dist/
