@@ -156,7 +156,7 @@ class WindowClass(QMainWindow, form_class):
             if self.mkimg.checkfile(self.poombun, color):
                 self.Makeimage_single()
             else:
-                self.tb_poombun_info.setPlainText(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}")
+                self.tb_poombun_info.setPlainText(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
 
         return
 
@@ -179,6 +179,8 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
             elif len(color) == 2:
                 self.mkimg.makeFV2(self.poombun, color[0], color[1], self.color_full)
+            elif len(color) == 3:
+                self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
 
             self.mkimg.makeDV(self.poombun, color[0])
 

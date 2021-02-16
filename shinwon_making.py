@@ -29,6 +29,7 @@ class MakeImg:
 
         self.no_file = ""
         self.no_file_itemnumber = ""
+        self.no_dir = ""
 
         # ini
         self.ini_config = configparser.ConfigParser()
@@ -94,6 +95,14 @@ class MakeImg:
         self.path = f"{path}/{itemnumber}"
 
     def checkfile(self, itemnumber, color):
+
+        check = os.path.isdir(self.path)
+        if not check:
+            print(f"Err : there is no {itemnumber} directory")
+            self.no_dir = self.no_dir + itemnumber + "\n"
+            self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
+            return False
+
         for number in self.A_list:
             check = os.path.isfile(f"{self.path}/{itemnumber}_{color[0]}_{number}.jpg")
             file_name = f"{itemnumber}_{color[0]}_{number}.jpg"
@@ -146,18 +155,11 @@ class MakeImg:
         return self.fullview
 
     def makeFV2(self, itemnumber, color1, color2, color_full):
-        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
         self.full_ptr = 80
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
-        self.img = self.img.resize((600, 600))
-        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color1)
-        ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color_full[0],font=fnt, fill=(0,0,0))
-        self.full_ptr += self.img.height + 100
-
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
@@ -165,7 +167,14 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color_full[1],font=fnt, fill=(0,0,0))
         self.full_ptr += self.img.height + 100
 
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_2.jpg")
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+        w, h = fnt.getsize(color1)
+        ImageDraw.Draw(self.fullview).text(((self.base_width/2) - (w/2), self.full_ptr+self.img.height), color_full[0],font=fnt, fill=(0,0,0))
+        self.full_ptr += self.img.height + 100
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_2.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
@@ -173,24 +182,38 @@ class MakeImg:
 
         return self.fullview
 
-    def makeFV3(self, itemnumber, color2, color1):
-        self.full_ptr = 0
-        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
+    def makeFV3(self, itemnumber, color1, color2, color3, color_full):
+        self.fullview = Image.new("RGB", (self.base_width, 2900), (255, 255, 255))
         self.tag = Image.open("01_data/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 20))
 
-        self.full_ptr += 50
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_1.jpg")
+        self.full_ptr = 80
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color3}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        w, h = fnt.getsize(color2)
+        ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
+                                           color_full[2], font=fnt, fill=(0, 0, 0))
         self.full_ptr += self.img.height + 100
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_1.jpg")
+
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
+        w, h = fnt.getsize(color2)
+        ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
+                                           color_full[1], font=fnt, fill=(0, 0, 0))
         self.full_ptr += self.img.height + 100
-        self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A2}.jpg")
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
+        self.img = self.img.resize((600, 600))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+        w, h = fnt.getsize(color1)
+        ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
+                                           color_full[0], font=fnt, fill=(0, 0, 0))
+        self.full_ptr += self.img.height + 100
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_2.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
