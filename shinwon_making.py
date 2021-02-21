@@ -76,7 +76,7 @@ class MakeImg:
         # 브랜드 로고 자리
 
         logo = Image.open(f"01_data/image/Brand_SIEG.jpg")
-        self.product_info.paste(logo, (300, 35 - logo.height))
+        self.product_info.paste(logo, (300, 0))
 
         self.prd_ptr = 140
         draw.text((310, 140), "품번", fill=(80, 80, 80), font=fnt)
