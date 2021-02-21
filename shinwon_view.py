@@ -106,16 +106,28 @@ class WindowClass(QMainWindow, form_class):
             self.mkimg.makeDV(self.poombun, color[0])
             self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
 
-            self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
-            self.mkimg.info_product(self.poombun)
-            self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
-            self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
-            self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
-            self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
-            self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
-            self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+            if self.sw_obj.dic_product['성별'] == '남성':
+                self.mkimg.info_product_name_man(self.sw_obj.dic_product["상품명"])
+                self.mkimg.info_product_man(self.poombun)
+                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["시즌"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["소재"])
 
-            self.mkimg.combineImg(self.poombun)
+                self.mkimg.combineImg_man(self.poombun)
+            else:
+                self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
+                self.mkimg.info_product(self.poombun)
+                self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+                self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+                self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
+                self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+                self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+                self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+                self.mkimg.combineImg(self.poombun)
 
             return
 
@@ -172,7 +184,7 @@ class WindowClass(QMainWindow, form_class):
             if self.mkimg.checkfile(self.poombun, color):
                 self.Makeimage_single()
             else:
-                self.tb_poombun_info.setPlainText(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
+                self.tb_poombun_info.append(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
 
         return
@@ -182,7 +194,7 @@ class WindowClass(QMainWindow, form_class):
 
         if len(self.poombun) != 9:
             # self.tb_poombun_info.clear()
-            self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
             return
         else:
             value = self.sw_obj.dic_product["컬러"]
@@ -201,22 +213,7 @@ class WindowClass(QMainWindow, form_class):
 
             self.mkimg.makeDV(self.poombun, color[0])
 
-            if "S/S" in self.sw_obj.dic_product["시즌"]:
-                season = "봄/여름"
-            else:
-                season = "가을/겨울"
 
-            product_name = self.sw_obj.dic_product["상품명"].split("(")
-
-
-            self.mkimg.info_product_name(product_name[0])
-            self.mkimg.info_product(self.poombun)
-            self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
-            self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
-            self.mkimg.info_product(season)
-            self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
-            self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
-            self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
             self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
             self.mkimg.info_size(self.sw_obj.size_count + 1)
@@ -225,7 +222,37 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.size_insert(self.sw_obj.dic_product[f"사이즈{n}"])
 
             self.mkimg.combineInfo()
-            self.mkimg.combineImg(self.poombun)
+
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            product_name = self.sw_obj.dic_product["상품명"].split("(")
+
+            if self.sw_obj.dic_product['성별'] == '남성':
+
+                self.mkimg.info_product_name_man(product_name[0], self.poombun, color[0])
+                self.mkimg.info_product_man(self.poombun)
+                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+                self.mkimg.info_product_man(season)
+                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+                self.mkimg.info_product_man(self.sw_obj.dic_product["소재"])
+
+                self.mkimg.combineImg_man(self.poombun)
+            else:
+                self.mkimg.info_product_name(product_name[0])
+                self.mkimg.info_product(self.poombun)
+                self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+                self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+                self.mkimg.info_product(season)
+                self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+                self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+                self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+                self.mkimg.combineImg(self.poombun)
 
             return
 
