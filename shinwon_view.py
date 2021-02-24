@@ -12,8 +12,7 @@ import re
 from shinwon_data import Shinwon
 from shinwon_making import MakeImg
 
-form_class = uic.loadUiType("ui_imageMaking.ui")[0]
-
+form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
