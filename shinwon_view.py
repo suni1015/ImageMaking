@@ -20,6 +20,9 @@ class WindowClass(QMainWindow, form_class):
 
     def __init__(self):
         super().__init__()
+
+        #self.setWindowFlag(Qt.FramelessWindowHint)
+
         self.sw_obj = Shinwon()  # sw_obj = Shinwon('BYJAX1234-0')
         self.mkimg = MakeImg()
 
