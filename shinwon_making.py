@@ -75,7 +75,7 @@ class MakeImg:
 
         # 브랜드 로고 자리
 
-        logo = Image.open(f"01_data/image/Brand_SIEG.jpg")
+        logo = Image.open(f"03_resource/image/Brand_SIEG.jpg")
         self.product_info.paste(logo, (300, 0))
 
         self.prd_ptr = 140
@@ -161,15 +161,13 @@ class MakeImg:
 
     def makeFV1(self, itemnumber, color, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
-        self.tag = Image.open("03_resource/image/FullView.jpg")
-        self.fullview.paste(self.tag, (0, 20))
 
         if itemnumber[0] == ("B" or "S" or "T" or "V" or "G"):
-            img = Image.open("01_data/image/Brand_SI.jpg")
+            img = Image.open("03_resource/image/Brand_SI.jpg")
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
-            self.tag = Image.open("01_data/image/FullView.jpg")
+            self.tag = Image.open("03_resource/image/FullView.jpg")
             self.fullview.paste(self.tag, (0, 20))
             self.full_ptr = 80
 
@@ -197,16 +195,14 @@ class MakeImg:
         return self.fullview
 
     def makeFV2(self, itemnumber, color1, color2, color_full):
-        self.fullview = Image.new("RGB", (self.base_width, 2100), (255, 255, 255))
-        self.tag = Image.open("03_resource/image/FullView.jpg")
-        self.fullview.paste(self.tag, (0, 20))
+        self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
 
         if itemnumber[0] == "B" or "S" or "T" or "V" or "G":
-            img = Image.open("01_data/image/Brand_SI.jpg")
+            img = Image.open("03_resource/image/Brand_SI.jpg")
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
-            self.tag = Image.open("01_data/image/FullView.jpg")
+            self.tag = Image.open("03_resource/image/FullView.jpg")
             self.fullview.paste(self.tag, (0, 20))
             self.full_ptr = 80
 
@@ -238,7 +234,7 @@ class MakeImg:
         self.fullview = Image.new("RGB", (self.base_width, 2900), (255, 255, 255))
 
         if itemnumber[0] == "B" or "S" or "T" or "V" or "G":
-            img = Image.open("01_data/image/Brand_SI.jpg")
+            img = Image.open("03_resource/image/Brand_SI.jpg")
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
@@ -454,7 +450,7 @@ class MakeImg:
             num += 1
         self.size_ptr += 40
 
-        img = Image.open("01_data/image/Size_woman.jpg")
+        img = Image.open("03_resource/image/Size_woman.jpg")
         self.sizeview.paste(img, (500, int((self.sizeview.height - img.height)/2)))
 
         # self.sizeview.save("test_size2.jpg", quallity=95)
