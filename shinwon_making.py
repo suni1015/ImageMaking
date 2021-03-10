@@ -7,9 +7,9 @@ from PIL import Image, ImageDraw, ImageFont
 import configparser
 import os
 
-pdt_name = ImageFont.truetype("03_resource/NanumGothic.ttf", 20, encoding="UTF-8")
-fnt = ImageFont.truetype("03_resource/NanumGothic.ttf", 15, encoding="UTF-8")
-fnt_tip = ImageFont.truetype("03_resource/NanumGothic.ttf", 12, encoding="UTF-8")
+pdt_name = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 20, encoding="UTF-8")
+fnt = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 15, encoding="UTF-8")
+fnt_tip = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 12, encoding="UTF-8")
 ini_filepath = f'./03_resource/setting.ini'
 
 result_path = f'./04_result/'
@@ -72,7 +72,7 @@ class MakeImg:
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
         img = img.resize((300, 300))
         self.product_info.paste(img, (0, 70))
-
+        logo = Image.new("RGB", (0, 0), (255, 255, 255))
         # 브랜드 로고 자리
 
         logo = Image.open(f"03_resource/image/Brand_SIEG.jpg")
@@ -89,7 +89,7 @@ class MakeImg:
 
         draw.text((310, 70), name, fill=(0, 0, 0), font=pdt_name)
 
-        #self.product_info.save("test_man.jpg")
+        # self.product_info.save("test_man.jpg")
 
     def info_product_man(self, text):
         draw = ImageDraw.Draw(self.product_info)
@@ -161,9 +161,19 @@ class MakeImg:
 
     def makeFV1(self, itemnumber, color, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
+        img = Image.new("RGB", (0, 0), (255, 255, 255))
 
         if itemnumber[0] == ("B" or "S" or "T" or "V" or "G"):
-            img = Image.open("03_resource/image/Brand_SI.jpg")
+            if itemnumber[0] == "B":
+                img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            elif itemnumber[0] == "S":
+                img = Image.open("03_resource/image/Brand_씨.jpg")
+            elif itemnumber[0] == "T":
+                img = Image.open("03_resource/image/Brand_비키.jpg")
+            elif itemnumber[0] == "V":
+                img = Image.open("03_resource/image/Brand_이사베이.jpg")
+            elif itemnumber[0] == "G":
+                img = img
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
@@ -197,8 +207,19 @@ class MakeImg:
     def makeFV2(self, itemnumber, color1, color2, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
 
-        if itemnumber[0] == "B" or "S" or "T" or "V" or "G":
-            img = Image.open("03_resource/image/Brand_SI.jpg")
+        img = Image.new("RGB", (0, 0), (255, 255, 255))
+
+        if itemnumber[0] == ("B" or "S" or "T" or "V" or "G"):
+            if itemnumber[0] == "B":
+                img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            elif itemnumber[0] == "S":
+                img = Image.open("03_resource/image/Brand_씨.jpg")
+            elif itemnumber[0] == "T":
+                img = Image.open("03_resource/image/Brand_비키.jpg")
+            elif itemnumber[0] == "V":
+                img = Image.open("03_resource/image/Brand_이사베이.jpg")
+            elif itemnumber[0] == "G":
+                img = img
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
@@ -233,8 +254,19 @@ class MakeImg:
     def makeFV3(self, itemnumber, color1, color2, color3, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 2900), (255, 255, 255))
 
-        if itemnumber[0] == "B" or "S" or "T" or "V" or "G":
-            img = Image.open("03_resource/image/Brand_SI.jpg")
+        img = Image.new("RGB", (0, 0), (255, 255, 255))
+
+        if itemnumber[0] == ("B" or "S" or "T" or "V" or "G"):
+            if itemnumber[0] == "B":
+                img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            elif itemnumber[0] == "S":
+                img = Image.open("03_resource/image/Brand_씨.jpg")
+            elif itemnumber[0] == "T":
+                img = Image.open("03_resource/image/Brand_비키.jpg")
+            elif itemnumber[0] == "V":
+                img = Image.open("03_resource/image/Brand_이사베이.jpg")
+            elif itemnumber[0] == "G":
+                img = img
             self.fullview.paste(img, (0, 0))
             self.full_ptr = 250
         else:
@@ -279,7 +311,7 @@ class MakeImg:
         detail_ptr = 0
         self.area = (50, 150, 550, 550)
         self.detailview = Image.new("RGB", (self.base_width, 1300), (255, 255, 255))
-        self.tag = Image.open("03_resource/image/DetailVeiw.jpg")
+        self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 0))
         detail_ptr += 50
 
@@ -421,13 +453,63 @@ class MakeImg:
 
         self.grey = True
         # 사이즈 고시할 공간
-        self.size_table = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))  # (500, 40)
+        self.size_table = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))  # (480, 40)
         self.size_table_grey = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))
         self.img = Image.new("RGB", (self.base_width - 220, 38), (255, 255, 255))
         self.size_table.paste(self.img, (1, 0))
 
         self.img = Image.open("03_resource/image/SizeSpec.jpg")
         self.sizeview.paste(self.img, (0, 0))
+
+        img = Image.new("RGB", (0, 0), (255, 255, 255))
+
+        if self.itemnumber[0] == ("B" or "S" or "T" or "V" or "G"):  # 여성구분
+            if self.itemnumber[2] == "A":
+                if self.itemnumber[3] == "F":
+                    img = Image.open("03_resource/image/여성_스카프.jpg")
+
+                elif self.itemnumber[3] == "G":
+                    img = Image.open("03_resource/image/가방.jpg")
+
+            elif self.itemnumber[2] == "F":
+                img = Image.open("03_resource/image/여성_팬츠.jpg")
+
+            elif self.itemnumber[2] == "S":
+                img = Image.open("03_resource/image/여성_치마")
+
+            elif self.itemnumber[2] == "O":
+                img = Image.open("03_resource/image/여성_원피스.jpg")
+
+            else:
+                img = Image.open("03_resource/image/여성_셔츠.jpg")
+
+
+        else:  # 남성
+            if self.itemnumber[2] == "A":
+                if self.itemnumber[3] == "L":
+                    img = Image.open("03_resource/image/벨트.jpg")
+
+                elif self.itemnumber[3] == "I":
+                    img = Image.open("03_resource/image/넥타이.jpg")
+
+                elif self.itemnumber[3] == "S":
+                    img = Image.open("03_resource/image/신발.jpg")
+                elif self.itemnumber[3] == "G":
+                    img = Image.open("03_resource/image/가방.jpg")
+
+
+            elif self.itemnumber[2] == ("B" or "C" or "U" or "I"):
+                img = Image.open("03_resource/image/상의.jpg")
+
+            elif self.itemnumber[2] == ("F"):
+                img = Image.open("03_resource/image/팬츠.jpg")
+            else:
+                img = Image.open("03_resource/image/자켓.jpg")
+
+        img = img.resize((200, 200))
+        self.sizeview.paste(img, (500, int((self.sizeview.height - img.height) / 2)))
+
+        ImageDraw.Draw(self.sizeview).text((40, 440), "단위(cm)", font=fnt_tip, fill=(51, 51, 51))
 
         self.size_ptr = 70
 
@@ -449,9 +531,6 @@ class MakeImg:
                 n, font=fnt, fill=(0, 0, 0))
             num += 1
         self.size_ptr += 40
-
-        img = Image.open("03_resource/image/Size_woman.jpg")
-        self.sizeview.paste(img, (500, int((self.sizeview.height - img.height)/2)))
 
         # self.sizeview.save("test_size2.jpg", quallity=95)
 

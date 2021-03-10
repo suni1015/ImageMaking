@@ -3,6 +3,7 @@ View 클래스
 
 """
 import sys
+import qdarkgraystyle
 from PyQt5 import QtGui, QtCore, uic, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -29,7 +30,7 @@ class WindowClass(QMainWindow, form_class):
         self.poombun = None
 
         self.setupUi(self)
-        self.setStyleSheet("background-color: white;")
+        self.setStyleSheet(qdarkgraystyle.load_stylesheet())
 
         self.btn_file_open.clicked.connect(self.OnfileOpen)
         self.btn_img_make_single.clicked.connect(self.Makeimage_single)
@@ -188,6 +189,8 @@ class WindowClass(QMainWindow, form_class):
             else:
                 self.tb_poombun_info.append(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
+        self.tb_poombun_info.append(
+            f"\n-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
 
         return
 
@@ -262,5 +265,8 @@ class WindowClass(QMainWindow, form_class):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()
+
+
+
     myWindow.show()
     app.exec_()
