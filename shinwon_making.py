@@ -89,11 +89,8 @@ class MakeImg:
 
         draw.text((310, 70), name, fill=(0, 0, 0), font=pdt_name)
 
-<<<<<<< HEAD
-        # self.product_info.save("test_man.jpg")
-=======
         self.product_info.save("test_man.jpg")
->>>>>>> parent of 67c3732 (bug fix)
+
 
     def info_product_man(self, text):
         draw = ImageDraw.Draw(self.product_info)
