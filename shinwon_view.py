@@ -15,6 +15,7 @@ from shinwon_making import MakeImg
 
 form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
+
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
     filename = None
@@ -22,17 +23,20 @@ class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
 
-        #self.setWindowFlag(Qt.FramelessWindowHint)
+        # self.setWindowFlag(Qt.FramelessWindowHint)
 
         self.sw_obj = Shinwon()  # sw_obj = Shinwon('BYJAX1234-0')
         self.mkimg = MakeImg()
 
         self.poombun = None
 
+        self.image_path = None
+
         self.setupUi(self)
         self.setStyleSheet(qdarkgraystyle.load_stylesheet())
 
         self.btn_file_open.clicked.connect(self.OnfileOpen)
+        self.btn_path.clicked.connect(self.OnSelectPath)
         self.btn_img_make_single.clicked.connect(self.Makeimage_single)
         self.btn_img_make_multi.clicked.connect(self.Makeimage_multi)
         self.edt_poombun.returnPressed.connect(self.OnEnterPoombun)
@@ -40,6 +44,10 @@ class WindowClass(QMainWindow, form_class):
 
     @pyqtSlot()
     def OnfileOpen(self):
+
+        self.image_path = None
+        self.label_file_path_2.setText('...')
+
         self.filename = QFileDialog.getOpenFileName(self, 'Open File', '', 'Excel File(*.xls *.xlsx)')
         if self.filename[0]:
 
@@ -51,6 +59,13 @@ class WindowClass(QMainWindow, form_class):
             return
 
         self.sw_obj.openFile_clothInfo(self.filename[0])  # 엑셀 -> dataframe 으로 로딩.
+
+    @pyqtSlot()
+    def OnSelectPath(self):
+        self.dir_path = QFileDialog.getExistingDirectory(self, "select Directory")
+
+        self.image_path = self.dir_path
+        self.label_file_path_2.setText(self.dir_path)
 
     # QLineEdit 의 엔터 입력시 발생하는 이벤트 (not use here)
     @pyqtSlot()
@@ -99,7 +114,10 @@ class WindowClass(QMainWindow, form_class):
             # 색분류
             print(color)
 
-            self.mkimg.setPath(self.path, self.poombun)
+            if not self.image_path == "":
+                self.mkimg.setPath(self.image_path, self.poombun)
+            else:
+                self.mkimg.setPath(self.path, self.poombun)
             len(color)
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0])
@@ -175,8 +193,11 @@ class WindowClass(QMainWindow, form_class):
                     return
 
             dic_prod_info = self.sw_obj.get_product_info()
-            #self.Makeimage()
-            self.mkimg.setPath(self.path, self.poombun)
+            # self.Makeimage()
+            if not self.image_path == "":
+                self.mkimg.setPath(self.image_path, self.poombun)
+            else:
+                self.mkimg.setPath(self.path, self.poombun)
 
             value = self.sw_obj.dic_product["컬러"]
             self.color_full = value.split("/")
@@ -186,8 +207,6 @@ class WindowClass(QMainWindow, form_class):
 
             if self.mkimg.checkfile(self.poombun, color):
                 self.Makeimage_single()
-            else:
-                self.tb_poombun_info.append(f"-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
         self.tb_poombun_info.append(
             f"\n-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
@@ -207,7 +226,6 @@ class WindowClass(QMainWindow, form_class):
             color = comp.sub('', value)
             color = color.split("/")
 
-
             len(color)
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
@@ -217,8 +235,6 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
 
             self.mkimg.makeDV(self.poombun, color[0])
-
-
 
             self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
             self.mkimg.info_size(self.sw_obj.size_count + 1)
@@ -265,8 +281,5 @@ class WindowClass(QMainWindow, form_class):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()
-
-
-
     myWindow.show()
     app.exec_()
