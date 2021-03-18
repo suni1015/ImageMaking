@@ -174,7 +174,9 @@ class MakeImg:
                 img = Image.open("03_resource/image/Brand_이사베이.jpg")
             elif itemnumber[0] == "G":
                 img = img
-            self.fullview.paste(img, (0, 0))
+            img = img.resize((350, 100))
+
+            self.fullview.paste(img, (int((700-img.width)/2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -220,7 +222,9 @@ class MakeImg:
                 img = Image.open("03_resource/image/Brand_이사베이.jpg")
             elif itemnumber[0] == "G":
                 img = img
-            self.fullview.paste(img, (0, 0))
+            img = img.resize((350, 100))
+
+            self.fullview.paste(img, (int((700-img.width)/2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -267,7 +271,9 @@ class MakeImg:
                 img = Image.open("03_resource/image/Brand_이사베이.jpg")
             elif itemnumber[0] == "G":
                 img = img
-            self.fullview.paste(img, (0, 0))
+            img = img.resize((350, 100))
+
+            self.fullview.paste(img, (int((700-img.width)/2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")

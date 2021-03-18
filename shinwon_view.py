@@ -64,8 +64,12 @@ class WindowClass(QMainWindow, form_class):
     def OnSelectPath(self):
         self.dir_path = QFileDialog.getExistingDirectory(self, "select Directory")
 
-        self.image_path = self.dir_path
-        self.label_file_path_2.setText(self.dir_path)
+        if self.dir_path:
+
+            self.image_path = self.dir_path
+            self.label_file_path_2.setText(self.dir_path)
+        else:
+            return
 
     # QLineEdit 의 엔터 입력시 발생하는 이벤트 (not use here)
     @pyqtSlot()
@@ -118,7 +122,8 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.setPath(self.image_path, self.poombun)
             else:
                 self.mkimg.setPath(self.path, self.poombun)
-            len(color)
+
+
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0])
             else:
