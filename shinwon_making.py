@@ -89,7 +89,8 @@ class MakeImg:
 
         draw.text((310, 70), name, fill=(0, 0, 0), font=pdt_name)
 
-        # self.product_info.save("test_man.jpg")
+        self.product_info.save("test_man.jpg")
+
 
     def info_product_man(self, text):
         draw = ImageDraw.Draw(self.product_info)

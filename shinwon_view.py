@@ -15,16 +15,12 @@ from shinwon_making import MakeImg
 
 form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
-
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
     filename = None
 
     def __init__(self):
         super().__init__()
-
-        # self.setWindowFlag(Qt.FramelessWindowHint)
-
         self.sw_obj = Shinwon()  # sw_obj = Shinwon('BYJAX1234-0')
         self.mkimg = MakeImg()
 
