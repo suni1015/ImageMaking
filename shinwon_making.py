@@ -72,10 +72,26 @@ class MakeImg:
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
         img = img.resize((300, 300))
         self.product_info.paste(img, (0, 70))
+
         logo = Image.new("RGB", (0, 0), (255, 255, 255))
         # 브랜드 로고 자리
 
         logo = Image.open(f"03_resource/image/Brand_SIEG.jpg")
+
+        if self.itemnumber[0] == "P":
+            logo = Image.open("03_resource/image/Brand_지이크.jpg")
+            logo = logo.crop((380, 0, 620, 300))
+            logo = logo.resize((80, 100))
+        elif self.itemnumber == "F":
+            logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
+            logo = logo.crop((125, 0, 875, 300))
+            logo = logo.resize((250, 100))
+        elif self.itemnumber == "Q":
+            logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
+            logo = logo.crop((250, 0, 750, 300))
+            logo = logo.resize((167, 100))
+
+
         self.product_info.paste(logo, (300, 0))
 
         self.prd_ptr = 140
@@ -87,10 +103,10 @@ class MakeImg:
         draw.text((310, 290), "원산지", fill=(80, 80, 80), font=fnt)
         draw.text((310, 320), "소재", fill=(80, 80, 80), font=fnt)
 
-        draw.text((310, 70), name, fill=(0, 0, 0), font=pdt_name)
+        if len(name) < 20:
+            draw.text((310, 70), name, fill=(0, 0, 0), font=pdt_name)
 
         self.product_info.save("test_man.jpg")
-
 
     def info_product_man(self, text):
         draw = ImageDraw.Draw(self.product_info)
@@ -177,7 +193,7 @@ class MakeImg:
                 img = img
             img = img.resize((350, 100))
 
-            self.fullview.paste(img, (int((700-img.width)/2), 50))
+            self.fullview.paste(img, (int((700 - img.width) / 2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -225,7 +241,7 @@ class MakeImg:
                 img = img
             img = img.resize((350, 100))
 
-            self.fullview.paste(img, (int((700-img.width)/2), 50))
+            self.fullview.paste(img, (int((700 - img.width) / 2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -274,7 +290,7 @@ class MakeImg:
                 img = img
             img = img.resize((350, 100))
 
-            self.fullview.paste(img, (int((700-img.width)/2), 50))
+            self.fullview.paste(img, (int((700 - img.width) / 2), 50))
             self.full_ptr = 250
         else:
             self.tag = Image.open("03_resource/image/FullView.jpg")
