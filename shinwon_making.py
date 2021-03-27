@@ -174,6 +174,10 @@ class MakeImg:
                     self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
                     print(self.no_file)
                     return False
+
+        if not os.path.isdir("04_result"):
+            os.makedirs("04_result")
+
         return True
 
     def makeFV1(self, itemnumber, color, color_full):

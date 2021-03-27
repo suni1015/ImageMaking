@@ -114,7 +114,7 @@ class WindowClass(QMainWindow, form_class):
             # 색분류
             print(color)
 
-            if not self.image_path == "":
+            if not self.image_path == None:
                 self.mkimg.setPath(self.image_path, self.poombun)
             else:
                 self.mkimg.setPath(self.path, self.poombun)
@@ -195,7 +195,7 @@ class WindowClass(QMainWindow, form_class):
 
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
-            if not self.image_path == "":
+            if not self.image_path == None:
                 self.mkimg.setPath(self.image_path, self.poombun)
             else:
                 self.mkimg.setPath(self.path, self.poombun)
