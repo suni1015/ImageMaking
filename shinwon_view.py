@@ -177,21 +177,40 @@ class WindowClass(QMainWindow, form_class):
             if var_tf:
                 self.tb_poombun_info.append("ERR : 품번체계 오류(NaN)")
                 continue
+            '''
             if len(poombun) != 9:
                 self.tb_poombun_info.append("ERR : 품번체계는 9자 입니다.")
                 continue
+            '''
+            if len(poombun) == 9:
+                self.sw_obj.bSET_poombun = False
+            elif len(poombun) == 19:
+                self.sw_obj.bSET_poombun = True
+            else:
+                self.tb_poombun_info.append("ERR : 품번 길이 오류")
+                continue
+
             self.tb_poombun_info.append("품번 : " + poombun)
 
             self.poombun = poombun
             self.sw_obj.set_poombun(poombun)
+
             self.sw_obj.clear_product_info()  # 이전 품번 정보를 클리어한다.
-            self.sw_obj.decode_poombun()  # 품번 정보 디코딩(파싱)
 
             if self.filename:
-                ret = self.sw_obj.parse_excel_data()  # 품번 기반으로 엑셀에서 정보를 가져온다.
+                if self.sw_obj.bSET_poombun == False:
+                    self.sw_obj.decode_poombun()  # 품번 정보 디코딩(파싱)
+                    ret = self.sw_obj.parse_excel_data()  # 품번 기반으로 엑셀에서 정보를 가져온다.
+                elif self.sw_obj.bSET_poombun == True:
+                    self.sw_obj.decode_poombun_set()  # 품번 정보 디코딩(파싱)
+                    ret = self.sw_obj.parse_excel_data_set()  # 품번 기반으로 엑셀에서 정보를 가져온다.
+                else:
+                    self.tb_poombun_info.append("ERR : 일반 품번인지 Set 품번인지 구분하지 못했습니다")
+                    continue
+
                 if not ret:
                     self.tb_poombun_info.append("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
-                    return
+                    continue #return
 
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
@@ -200,7 +219,12 @@ class WindowClass(QMainWindow, form_class):
             else:
                 self.mkimg.setPath(self.path, self.poombun)
 
-            value = self.sw_obj.dic_product["컬러"]
+            # 추후 '컬럼' key 통일 시킨 후 아래 구분 구문 제거해도 됨.
+            if self.sw_obj.bSET_poombun == False:
+                value = dic_prod_info["컬러"]
+            if self.sw_obj.bSET_poombun == True:
+                value = dic_prod_info["컬러명 ( 한글/영문 )"]
+
             self.color_full = value.split("/")
             comp = re.compile('[^a-zA-Z/]')
             color = comp.sub('', value)
