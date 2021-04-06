@@ -438,9 +438,6 @@ class Shinwon:
 
         # df 데이터 처리 테스트 코드
         row_condition = df_all['품번']
-        #col_condition1 = ['브랜드', '관리코드', '상품분류코드', '상품명', '컬러', '시즌', '소재', '실측사이즈(cm)']
-        #col_condition2 = ['브랜드', '관리코드', '컬러', '시즌', '소재', '실측사이즈(cm)']
-        #df_product_info = df_all.loc[row_condition == self.str_poombun, col_condition2]  # 행/열 조건 삽입하여 데이터 추출
 
         df_product_info = df_all[row_condition == self.str_poombun]  # 행 조건만 삽입하여 데이터 추출
         #print(type(df_product_info.columns))
@@ -448,61 +445,30 @@ class Shinwon:
         if df_product_info.empty:
             print('ERR : 입력한 품번은 정보고시 파일에 존재하지 않습니다.')
             return False
-        '''
-        품번
-        브랜드
-        분류코드
-        행사가
-    상품명
-    컬러명(한글 / 영문)
-        시즌
-    세탁방법
-    원산지
-    소재
-    사이즈
-    제조원
-    제조월
-        '''
 
         self.dic_product_set['상품명'] = df_all.loc[row_condition == self.str_poombun, '상품명'].values[0]
         self.dic_product_set['컬러명 ( 한글/영문 )'] = df_all.loc[row_condition == self.str_poombun, '컬러명 ( 한글/영문 )'].values[0]
         self.dic_product_set['세탁방법'] = df_all.loc[row_condition == self.str_poombun, '세탁방법'].values[0]
         self.dic_product_set['원산지'] = df_all.loc[row_condition == self.str_poombun, '원산지'].values[0]
         self.dic_product_set['소재'] = df_all.loc[row_condition == self.str_poombun, '소재'].values[0]
-        #self.dic_product['상품특성'] = df_all.loc[row_condition == self.str_poombun, '상품특성'].values[0]
         self.dic_product_set['제조원'] = df_all.loc[row_condition == self.str_poombun, '제조원'].values[0]
         self.dic_product_set['제조월'] = df_all.loc[row_condition == self.str_poombun, '제조월'].values[0]
         self.dic_product_set['사이즈'] = df_all.loc[row_condition == self.str_poombun, '사이즈'].values[0]
-        #self.dic_product['실측사이즈(cm)'] = df_all.loc[row_condition == self.str_poombun, '실측사이즈(cm)'].values[0]
 
-        # 칼럼 이름이 없어서 수작업으로 파싱.
+        ''' 엑셀에 아래 포맷으로 저장되어 있음
+        상의
+        
+         95, 97,100,103,105,110
+        
+        하의
+        
+         74, 78, 82, 86, 90, 94
         '''
-        for i, item in enumerate(df_product_info.columns):
-            print(i, item)
-            if item == '상품특성':
-                col_idx1 = i + 1            # 상품특성의 값은 (엑셀상의) 다음칼럼에 있다.(칼럼 이름이 없어서 수작업 처리함)
-            elif item == '실측사이즈(cm)':
-                col_idx2 = i + 1            # 실측사이즈 값은 (엑셀상의) 다음칼럼에 있다.(칼럼 이름이 없어서 수작업 처리함)
+        if(self.dic_product_set['사이즈'].split('\n')[0] == '상의'):
+            self.dic_product_set['사이즈_상의'] = self.dic_product_set['사이즈'].split('\n')[2]
+        if (self.dic_product_set['사이즈'].split('\n')[4] == '하의'):
+            self.dic_product_set['사이즈_하의'] = self.dic_product_set['사이즈'].split('\n')[6]
 
-        print('상품특성의 값이 있는 칼럼 인덱스 : ', col_idx1)
-        print('실측사이즈 값이 있는 칼럼 인덱스 : ', col_idx2)
-        '''
-
-        #print(df_product_info.iloc[:, col_idx1].values[0])
-        #self.dic_product['상품특성 값'] = df_product_info.iloc[:, col_idx1].values[0]
-
-        # 사이즈 개수 세기
-        '''
-        token = ['/', ',']
-        self.size_count = 1     # 최소 1개이므로.
-        for tk in token:
-            self.size_count += self.dic_product['기준\n사이즈'].count(tk)
-        print('사이즈 개수 : ', self.size_count)
-
-        for i in range(self.size_count):
-            str_key = "사이즈%d" % i
-            self.dic_product[str_key] = df_product_info.iloc[:, col_idx2+i].values[0]
-        '''
         return True
 
     def get_product_info(self):
