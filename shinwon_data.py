@@ -446,6 +446,9 @@ class Shinwon:
             print('ERR : 입력한 품번은 정보고시 파일에 존재하지 않습니다.')
             return False
 
+        self.dic_product_set['품번_상의'] = self.str_poombun.split('_')[0]
+        self.dic_product_set['품번_하의'] = self.str_poombun.split('_')[1]
+
         self.dic_product_set['상품명'] = df_all.loc[row_condition == self.str_poombun, '상품명'].values[0]
         self.dic_product_set['컬러명 ( 한글/영문 )'] = df_all.loc[row_condition == self.str_poombun, '컬러명 ( 한글/영문 )'].values[0]
         self.dic_product_set['세탁방법'] = df_all.loc[row_condition == self.str_poombun, '세탁방법'].values[0]
