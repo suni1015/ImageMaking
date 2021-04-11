@@ -15,6 +15,7 @@ from shinwon_making import MakeImg
 
 form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
+
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
     filename = None
@@ -101,58 +102,6 @@ class WindowClass(QMainWindow, form_class):
             str_pf = '*' + key + '-' + value
             self.tb_poombun_info.append(str_pf)
 
-    def Makeimage(self):
-        if len(self.poombun) != 9:
-            # self.tb_poombun_info.clear()
-            self.tb_poombun_info.setPlainText("품번이 유효하지 않습니다")
-            return
-        else:
-            value = self.sw_obj.dic_product["컬러"]
-            comp = re.compile('[^a-zA-Z/]')
-            color = comp.sub('', value)
-            color = color.split("/")
-            # 색분류
-            print(color)
-
-            if not self.image_path == None:
-                self.mkimg.setPath(self.image_path, self.poombun)
-            else:
-                self.mkimg.setPath(self.path, self.poombun)
-
-
-            if len(color) == 1:
-                self.mkimg.makeFV1(self.poombun, color[0])
-            else:
-                self.mkimg.makeFV2(self.poombun, color[0], color[1])
-
-            self.mkimg.makeDV(self.poombun, color[0])
-            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-
-            if self.sw_obj.dic_product['성별'] == '남성':
-                self.mkimg.info_product_name_man(self.sw_obj.dic_product["상품명"])
-                self.mkimg.info_product_man(self.poombun)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["시즌"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["소재"])
-
-                self.mkimg.combineImg_man(self.poombun)
-            else:
-                self.mkimg.info_product_name(self.sw_obj.dic_product["상품명"])
-                self.mkimg.info_product(self.poombun)
-                self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
-                self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
-                self.mkimg.info_product(self.sw_obj.dic_product["시즌"])
-                self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
-                self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
-                self.mkimg.info_product(self.sw_obj.dic_product["소재"])
-
-                self.mkimg.combineImg(self.poombun)
-
-            return
-
     def isNaN(self, num):
         return num != num
 
@@ -161,8 +110,16 @@ class WindowClass(QMainWindow, form_class):
 
         self.mkimg.clear_data()
 
+        self.success_count = 0
+        self.fail_count = 0
+
         # exception : 품번 리스트가 열려 있는가
         list_poombun = self.sw_obj.get_list_poombun()
+
+        if not self.radio_set.isChecked() and not self.radio_single.isChecked():
+            self.tb_poombun_info.setPlainText('단품 세트 중 하나를 선택해 주세요.')
+            return
+
         if list_poombun is None:
             print('품번 리스트가 없습니다. 엑셀 파일을 다시 열어주세요.')
             self.tb_poombun_info.append('품번 리스트가 없습니다. 엑셀 파일을 다시 열어주세요.')
@@ -206,11 +163,12 @@ class WindowClass(QMainWindow, form_class):
                     ret = self.sw_obj.parse_excel_data_set()  # 품번 기반으로 엑셀에서 정보를 가져온다.
                 else:
                     self.tb_poombun_info.append("ERR : 일반 품번인지 Set 품번인지 구분하지 못했습니다")
+                    self.fail_count += 1
                     continue
 
                 if not ret:
                     self.tb_poombun_info.append("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
-                    continue #return
+                    continue  # return
 
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
@@ -229,12 +187,26 @@ class WindowClass(QMainWindow, form_class):
             comp = re.compile('[^a-zA-Z/]')
             color = comp.sub('', value)
             color = color.split("/")
+            if self.sw_obj.bSET_poombun == False:
+                if self.mkimg.checkfile(self.poombun, color):
+                    self.Makeimage_single()
+                    self.success_count += 1
+                else:
+                    self.fail_count += 1
+            elif self.sw_obj.bSET_poombun == True:
+                if self.mkimg.checkfile_set(self.poombun):
+                    self.Makeimage_set()
+                    self.success_count += 1
+                else:
+                    self.fail_count += 1
 
-            if self.mkimg.checkfile(self.poombun, color):
-                self.Makeimage_single()
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
+        self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건")
         self.tb_poombun_info.append(
-            f"\n-실패한 품번-\n{self.mkimg.no_file_itemnumber}-없는이미지-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
+            f"\n-이미지없음-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
+        # \n-실패한 품번-\n{self.mkimg.no_file_itemnumber}
+
+        self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건\n")
 
         return
 
@@ -251,15 +223,18 @@ class WindowClass(QMainWindow, form_class):
             color = comp.sub('', value)
             color = color.split("/")
 
-            len(color)
+            '''
             if len(color) == 1:
                 self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
             elif len(color) == 2:
                 self.mkimg.makeFV2(self.poombun, color[0], color[1], self.color_full)
             elif len(color) == 3:
                 self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
-
-            self.mkimg.makeDV(self.poombun, color[0])
+            '''
+            if self.poombun[0] == "F":
+                self.mkimg.makeDV2(self.poombun, color[0])
+            else:
+                self.mkimg.makeDV(self.poombun, color[0])
 
             self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
             self.mkimg.info_size(self.sw_obj.size_count + 1)
@@ -278,6 +253,11 @@ class WindowClass(QMainWindow, form_class):
 
             if self.sw_obj.dic_product['성별'] == '남성':
 
+                if self.poombun[0] =="F":
+                    self.mkimg.makeFV_man_2(self.poombun, color[0])
+                else:
+                    self.mkimg.makeFV_man(self.poombun, color[0])
+
                 self.mkimg.info_product_name_man(product_name[0], self.poombun, color[0])
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
@@ -288,6 +268,85 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.info_product_man(self.sw_obj.dic_product["소재"])
 
                 self.mkimg.combineImg_man(self.poombun)
+
+            else:
+                if len(color) == 1:
+                    self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
+                elif len(color) == 2:
+                    self.mkimg.makeFV2(self.poombun, color[0], color[1], self.color_full)
+                elif len(color) == 3:
+                    self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
+
+                self.mkimg.info_product_name(product_name[0])
+                self.mkimg.info_product(self.poombun)
+                self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+                self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+                self.mkimg.info_product(season)
+                self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+                self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+                self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+                self.mkimg.combineImg(self.poombun)
+
+            return
+
+    @pyqtSlot()
+    def Makeimage_set(self):
+        if len(self.poombun) != 19:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            value = self.sw_obj.dic_product_set['컬러명 ( 한글/영문 )']
+            comp = re.compile('[^a-zA-Z/]')
+            color = comp.sub('', value)
+            color = color.split("/")
+
+            poombun = self.poombun.split("_")
+            # poombun[0]=상의 poombun[1]=하의
+
+            if "S/S" in self.sw_obj.dic_product_set["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            index2 = self.sw_obj.dic_product_set['사이즈'].split("\n")
+
+            while "" in index2:
+                index2.remove("")
+            while "상의" in index2:
+                index2.remove("상의")
+
+            n = index2.index("하의")
+
+            top_size = index2[0]
+            bottom_size = index2[2]
+
+
+            product_name = self.sw_obj.dic_product_set["상품명"].split("(")
+
+            if self.sw_obj.dic_product_set['성별'] == '남성':
+
+                self.mkimg.makeSet(poombun[0], poombun[1])
+
+                self.mkimg.info_product_name_set(product_name[0], self.poombun, self.sw_obj.dic_product_set["소재"])
+
+                self.mkimg.info_product_set(self.poombun, 0)
+                self.mkimg.info_product_set(self.sw_obj.dic_product_set['컬러명 ( 한글/영문 )'], 0)
+                self.mkimg.info_product_set(season, 0)
+                self.mkimg.info_product_set(self.sw_obj.dic_product_set["세탁방법"], 0)
+                self.mkimg.info_product_set(self.sw_obj.dic_product_set["원산지"], 1)
+
+                self.mkimg.info_product_set(top_size, 2)
+                for i in self.mkimg.top_resource:
+                    self.mkimg.info_product_set(i, 2)
+                self.mkimg.prd_ptr += 50
+
+                self.mkimg.info_product_set(bottom_size, 2)
+                for i in self.mkimg.bottom_resource:
+                    self.mkimg.info_product_set(i, 2)
+
+                self.mkimg.combineSet(self.poombun)
             else:
                 self.mkimg.info_product_name(product_name[0])
                 self.mkimg.info_product(self.poombun)
