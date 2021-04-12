@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>700</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="font">
@@ -30,7 +30,7 @@
      <rect>
       <x>20</x>
       <y>520</y>
-      <width>100</width>
+      <width>110</width>
       <height>30</height>
      </rect>
     </property>
@@ -50,9 +50,9 @@
    <widget class="QLabel" name="label_file_path">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>149</x>
       <y>525</y>
-      <width>450</width>
+      <width>441</width>
       <height>20</height>
      </rect>
     </property>
@@ -160,9 +160,9 @@
    <widget class="QPushButton" name="btn_img_make_multi">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>640</y>
-      <width>100</width>
+      <x>20</x>
+      <y>600</y>
+      <width>110</width>
       <height>30</height>
      </rect>
     </property>
@@ -185,9 +185,9 @@
    <widget class="QLabel" name="label_file_path_2">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>149</x>
       <y>565</y>
-      <width>450</width>
+      <width>441</width>
       <height>20</height>
      </rect>
     </property>
@@ -203,7 +203,7 @@
      <rect>
       <x>20</x>
       <y>560</y>
-      <width>100</width>
+      <width>110</width>
       <height>30</height>
      </rect>
     </property>
@@ -225,8 +225,8 @@
      <rect>
       <x>20</x>
       <y>500</y>
-      <width>50</width>
-      <height>16</height>
+      <width>60</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -236,10 +236,10 @@
    <widget class="QRadioButton" name="radio_set">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>80</x>
       <y>500</y>
-      <width>50</width>
-      <height>16</height>
+      <width>60</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
