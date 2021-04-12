@@ -168,7 +168,7 @@ class WindowClass(QMainWindow, form_class):
 
                 if not ret:
                     self.tb_poombun_info.append("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
-                    continue  # return
+                    continue #return
 
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
