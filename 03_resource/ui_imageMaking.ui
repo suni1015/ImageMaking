@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>389</width>
-    <height>693</height>
+    <width>600</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="font">
    <font>
     <pointsize>9</pointsize>
    </font>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>WAVE STUDIO</string>
@@ -26,9 +29,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>67</y>
-      <width>171</width>
-      <height>61</height>
+      <y>520</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
@@ -47,9 +50,9 @@
    <widget class="QLabel" name="label_file_path">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>140</y>
-      <width>351</width>
+      <x>140</x>
+      <y>525</y>
+      <width>450</width>
       <height>20</height>
      </rect>
     </property>
@@ -63,8 +66,8 @@
    <widget class="QLineEdit" name="edt_poombun">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>610</y>
+      <x>10</x>
+      <y>790</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -93,9 +96,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>220</y>
-      <width>351</width>
-      <height>381</height>
+      <y>70</y>
+      <width>571</width>
+      <height>411</height>
      </rect>
     </property>
    </widget>
@@ -132,8 +135,8 @@
    <widget class="QPushButton" name="btn_img_make_single">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>610</y>
+      <x>210</x>
+      <y>800</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -157,10 +160,10 @@
    <widget class="QPushButton" name="btn_img_make_multi">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>69</y>
-      <width>171</width>
-      <height>61</height>
+      <x>10</x>
+      <y>640</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
@@ -182,9 +185,9 @@
    <widget class="QLabel" name="label_file_path_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>165</y>
-      <width>351</width>
+      <x>140</x>
+      <y>565</y>
+      <width>450</width>
       <height>20</height>
      </rect>
     </property>
@@ -199,15 +202,15 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>190</y>
-      <width>81</width>
-      <height>25</height>
+      <y>560</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial</family>
-      <pointsize>11</pointsize>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="toolTip">
@@ -217,14 +220,40 @@
      <string>PATH</string>
     </property>
    </widget>
+   <widget class="QRadioButton" name="radio_single">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>500</y>
+      <width>50</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>단품</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radio_set">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>500</y>
+      <width>50</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>세트</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>389</width>
-     <height>26</height>
+     <width>600</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
