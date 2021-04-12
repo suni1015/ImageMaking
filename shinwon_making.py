@@ -926,37 +926,6 @@ class MakeImg:
 
 if __name__ == '__main__':
     mkImage = MakeImg()
-    '''
-    itemnumber = "PBJAX2032"
-    color = "GY"
-
-    mkImage = MakeImg()
-
-    path = "D:\\GitHub\\ImageMaking\\01_data\\man"
-
-    mkImage.setPath("D:/GitHub/ImageMaking/01_data/신원몰/man", itemnumber)
-    # mkImage.setPath("D:\GitHub\ImageMaking\01_data\man\PBJAX2032")
-
-    column1 = "비침/n안감/n신축성/n두께감/n탈부착가능여부"
-    column2 = "없음/n있음/n없음/n보통/n없음"
-
-    mkImage.makeInfo(column1, column2)
-    mkImage.info_size(2)
-    mkImage.size_insert("사이즈/n어깨넓이/n가슴둘레/n소매길이/n전체길이")
-    mkImage.size_insert("100/n55/n66/n77/n88")
-    mkImage.info_tip()
-    mkImage.combineInfo()
-
-    mkImage.info_product_name_man("이테리 울 체크 더블 그레이 셋업 정장 자켓", "PBJAX2032", "GY")
-    mkImage.info_product_man("PBJAX2032")
-    mkImage.info_product_man("그레이(GY)")
-    mkImage.info_product_man("95, 97, 100, 103, 105, 110")
-    mkImage.info_product_man("가을/겨울")
-    mkImage.info_product_man("본 제품은 반드시 드라이크리닝하십시오")
-    mkImage.info_product_man("필리핀")
-    mkImage.info_product_man("[겉감]폴리에스터1%모99%")
-    mkImage.info_product_man("[소매안감]레이온(비스코스)48%폴리에스터52%")
-    '''
 
     '''
     mkImage.itemnumber = "PCJAA2001_PCPAA2201"
