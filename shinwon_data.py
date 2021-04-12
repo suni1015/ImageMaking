@@ -472,6 +472,10 @@ class Shinwon:
         if (self.dic_product_set['사이즈'].split('\n')[4] == '하의'):
             self.dic_product_set['사이즈_하의'] = self.dic_product_set['사이즈'].split('\n')[6]
 
+        # 현재 딕셔너리 모든 키 출력
+        for key in self.dic_product_set:
+            print(key)
+
         return True
 
     def get_product_info(self):
