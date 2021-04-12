@@ -351,9 +351,10 @@ class MakeImg:
                     print(self.no_file)
                     return False
         check = os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_1.jpg")
-        if not check:
+        check2 = os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_B.jpg")
+        if not check and not check2:
             print(f'Err : there is no {itemnumber}_1.jpg')
-            self.no_file = self.no_file + itemnumber + "_1.jpg" + "\n"
+            self.no_file = self.no_file + itemnumber + "_1.jpg or "+f"{itemnumber}_B.jpg" + "\n"
             self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
             print(self.no_file)
             return False
