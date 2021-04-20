@@ -7,9 +7,10 @@ from PIL import Image, ImageDraw, ImageFont
 import configparser
 import os
 
-pdt_name = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 25, encoding="UTF-8")
+pdt_name = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 22, encoding="UTF-8")
 fnt = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 15, encoding="UTF-8")
 fnt_tip = ImageFont.truetype("03_resource/NanumBarunGothic.ttf", 12, encoding="UTF-8")
+pdt_name_1 = ImageFont.truetype("03_resource/NotoSansKR-Regular_1.otf", 22, encoding="UTF-8")
 ini_filepath = f'./03_resource/setting.ini'
 
 result_path = f'./04_result/'
@@ -67,14 +68,14 @@ class MakeImg:
             self.ini_config.write(configfile)
 
     def info_product_name_man(self, name, itemnumber, color):
-        self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
+        self.product_info = Image.new("RGB", (self.base_width, 600), (240, 240, 240))
         draw = ImageDraw.Draw(self.product_info)
 
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
-        img = img.resize((300, 300))
-        self.product_info.paste(img, (0, 70))
+        img = img.resize((400, 400))
+        self.product_info.paste(img, (-70, 80))
 
-        logo = Image.new("RGB", (0, 0), (255, 255, 255))
+        logo = Image.new("RGB", (0, 80), (255, 255, 255))
         # 브랜드 로고 자리
 
         if self.itemnumber[0] == "P":
@@ -90,37 +91,55 @@ class MakeImg:
             logo = logo.crop((250, 0, 750, 300))
             logo = logo.resize((167, 100))
 
-        self.product_info.paste(logo, (305, 0))
+        self.product_info.paste(logo, (305, 50))
 
-        self.prd_ptr = 140
-        draw.text((310, 140), "품번", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 170), "색상", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 200), "사이즈", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 230), "시즌", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 260), "세박방법", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 290), "원산지", fill=(125, 125, 125), font=fnt)
-        draw.text((310, 320), "소재", fill=(125, 125, 125), font=fnt)
+        self.prd_ptr = 190
+        draw.text((315, 190), "품번", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 220), "색상", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 250), "사이즈", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 280), "시즌", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 310), "세탁방법", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 340), "원산지", fill=(125, 125, 125), font=fnt)
+        draw.text((315, 370), "소재", fill=(125, 125, 125), font=fnt)
 
         if len(name) <= 20:  # 상품이름이 너무길경우
-            draw.text((310, 90), name, fill=(25, 25, 25), font=pdt_name)
+            draw.text((310, 140), name, fill=(25, 25, 25), font=pdt_name_1)
         else:
             i = 20
             while True:
                 if name[i] == " ":
                     break
                 i -= 1
-            draw.text((310, 75), name[:i], fill=(25, 25, 25), font=pdt_name)
-            draw.text((310, 105), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
+            draw.text((310, 125), name[:i], fill=(25, 25, 25), font=pdt_name_1)
+            draw.text((310, 155), name[i + 1:], fill=(25, 25, 25), font=pdt_name_1)
 
-        self.product_info.save("test_man.jpg")
+        # self.product_info.save("test_man.jpg")
 
     def info_product_man(self, text):
         draw = ImageDraw.Draw(self.product_info)
 
-        draw.text((400, self.prd_ptr), text, fill=(55, 55, 55), font=fnt)
-        self.prd_ptr += 30
+        if len(text) > 23:
+            i = 23
+            while True:
+                if text[i] == "%":
+                    break
+                i -= 1
 
-        self.product_info.save("test_man.jpg")
+            title = text.split("]")
+            title = title[0] + "]"
+            w, h = fnt.getsize(title)
+
+            draw.text((400, self.prd_ptr), text[:i + 1], fill=(55, 55, 55), font=fnt)
+            self.prd_ptr += 20
+            draw.text((400 + w, self.prd_ptr), text[i + 1:], fill=(55, 55, 55), font=fnt)
+            self.prd_ptr += 30
+        else:
+            draw.text((400, self.prd_ptr), text, fill=(55, 55, 55), font=fnt)
+            self.prd_ptr += 30
+
+        # [겉감]폴리우레탄5%레이온28% <17> 폴리에스터40%
+
+        # self.product_info.save("test_man.jpg")
 
     def info_product_name(self, name):
         self.product_info = Image.new("RGB", (self.base_width, 500), (255, 255, 255))
@@ -133,7 +152,7 @@ class MakeImg:
         draw.text((20, 180), "색상", fill=(125, 125, 125), font=fnt)
         draw.text((20, 210), "사이즈", fill=(125, 125, 125), font=fnt)
         draw.text((20, 240), "시즌", fill=(125, 125, 125), font=fnt)
-        draw.text((20, 270), "세박방법", fill=(125, 125, 125), font=fnt)
+        draw.text((20, 270), "세탁방법", fill=(125, 125, 125), font=fnt)
         draw.text((20, 300), "원산지", fill=(125, 125, 125), font=fnt)
         draw.text((20, 330), "소재", fill=(125, 125, 125), font=fnt)
 
@@ -258,7 +277,7 @@ class MakeImg:
         self.top_resource = index2[:n]
         self.bottom_resource = index2[n + 1:]
 
-        self.product_info.save("test_man.jpg")
+        # self.product_info.save("test_man.jpg")
 
     def info_product_set(self, text, i):
         draw = ImageDraw.Draw(self.product_info)
@@ -276,7 +295,7 @@ class MakeImg:
             draw.text((380, self.prd_ptr), text, fill=(55, 55, 55), font=fnt)
             self.prd_ptr += 75
 
-        self.product_info.save("test_man2.jpg")
+        # self.product_info.save("test_man2.jpg")
 
     def setPath(self, path, itemnumber):
         self.dir = f"{path}"
@@ -354,7 +373,7 @@ class MakeImg:
         check2 = os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_B.jpg")
         if not check and not check2:
             print(f'Err : there is no {itemnumber}_1.jpg')
-            self.no_file = self.no_file + itemnumber + "_1.jpg or "+f"{itemnumber}_B.jpg" + "\n"
+            self.no_file = self.no_file + itemnumber + "_1.jpg or " + f"{itemnumber}_B.jpg" + "\n"
             self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
             print(self.no_file)
             return False
@@ -393,7 +412,7 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
-        w, h = fnt.getsize(color)
+        w, h = fnt.getsize(color_full[0])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
 
@@ -439,7 +458,7 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color2)
+        w, h = fnt.getsize(color_full[1])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[1], font=fnt, fill=(25, 25, 25))
         self.full_ptr += self.img.height + 100
@@ -447,7 +466,7 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color1)
+        w, h = fnt.getsize(color_full[0])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
         self.full_ptr += self.img.height + 100
@@ -488,7 +507,7 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color3}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color2)
+        w, h = fnt.getsize(color_full[2])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[2], font=fnt, fill=(25, 25, 25))
         self.full_ptr += self.img.height + 100
@@ -496,7 +515,7 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color2)
+        w, h = fnt.getsize(color_full[1])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[1], font=fnt, fill=(25, 25, 25))
         self.full_ptr += self.img.height + 100
@@ -504,7 +523,7 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-        w, h = fnt.getsize(color1)
+        w, h = fnt.getsize(color_full[0])
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
         self.full_ptr += self.img.height + 100
@@ -767,20 +786,10 @@ class MakeImg:
 
     def info_size(self, size_count):
 
-        if 80 + (40 * size_count) > 250:
+        if 80 + (40 * size_count) > 280:
             self.sizeview = Image.new("RGB", (self.base_width, 80 + (40 * size_count)), (255, 255, 255))
         else:
-            self.sizeview = Image.new("RGB", (self.base_width, 250), (255, 255, 255))
-
-        self.grey = True
-        # 사이즈 고시할 공간
-        self.size_table = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))  # (480, 40)
-        self.size_table_grey = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))
-        self.img = Image.new("RGB", (self.base_width - 220, 38), (255, 255, 255))
-        self.size_table.paste(self.img, (1, 0))
-
-        self.img = Image.open("03_resource/image/SizeSpec.jpg")
-        self.sizeview.paste(self.img, (0, 0))
+            self.sizeview = Image.new("RGB", (self.base_width, 280), (255, 255, 255))
 
         img = Image.new("RGB", (1, 1), (255, 255, 255))
 
@@ -825,8 +834,18 @@ class MakeImg:
             elif self.itemnumber[2] in ["D", "E", "G", "H", "L", "M", "N", "J"]:
                 img = Image.open("03_resource/image/자켓.jpg")
 
-        img = img.resize((200, 200))
-        self.sizeview.paste(img, (500, int((self.sizeview.height - img.height) / 2)))
+        img = img.resize((300, 300))
+        self.sizeview.paste(img, (450, int((self.sizeview.height - img.height) / 2)))
+
+        self.grey = True
+        # 사이즈 고시할 공간
+        self.size_table = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))  # (480, 40)
+        self.size_table_grey = Image.new("RGB", (self.base_width - 220, 40), (244, 244, 244))
+        self.img = Image.new("RGB", (self.base_width - 220, 38), (255, 255, 255))
+        self.size_table.paste(self.img, (1, 0))
+
+        self.img = Image.open("03_resource/image/SizeSpec.jpg")
+        self.sizeview.paste(self.img, (0, 0))
 
         ImageDraw.Draw(self.sizeview).text((40, 440), "단위(cm)", font=fnt_tip, fill=(51, 51, 51))
 
@@ -847,7 +866,7 @@ class MakeImg:
             w, h = fnt.getsize(n)
             ImageDraw.Draw(self.sizeview).text(
                 (((480 / len(value_list) * num) - (480 / len(value_list) / 2) - (w / 2)), (self.size_ptr + 25 - h)),
-                n, font=fnt, fill=(0, 0, 0))
+                n, font=fnt, fill=(60, 60, 60))
             num += 1
         self.size_ptr += 40
 
@@ -857,14 +876,14 @@ class MakeImg:
         self.tip_view = Image.new("RGB", (self.base_width, 150), (255, 255, 255))
         self.tag = Image.open("03_resource/image/Tip.jpg")
         self.tip_view.paste(self.tag, (0, 0))
-        self.tip_ptr = 70
+        self.tip_ptr = 50
 
         ImageDraw.Draw(self.tip_view).text((20, self.tip_ptr), "-사이즈 스펙은 실측 사이즈 기준입니다.(가슴둘레는 라벨사이즈 기준)", font=fnt_tip,
                                            fill=(60, 60, 60))
-        self.tip_ptr += 25
+        self.tip_ptr += 20
         ImageDraw.Draw(self.tip_view).text((20, self.tip_ptr), "-사이즈는 측정 방법과 생산 과정에 따라 약간의 오차가 발생할 수 있습니다.",
                                            font=fnt_tip, fill=(60, 60, 60))
-        self.tip_ptr += 25
+        self.tip_ptr += 20
         ImageDraw.Draw(self.tip_view).text((20, self.tip_ptr),
                                            "-제품 안쪽 라벨에 표기된 사이즈는 표준 신체 사이즈를 표기한 것이므로, 실측사이즈와 차이가 있을 수 있습니다.",
                                            font=fnt_tip, fill=(60, 60, 60))

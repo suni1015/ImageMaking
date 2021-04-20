@@ -168,7 +168,7 @@ class WindowClass(QMainWindow, form_class):
 
                 if not ret:
                     self.tb_poombun_info.append("안내 : 입력하신 품번은 정보고시 파일에 존재하지 않습니다.")
-                    continue #return
+                    continue  # return
 
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
@@ -253,10 +253,12 @@ class WindowClass(QMainWindow, form_class):
 
             if self.sw_obj.dic_product['성별'] == '남성':
 
-                if self.poombun[0] =="F":
+                if self.poombun[0] == "F":
                     self.mkimg.makeFV_man_2(self.poombun, color[0])
                 else:
                     self.mkimg.makeFV_man(self.poombun, color[0])
+                if self.poombun[2] in ["F", "P"]:
+                    self.mkimg.makeFV_man_2(self.poombun, color[0])
 
                 self.mkimg.info_product_name_man(product_name[0], self.poombun, color[0])
                 self.mkimg.info_product_man(self.poombun)
@@ -322,14 +324,14 @@ class WindowClass(QMainWindow, form_class):
             top_size = index2[0]
             bottom_size = index2[2]
 
-
             product_name = self.sw_obj.dic_product_set["상품명"].split("(")
 
             if self.sw_obj.dic_product_set['성별'] == '남성':
 
                 self.mkimg.makeSet(poombun[0], poombun[1])
 
-                self.mkimg.info_product_name_set(product_name[0], self.poombun, self.sw_obj.dic_product_set["소재"], self.mkimg.full_code_dir)
+                self.mkimg.info_product_name_set(product_name[0], self.poombun, self.sw_obj.dic_product_set["소재"],
+                                                 self.mkimg.full_code_dir)
 
                 self.mkimg.info_product_set(self.poombun, 0)
                 self.mkimg.info_product_set(self.sw_obj.dic_product_set['컬러명 ( 한글/영문 )'], 0)
