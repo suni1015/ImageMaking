@@ -267,7 +267,11 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.info_product_man(season)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["소재"])
+
+                list_material = self.sw_obj.dic_product["소재"].split("\n")
+
+                for i in list_material:
+                    self.mkimg.info_product_man(i)
 
                 self.mkimg.combineImg_man(self.poombun)
 
@@ -286,6 +290,8 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.info_product(season)
                 self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
                 self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+
+
                 self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
                 self.mkimg.combineImg(self.poombun)
