@@ -79,6 +79,7 @@ class MakeImg:
         logo = Image.new("RGB", (0, 80), (255, 255, 255))
         # 브랜드 로고 자리
 
+
         if self.itemnumber[0] == "P":
             logo = Image.open("03_resource/image/Brand_지이크.jpg")
             logo = logo.crop((380, 0, 620, 300))
