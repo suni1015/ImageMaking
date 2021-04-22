@@ -203,7 +203,7 @@ class WindowClass(QMainWindow, form_class):
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
         self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건")
         self.tb_poombun_info.append(
-            f"\n-이미지없음-\n{self.mkimg.no_file}\n-경로없음-\n{self.mkimg.no_dir}")
+            f"\n-경로없음-\n{self.mkimg.no_dir}\n-이미지없음-\n{self.mkimg.no_file}")
         # \n-실패한 품번-\n{self.mkimg.no_file_itemnumber}
 
         self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건\n")
@@ -231,7 +231,7 @@ class WindowClass(QMainWindow, form_class):
             elif len(color) == 3:
                 self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
             '''
-            if self.poombun[0] == "F":
+            if self.poombun[0] == "F" or self.sw_obj.dic_product["성별"] == "여성":
                 self.mkimg.makeDV2(self.poombun, color[0])
             else:
                 self.mkimg.makeDV(self.poombun, color[0])
@@ -249,7 +249,8 @@ class WindowClass(QMainWindow, form_class):
             else:
                 season = "가을/겨울"
 
-            product_name = self.sw_obj.dic_product["상품명"].split("(")
+            # product_name = self.sw_obj.dic_product["상품명"].split("(")
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
             if self.sw_obj.dic_product['성별'] == '남성':
 
@@ -260,7 +261,7 @@ class WindowClass(QMainWindow, form_class):
                 if self.poombun[2] in ["F", "P"]:
                     self.mkimg.makeFV_man_2(self.poombun, color[0])
 
-                self.mkimg.info_product_name_man(product_name[0], self.poombun, color[0])
+                self.mkimg.info_product_name_man(product_name, self.poombun, color[0])
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -283,14 +284,13 @@ class WindowClass(QMainWindow, form_class):
                 elif len(color) == 3:
                     self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
 
-                self.mkimg.info_product_name(product_name[0])
+                self.mkimg.info_product_name(product_name)
                 self.mkimg.info_product(self.poombun)
                 self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
                 self.mkimg.info_product(season)
                 self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
                 self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
-
 
                 self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
@@ -330,13 +330,14 @@ class WindowClass(QMainWindow, form_class):
             top_size = index2[0]
             bottom_size = index2[2]
 
-            product_name = self.sw_obj.dic_product_set["상품명"].split("(")
+            # product_name = self.sw_obj.dic_product_set["상품명"].split("(")
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
             if self.sw_obj.dic_product_set['성별'] == '남성':
 
                 self.mkimg.makeSet(poombun[0], poombun[1])
 
-                self.mkimg.info_product_name_set(product_name[0], self.poombun, self.sw_obj.dic_product_set["소재"],
+                self.mkimg.info_product_name_set(product_name, self.poombun, self.sw_obj.dic_product_set["소재"],
                                                  self.mkimg.full_code_dir)
 
                 self.mkimg.info_product_set(self.poombun, 0)
@@ -356,7 +357,7 @@ class WindowClass(QMainWindow, form_class):
 
                 self.mkimg.combineSet(self.poombun)
             else:
-                self.mkimg.info_product_name(product_name[0])
+                self.mkimg.info_product_name(product_name)
                 self.mkimg.info_product(self.poombun)
                 self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
