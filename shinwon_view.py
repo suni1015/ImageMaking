@@ -223,16 +223,13 @@ class WindowClass(QMainWindow, form_class):
             color = comp.sub('', value)
             color = color.split("/")
 
-            '''
-            if len(color) == 1:
-                self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
-            elif len(color) == 2:
-                self.mkimg.makeFV2(self.poombun, color[0], color[1], self.color_full)
-            elif len(color) == 3:
-                self.mkimg.makeFV3(self.poombun, color[0], color[1], color[2], self.color_full)
-            '''
             if self.poombun[0] == "F" or self.sw_obj.dic_product["성별"] == "여성":
                 self.mkimg.makeDV2(self.poombun, color[0])
+            elif self.poombun[0] == "P":
+                if self.poombun[1] == "C":
+                    self.mkimg.makeDV(self.poombun, color[0])
+                else:
+                    self.mkimg.makeDV2(self.poombun, color[0])
             else:
                 self.mkimg.makeDV(self.poombun, color[0])
 
@@ -256,10 +253,19 @@ class WindowClass(QMainWindow, form_class):
 
                 if self.poombun[0] == "F":
                     self.mkimg.makeFV_man_2(self.poombun, color[0])
+                elif self.poombun[0] == "P":
+                    if self.poombun[1] == "C":
+                        if self.poombun[2] == "J":
+                            self.mkimg.makeFV_man(self.poombun, color[0])
+                        else:
+                            self.mkimg.makeFV_man_3(self.poombun, color[0])
+                    else:
+                        self.mkimg.makeFV_man(self.poombun, color[0])
                 else:
-                    self.mkimg.makeFV_man(self.poombun, color[0])
-                if self.poombun[2] in ["F", "P"]:
-                    self.mkimg.makeFV_man_2(self.poombun, color[0])
+                    if self.poombun[2] in ["F", "P"]:
+                        self.mkimg.makeFV_man_2(self.poombun, color[0])
+                    else:
+                        self.mkimg.makeFV_man(self.poombun, color[0])
 
                 self.mkimg.info_product_name_man(product_name, self.poombun, color[0])
                 self.mkimg.info_product_man(self.poombun)

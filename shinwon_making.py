@@ -75,7 +75,11 @@ class MakeImg:
 
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
         img = img.resize((380, 380))
-        self.product_info.paste(img, (-50, 80))
+        if itemnumber[0] == "P" and itemnumber[1] == "C" and not itemnumber[2] == "J":
+            img = img.resize((300, 300))
+            self.product_info.paste(img, (0, 80))
+        else:
+            self.product_info.paste(img, (-50, 80))
 
         logo = Image.new("RGB", (0, 80), (255, 255, 255))
         # 브랜드 로고 자리
@@ -559,7 +563,7 @@ class MakeImg:
 
         return self.fullview
 
-    def makeFV_man(self, itemnumber, color):
+    def makeFV_man(self, itemnumber, color):  # 1 2 3 사용
         self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -590,7 +594,7 @@ class MakeImg:
 
         return self.fullview
 
-    def makeFV_man_2(self, itemnumber, color):
+    def makeFV_man_2(self, itemnumber, color):  # 1 2 사용
         self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -614,7 +618,7 @@ class MakeImg:
 
         return self.fullview
 
-    def makeFV_man_3(self, itemnumber, color):
+    def makeFV_man_3(self, itemnumber, color):  # 2 3사용
         self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
@@ -636,7 +640,7 @@ class MakeImg:
 
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
-    def makeDV(self, itemnumber, color):
+    def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
         detail_ptr = 0
         self.area = (100, 150, 500, 550)
@@ -659,7 +663,7 @@ class MakeImg:
         detail_ptr += self.img.height + 22
 
         try:
-            self.img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
+            self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A6}.jpg")
             self.img = self.img.resize((600, 600))
             self.img = self.img.crop(self.area)
             self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
@@ -672,7 +676,7 @@ class MakeImg:
 
         return self.detailview
 
-    def makeDV2(self, itemnumber, color):
+    def makeDV2(self, itemnumber, color):  # 3 4 5 사용
 
         detail_ptr = 0
         self.area = (100, 150, 500, 550)
