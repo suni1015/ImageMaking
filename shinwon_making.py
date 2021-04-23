@@ -53,7 +53,7 @@ class MakeImg:
             self.A5 = self.ini_config['IMG_ORDER']['A5']
             self.A6 = self.ini_config['IMG_ORDER']['A6']
 
-            self.A_list = [self.A1, self.A2, self.A3, self.A4, self.A5, self.A6]
+            self.A_list = [self.A1, self.A2, self.A3, self.A4, self.A5]
 
         else:
             print('info : make default ini file')
