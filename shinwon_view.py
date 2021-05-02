@@ -226,10 +226,13 @@ class WindowClass(QMainWindow, form_class):
             if self.poombun[0] == "F" or self.sw_obj.dic_product["성별"] == "여성":
                 self.mkimg.makeDV2(self.poombun, color[0])
             elif self.poombun[0] == "P":
-                if self.poombun[1] == "C":
-                    self.mkimg.makeDV(self.poombun, color[0])
-                else:
+                if self.poombun[1] in ["A", "X", "Y", "Z"]:
                     self.mkimg.makeDV2(self.poombun, color[0])
+                else:
+                    if self.poombun[2] in ["J", "V"]:
+                        self.mkimg.makeDV(self.poombun, color[0])
+                    else:
+                        self.mkimg.makeDV3(self.poombun, color[0])
             else:
                 self.mkimg.makeDV(self.poombun, color[0])
 
@@ -254,13 +257,13 @@ class WindowClass(QMainWindow, form_class):
                 if self.poombun[0] == "F":
                     self.mkimg.makeFV_man_2(self.poombun, color[0])
                 elif self.poombun[0] == "P":
-                    if self.poombun[1] == "C":
-                        if self.poombun[2] == "J":
+                    if self.poombun[1] in ["A", "X", "Y", "Z"]:
+                        self.mkimg.makeFV_man_2(self.poombun, color[0])
+                    else:
+                        if self.poombun[2] in ["J", "V"]:
                             self.mkimg.makeFV_man(self.poombun, color[0])
                         else:
                             self.mkimg.makeFV_man_3(self.poombun, color[0])
-                    else:
-                        self.mkimg.makeFV_man(self.poombun, color[0])
                 else:
                     if self.poombun[2] in ["F", "P"]:
                         self.mkimg.makeFV_man_2(self.poombun, color[0])
@@ -277,8 +280,10 @@ class WindowClass(QMainWindow, form_class):
 
                 list_material = self.sw_obj.dic_product["소재"].split("\n")
 
+                self.mkimg.product_index()
                 for i in list_material:
                     self.mkimg.info_product_man(i)
+                self.mkimg.product_index()
 
                 self.mkimg.combineImg_man(self.poombun)
 
@@ -337,7 +342,7 @@ class WindowClass(QMainWindow, form_class):
             bottom_size = index2[2]
 
             # product_name = self.sw_obj.dic_product_set["상품명"].split("(")
-            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+            product_name = self.sw_obj.dic_product_set["상품명"].replace(f"({self.poombun})", "")
 
             if self.sw_obj.dic_product_set['성별'] == '남성':
 
