@@ -198,7 +198,7 @@ class MakeImg:
 
         # self.product_info.save("test1.jpg", quallity=95)
 
-    def info_product_name_set(self, name, itemnumber, index, set):
+    def info_product_name_set(self, name, itemnumber, index):
         self.product_info = Image.new("RGB", (self.base_width, 650), (255, 255, 255))
         draw = ImageDraw.Draw(self.product_info)
 
@@ -209,7 +209,7 @@ class MakeImg:
         self.top_space = space[0].count('\n')
         self.bottom_space = space[1].count('\n')
 
-        if set == True:
+        if self.full_code_dir == True:
             try:
                 img = Image.open(f"{self.path}/{itemnumber}_1.jpg")
             except:
@@ -387,8 +387,11 @@ class MakeImg:
                 self.no_dir = self.no_dir + i + "\n"
                 self.no_file_itemnumber = self.no_file_itemnumber + i + "\n"
                 return False
-
-        self.full_code_dir = os.path.isdir(f"{self.dir}/{itemnumber}")
+        if os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_B.jpg") or os.path.isfile(
+                f"{self.dir}/{itemnumber}/{itemnumber}_1.jpg"):
+            self.full_code_dir = True
+        else:
+            self.full_code_dir = False
 
         for i in code_list:
             for jpg in ["fv", "dv"]:
@@ -638,8 +641,8 @@ class MakeImg:
 
         return self.fullview
 
-    def makeFV_man_3(self, itemnumber, color):  # 2 3사용
-        self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
+    def makeFV_man_3(self, itemnumber, color):  # 3 4사용
+        self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
@@ -657,8 +660,20 @@ class MakeImg:
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
         self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.full_ptr += self.img.height + 100
 
+        set_image = self.fullview
+        self.fullview = self.fullview.crop((0, 0, self.base_width, 1500))
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+
+        if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
+
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_B.jpg")
+            img = img.resize((600, 600))
+            set_image.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+            set_image.save(f"{self.path}/{itemnumber}_fv_set.jpg", quallity=100)
+
+
 
     def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
@@ -969,7 +984,10 @@ class MakeImg:
         self.DV_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_dv.jpg")
         self.info_full_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_di.jpg")
 
-        self.FV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_fv.jpg")
+        try:
+            self.FV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_fv_set.jpg")
+        except:
+            self.FV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_fv.jpg")
         self.DV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_dv.jpg")
         self.info_full_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_di.jpg")
 

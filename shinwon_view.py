@@ -348,8 +348,7 @@ class WindowClass(QMainWindow, form_class):
 
                 self.mkimg.makeSet(poombun[0], poombun[1])
 
-                self.mkimg.info_product_name_set(product_name, self.poombun, self.sw_obj.dic_product_set["소재"],
-                                                 self.mkimg.full_code_dir)
+                self.mkimg.info_product_name_set(product_name, self.poombun, self.sw_obj.dic_product_set["소재"])
 
                 self.mkimg.info_product_set(self.poombun, 0)
                 self.mkimg.info_product_set(self.sw_obj.dic_product_set['컬러명 ( 한글/영문 )'], 0)
