@@ -1065,7 +1065,12 @@ class MakeImg:
         self.img = Image.open("03_resource/image/SizeSpec.jpg")
         self.sizeview.paste(self.img, (0, 0))
 
-        ImageDraw.Draw(self.sizeview).text((420, 50), "단위(cm)", font=fnt_tip, fill=(51, 51, 51))
+
+        if self.itemnumber[2] in ["F", "P"]:
+            ImageDraw.Draw(self.sizeview).text((450, 50), "단위(cm)", font=fnt_tip, fill=(51, 51, 51))
+        else:
+            ImageDraw.Draw(self.sizeview).text((420, 50), "단위(cm)", font=fnt_tip, fill=(51, 51, 51))
+
 
         self.size_ptr = 70
 
