@@ -3,6 +3,7 @@
 
 """
 # -*- coding: utf-8 -*-
+
 from PIL import Image, ImageDraw, ImageFont
 import configparser
 import os
@@ -454,7 +455,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2) + 14, self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
 
         self.full_ptr += self.img.height + 100
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A2}.jpg")
@@ -502,7 +503,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[1], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
@@ -512,7 +513,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_2.jpg")
@@ -555,7 +556,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[2], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
@@ -565,7 +566,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[1], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_{self.A1}.jpg")
@@ -575,7 +576,7 @@ class MakeImg:
         ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
                                            color_full[0], font=fnt, fill=(25, 25, 25))
         img = Image.open("03_resource/image/화살표.jpg")
-        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 5))
+        self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
         self.full_ptr += self.img.height + 100
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_2.jpg")
@@ -1071,6 +1072,9 @@ class MakeImg:
         # self.sizeview.save("test_size.jpg", quallity=95)
 
     def size_insert(self, value):
+
+        if value == "nan":
+            value = ""
         value_list = value.split("\n")
 
         if self.grey:

@@ -18,9 +18,11 @@ form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
+
     filename = None
 
     def __init__(self):
+
         super().__init__()
         self.sw_obj = Shinwon()  # sw_obj = Shinwon('BYJAX1234-0')
         self.mkimg = MakeImg()
@@ -240,7 +242,9 @@ class WindowClass(QMainWindow, form_class):
             self.mkimg.info_size(self.sw_obj.size_count + 1)
             self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
             for n in range(0, self.sw_obj.size_count):
-                self.mkimg.size_insert(self.sw_obj.dic_product[f"사이즈{n}"])
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+
+            # float (nan)
 
             self.mkimg.combineInfo()
 
