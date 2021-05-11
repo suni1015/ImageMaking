@@ -669,7 +669,7 @@ class MakeImg:
 
         if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
 
-            img = Image.open(f"{self.path}/{itemnumber}_{color}_B.jpg")
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
             img = img.resize((600, 600))
             set_image.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
             set_image.save(f"{self.path}/{itemnumber}_fv_set.jpg", quallity=100)
