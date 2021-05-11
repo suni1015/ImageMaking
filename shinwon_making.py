@@ -1043,7 +1043,7 @@ class MakeImg:
 
             elif self.itemnumber[2] in ["B", "C", "U", "I", "V"]:
                 img = Image.open("03_resource/image/상의.jpg")
-                img = img.resize((260, 260))
+                img = img.resize((250, 250))
             elif self.itemnumber[2] in ["F", "P"]:
                 img = Image.open("03_resource/image/팬츠.jpg")
             elif self.itemnumber[2] in ["D", "E", "G", "H", "L", "M", "N", "J"]:
@@ -1051,7 +1051,7 @@ class MakeImg:
                 img = img.resize((250, 250))
 
             if self.itemnumber[2] in ["F", "P"]:
-                self.sizeview.paste(img, (440, int((self.sizeview.height - img.height) / 2)))
+                self.sizeview.paste(img, (430, int((self.sizeview.height - img.height) / 2)))
             else:
                 self.sizeview.paste(img, (470, int((self.sizeview.height - img.height) / 2)))
 
@@ -1112,7 +1112,7 @@ class MakeImg:
         # self.sizeview.save("test_size2.jpg", quallity=95)
 
     def info_tip(self):
-        self.tip_view = Image.new("RGB", (self.base_width, 150), (255, 255, 255))
+        self.tip_view = Image.new("RGB", (self.base_width, 180), (255, 255, 255))
         self.tag = Image.open("03_resource/image/Tip.jpg")
         self.tip_view.paste(self.tag, (0, 0))
         self.tip_ptr = 70
