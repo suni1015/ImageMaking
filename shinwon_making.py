@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 import configparser
 import os
 
-pdt_name = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 23, encoding="UTF-8")
+pdt_name = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 22, encoding="UTF-8")
 fnt = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 15, encoding="UTF-8")
 fnt_FV = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 14, encoding="UTF-8")
 fnt3 = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 13, encoding="UTF-8")
@@ -86,15 +86,19 @@ class MakeImg:
 
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
 
-        if itemnumber[0] == "P" and itemnumber[1] == "C" and not itemnumber[2] == "J":
-            img = img.resize((300, 300))
-            self.product_info.paste(img, (0, 120))
-        elif itemnumber[2] == "P":
+        if itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"] and not itemnumber[2] == "J":
+            if itemnumber[2] == "F":
+                img = img.resize((450, 450))
+                self.product_info.paste(img, (-75, 70))
+            else:
+                img = img.resize((330, 330))
+                self.product_info.paste(img, (-15, 100))
+        elif itemnumber[2] in ["P", "F"]:
             img = img.resize((450, 450))
             self.product_info.paste(img, (-75, 70))
         else:
-            img = img.resize((300, 300))
-            self.product_info.paste(img, (0, 120))
+            img = img.resize((330, 330))
+            self.product_info.paste(img, (-15, 100))
 
         logo = Image.new("RGB", (0, 80), (255, 255, 255))
         # 브랜드 로고 자리
@@ -121,14 +125,16 @@ class MakeImg:
             draw.text((315, 190 + (content_list.index(content) * 30)), content, fill=(100, 100, 100), font=fnt)
             if not content == "소재":
                 self.product_info.paste(self.break_line, (305, 213 + (30 * content_list.index(content))))
-
-        if len(name) <= 24:  # 상품이름이 너무길경우
+        w, h = pdt_name.getsize(name)
+        if w < 400:  # 상품이름이 너무길경우
             draw.text((305, 120), name, fill=(25, 25, 25), font=pdt_name)
         else:
-            i = 23
+            i = len(name) - 1
             while True:
                 if name[i] == " ":
-                    break
+                    w, h = pdt_name.getsize(name[:i])
+                    if w < 400:
+                        break
                 i -= 1
             draw.text((305, 120), name[:i], fill=(25, 25, 25), font=pdt_name)
             draw.text((305, 150), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
@@ -598,21 +604,21 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/front_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
         self.full_ptr += self.img.height + 80
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A2}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/side_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
         self.full_ptr += self.img.height + 80
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A3}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
 
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
@@ -629,14 +635,14 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/front_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
         self.full_ptr += self.img.height + 80
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A2}.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
 
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
@@ -653,14 +659,14 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/front_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
         self.full_ptr += self.img.height + 80
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_4.jpg")
         self.img = self.img.resize((600, 600))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
-        self.fullview.paste(img, (700 - img.width, self.full_ptr + 485))
+        self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
         self.full_ptr += self.img.height + 80
 
         set_image = self.fullview
@@ -669,42 +675,45 @@ class MakeImg:
 
         if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
             img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
-            img = img.resize((600, 600))
+            img = img.resize((550, 550))
             set_image.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
             set_image.save(f"{self.path}/{itemnumber}_fv_set.jpg", quallity=100)
+
+            if self.itemnumber[2] == "P":
+                self.fullview = set_image
+                self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
     def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
         detail_ptr = 0
-        self.area = (30, 30, 670, 670)
-        self.detailview = Image.new("RGB", (self.base_width, 2150-90), (255, 255, 255))
+        self.detailview = Image.new("RGB", (self.base_width, 1650 + 150 + 80), (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100
 
         str_tmp = f"{self.path}/{itemnumber}_{color}_{self.A4}.jpg"
         self.img = Image.open(str_tmp)
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
+
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A5}.jpg")
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
+
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         try:
             self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A6}.jpg")
-            self.img = self.img.resize((700, 700))
-            self.img = self.img.crop(self.area)
+            self.img = self.img.resize((550, 550))
+
             self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
             self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         except:
-            self.detailview = self.detailview.crop((0, 0, self.base_width, 1450-60))
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 1100 + 150 + 40))
             self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
@@ -713,45 +722,40 @@ class MakeImg:
 
         detail_ptr = 0
         self.area = (30, 30, 670, 670)
-        self.detailview = Image.new("RGB", (self.base_width, 3450-150), (255, 255, 255))
+        self.detailview = Image.new("RGB", (self.base_width, 2750 + 150 + 160), (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100
 
         str_tmp = f"{self.path}/{itemnumber}_{color}_3.jpg"
         self.img = Image.open(str_tmp)
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_4.jpg")
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_5.jpg")
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         try:
             img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
             img2 = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
 
-            img = img.resize((700, 700))
-            img = img.crop(self.area)
+            img = img.resize((550, 550))
             self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-            detail_ptr += self.img.height + 30
+            detail_ptr += self.img.height + 40
 
-            img2 = img2.resize((700, 700))
-            img2 = img2.crop(self.area)
+            img2 = img2.resize((550, 550))
             self.detailview.paste(img2, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
         except:
-            self.detailview = self.detailview.crop((0, 0, self.base_width, 2150-90))
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
             pass
 
         self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
@@ -761,32 +765,43 @@ class MakeImg:
     def makeDV3(self, itemnumber, color):  # 남자 시그 c시즌
 
         detail_ptr = 0
-        self.area = (30, 30, 670, 670)
-        self.detailview = Image.new("RGB", (self.base_width, 2100-90), (255, 255, 255))
+        self.detailview = Image.new("RGB", (self.base_width, 2750 + 150 + 160), (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100
 
         str_tmp = f"{self.path}/{itemnumber}_{color}_2.jpg"
         self.img = Image.open(str_tmp)
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_5.jpg")
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
-        self.img = self.img.resize((700, 700))
-        self.img = self.img.crop(self.area)
+        self.img = self.img.resize((550, 550))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-        detail_ptr += self.img.height + 30
+        detail_ptr += self.img.height + 40
 
         self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+
+        try:
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
+            img2 = Image.open(f"{self.path}/{itemnumber}_{color}_8.jpg")
+
+            img = img.resize((550, 550))
+            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+            detail_ptr += self.img.height + 40
+
+            img2 = img2.resize((550, 550))
+            self.detailview.paste(img2, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+
+        except:
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
+            pass
 
         return self.detailview
 
@@ -815,7 +830,7 @@ class MakeImg:
         img = Image.new("RGB", (self.base_width, 1), (222, 222, 222))
         self.info_table.paste(self.infodata, (152, 1))
         self.info_table.paste(img, (0, 39))
-        self.infoview.paste(img, (0, self.info_ptr-1))
+        self.infoview.paste(img, (0, self.info_ptr - 1))
 
         # 표 첫줄
 
@@ -995,9 +1010,9 @@ class MakeImg:
     def info_size(self, size_count):
 
         if 80 + (40 * size_count) > 280:
-            self.sizeview = Image.new("RGB", (self.base_width, 80 + 40 + 50 + (40 * size_count)), (255, 255, 255))
+            self.sizeview = Image.new("RGB", (self.base_width, 80 + 100 + (40 * size_count)), (255, 255, 255))
         else:
-            self.sizeview = Image.new("RGB", (self.base_width, 280 + 40 + 50), (255, 255, 255))
+            self.sizeview = Image.new("RGB", (self.base_width, 280 + 100), (255, 255, 255))
 
         self.size_img = Image.new("RGB", (1, 1), (255, 255, 255))
 
@@ -1039,18 +1054,18 @@ class MakeImg:
                 elif self.itemnumber[3] == "G":
                     self.size_img = Image.open("03_resource/image/가방.jpg")
 
-            elif self.itemnumber[2] in ["B", "C", "U", "I", "V"]:
+            elif self.itemnumber[2] in ["B", "C", "U", "I"]:
                 self.size_img = Image.open("03_resource/image/상의.jpg")
 
             elif self.itemnumber[2] in ["F", "P"]:
                 self.size_img = Image.open("03_resource/image/팬츠.jpg")
-            elif self.itemnumber[2] in ["D", "E", "G", "H", "L", "M", "N", "J"]:
+            elif self.itemnumber[2] in ["D", "E", "G", "H", "L", "M", "N", "J", "V"]:
                 self.size_img = Image.open("03_resource/image/자켓.jpg")
 
             if self.itemnumber[2] in ["F", "P"]:
-                self.sizeview.paste(self.size_img, (440, 50))
+                self.sizeview.paste(self.size_img, (440, 30))
             else:
-                self.sizeview.paste(self.size_img, (self.base_width - self.size_img.width + 20, 50))
+                self.sizeview.paste(self.size_img, (self.base_width - self.size_img.width + 20, 30))
 
         self.grey = True
         # 사이즈 고시할 공간
@@ -1200,7 +1215,7 @@ class MakeImg:
         self.fullimage.paste(self.product_info, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.product_info.height
 
-        self.fullimage.paste(self.break_line, (0, self.fullimage_ptr-1))
+        self.fullimage.paste(self.break_line, (0, self.fullimage_ptr - 1))
 
         self.fullimage.paste(self.FV_top, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.FV_top.height
@@ -1223,8 +1238,6 @@ class MakeImg:
 
         self.fullimage.paste(self.info_full_bottom, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.info_full_bottom.height
-
-
 
         self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
         self.fullimage.save(f"{self.path}/{item_code}_result.jpg", quallity=100)
