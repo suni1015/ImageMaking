@@ -81,7 +81,7 @@ class MakeImg:
             self.prd_index = True
 
     def info_product_name_man(self, name, itemnumber, color):
-        self.product_info = Image.new("RGB", (self.base_width, 575), (255, 255, 255))
+        self.product_info = Image.new("RGB", (self.base_width, 565), (255, 255, 255))
         draw = ImageDraw.Draw(self.product_info)
 
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
@@ -145,7 +145,7 @@ class MakeImg:
         draw = ImageDraw.Draw(self.product_info)
 
         if len(text) <= 23 or not text[0] == "[":
-            draw.text((420, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+            draw.text((420, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
 
             if self.prd_index:
                 self.prd_ptr += 30
@@ -162,9 +162,9 @@ class MakeImg:
             title = title[0] + "]"
             w, h = fnt.getsize(title)
 
-            draw.text((420, self.prd_ptr), text[:i + 1], fill=(65, 65, 65), font=fnt)
+            draw.text((420, self.prd_ptr), text[:i + 1], fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 25
-            draw.text((420 + w, self.prd_ptr), text[i + 1:], fill=(65, 65, 65), font=fnt)
+            draw.text((420 + w, self.prd_ptr), text[i + 1:], fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 25
 
         # [겉감]폴리우레탄5%레이온28% <17> 폴리에스터40%
@@ -200,7 +200,7 @@ class MakeImg:
     def info_product(self, text):
         draw = ImageDraw.Draw(self.product_info)
 
-        draw.text((135, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+        draw.text((135, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
         self.prd_ptr += 30
 
         # self.product_info.save("test1.jpg", quallity=95)
@@ -322,16 +322,16 @@ class MakeImg:
         draw = ImageDraw.Draw(self.product_info)
 
         if i == 0:
-            draw.text((380, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+            draw.text((380, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 30
         elif i == 1:
-            draw.text((380, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+            draw.text((380, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 65
         elif i == 2:
-            draw.text((380, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+            draw.text((380, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 25
         elif i == 3:
-            draw.text((380, self.prd_ptr), text, fill=(65, 65, 65), font=fnt)
+            draw.text((380, self.prd_ptr), text, fill=(70, 70, 70), font=fnt)
             self.prd_ptr += 75
 
         # self.product_info.save("test_man2.jpg")
@@ -429,28 +429,25 @@ class MakeImg:
         self.fullview = Image.new("RGB", (self.base_width, 1830), (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
-        if itemnumber[0] in ["B", "S", "T", "V", "G"]:
-            if itemnumber[0] == "B":
-                img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
-                img = img.resize((330, 100))
-            elif itemnumber[0] == "S":
-                img = Image.open("03_resource/image/Brand_씨.jpg")
-                img = img.resize((330, 100))
-            elif itemnumber[0] == "T":
-                img = Image.open("03_resource/image/Brand_비키.jpg")
-                img = img.resize((330, 100))
-            elif itemnumber[0] == "V":
-                img = Image.open("03_resource/image/Brand_이사베이.jpg")
-                img = img.resize((330, 100))
-            elif itemnumber[0] == "G":
-                img = img
 
-            self.fullview.paste(img, (int((700 - img.width) / 2), 70))
-            self.full_ptr = 300
-        else:
-            self.tag = Image.open("03_resource/image/FullView.jpg")
-            self.fullview.paste(self.tag, (0, 30))
-            self.full_ptr = 80
+        if itemnumber[0] == "B":
+            img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            img = img.resize((330, 100))
+        elif itemnumber[0] == "S":
+            img = Image.open("03_resource/image/Brand_씨.jpg")
+            img = img.resize((330, 100))
+        elif itemnumber[0] == "T":
+            img = Image.open("03_resource/image/Brand_비키.jpg")
+            img = img.resize((330, 100))
+        elif itemnumber[0] == "V":
+            img = Image.open("03_resource/image/Brand_이사베이.jpg")
+            img = img.resize((330, 100))
+        elif itemnumber[0] == "G":
+            img = img
+
+        self.fullview.paste(img, (int((700 - img.width) / 2), 70))
+        self.full_ptr = 300
+
 
         str_img_file = f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg"
         self.img = Image.open(str_img_file)
@@ -594,7 +591,7 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man(self, itemnumber, color):  # 1 2 3 사용
-        self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1800+75+160), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
@@ -625,11 +622,11 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man_2(self, itemnumber, color):  # 1 2 사용
-        self.fullview = Image.new("RGB", (self.base_width, 1500), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1200+75+80), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
-        self.full_ptr = 80
+        self.full_ptr = 75
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
         self.img = self.img.resize((600, 600))
@@ -649,11 +646,11 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man_3(self, itemnumber, color):  # 3 4사용
-        self.fullview = Image.new("RGB", (self.base_width, 2200), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1800+75+160), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
-        self.full_ptr = 80
+        self.full_ptr = 75
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_3.jpg")
         self.img = self.img.resize((600, 600))
@@ -670,7 +667,7 @@ class MakeImg:
         self.full_ptr += self.img.height + 80
 
         set_image = self.fullview
-        self.fullview = self.fullview.crop((0, 0, self.base_width, 1500))
+        self.fullview = self.fullview.crop((0, 0, self.base_width, 1200+75+80))
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
@@ -802,6 +799,33 @@ class MakeImg:
         except:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
             pass
+
+        return self.detailview
+
+    def makeDV_woman(self, itemnumber, color):  # 3 4 5 사용
+
+        detail_ptr = 0
+        self.detailview = Image.new("RGB", (self.base_width, 1800 + 150 + 80), (255, 255, 255))
+        self.tag = Image.open("03_resource/image/DetailView.jpg")
+        self.detailview.paste(self.tag, (0, 30))
+        detail_ptr += 100
+
+        str_tmp = f"{self.path}/{itemnumber}_{color}_3.jpg"
+        self.img = Image.open(str_tmp)
+        self.img = self.img.resize((600, 600))
+        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        detail_ptr += self.img.height + 40
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_4.jpg")
+        self.img = self.img.resize((600, 600))
+        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        detail_ptr += self.img.height + 40
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_5.jpg")
+        self.img = self.img.resize((600, 600))
+        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+
+        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
@@ -1010,9 +1034,9 @@ class MakeImg:
     def info_size(self, size_count):
 
         if 80 + (40 * size_count) > 280:
-            self.sizeview = Image.new("RGB", (self.base_width, 80 + 100 + (40 * size_count)), (255, 255, 255))
+            self.sizeview = Image.new("RGB", (self.base_width, 80 + 110 + (40 * size_count)), (255, 255, 255))
         else:
-            self.sizeview = Image.new("RGB", (self.base_width, 280 + 100), (255, 255, 255))
+            self.sizeview = Image.new("RGB", (self.base_width, 280 + 80), (255, 255, 255))
 
         self.size_img = Image.new("RGB", (1, 1), (255, 255, 255))
 
@@ -1035,9 +1059,9 @@ class MakeImg:
                 self.size_img = Image.open("03_resource/image/여성_셔츠.jpg")
 
             if self.itemnumber[2] in ["F", "P"]:
-                self.sizeview.paste(self.size_img, (500, 50))
+                self.sizeview.paste(self.size_img, (440, 30))
             else:
-                self.sizeview.paste(self.size_img, (470, 50))
+                self.sizeview.paste(self.size_img, (self.base_width - self.size_img.width + 20, 30))
 
         else:  # 남성
 
