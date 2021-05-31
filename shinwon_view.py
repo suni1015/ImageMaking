@@ -225,8 +225,10 @@ class WindowClass(QMainWindow, form_class):
             color = comp.sub('', value)
             color = color.split("/")
 
-            if self.poombun[0] == "F" or self.sw_obj.dic_product["성별"] == "여성":
+            if self.sw_obj.dic_product["성별"] == "여성":
                 self.mkimg.makeDV_woman(self.poombun, color[0])
+            elif self.poombun[0] == "F":
+                self.mkimg.makeDV2(self.poombun, color[0])
             elif self.poombun[0] == "P":
                 if self.poombun[1] in ["A", "X", "Y", "Z"]:
                     self.mkimg.makeDV2(self.poombun, color[0])

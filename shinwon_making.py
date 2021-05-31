@@ -759,7 +759,7 @@ class MakeImg:
 
         return self.detailview
 
-    def makeDV3(self, itemnumber, color):  # 남자 시그 c시즌
+    def makeDV3(self, itemnumber, color):  # 남자 시그 after B시즌
 
         detail_ptr = 0
         self.detailview = Image.new("RGB", (self.base_width, 2750 + 150 + 160), (255, 255, 255))
@@ -785,7 +785,9 @@ class MakeImg:
 
         self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
-        try:
+        check1 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_7.jpg")
+        check2 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_8.jpg")
+        if check1 and check2:
             img = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
             img2 = Image.open(f"{self.path}/{itemnumber}_{color}_8.jpg")
 
@@ -795,10 +797,16 @@ class MakeImg:
 
             img2 = img2.resize((550, 550))
             self.detailview.paste(img2, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        elif check1:
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
 
-        except:
+            img = img.resize((550, 550))
+            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+
+            self.detailview = self.detailview.crop((0,0, self.base_width, 2200 + 150 + 120))
+
+        else:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
-            pass
 
         return self.detailview
 
@@ -1059,7 +1067,7 @@ class MakeImg:
                 self.size_img = Image.open("03_resource/image/여성_셔츠.jpg")
 
             if self.itemnumber[2] in ["F", "P"]:
-                self.sizeview.paste(self.size_img, (440, 30))
+                self.sizeview.paste(self.size_img, (510, 30))
             else:
                 self.sizeview.paste(self.size_img, (self.base_width - self.size_img.width + 20, 30))
 
