@@ -429,7 +429,6 @@ class MakeImg:
         self.fullview = Image.new("RGB", (self.base_width, 1830), (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
-
         if itemnumber[0] == "B":
             img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
             img = img.resize((330, 100))
@@ -447,7 +446,6 @@ class MakeImg:
 
         self.fullview.paste(img, (int((700 - img.width) / 2), 70))
         self.full_ptr = 300
-
 
         str_img_file = f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg"
         self.img = Image.open(str_img_file)
@@ -591,7 +589,7 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man(self, itemnumber, color):  # 1 2 3 사용
-        self.fullview = Image.new("RGB", (self.base_width, 1800+75+160), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1800 + 75 + 160), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
@@ -622,7 +620,7 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man_2(self, itemnumber, color):  # 1 2 사용
-        self.fullview = Image.new("RGB", (self.base_width, 1200+75+80), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1200 + 75 + 80), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
@@ -646,7 +644,7 @@ class MakeImg:
         return self.fullview
 
     def makeFV_man_3(self, itemnumber, color):  # 3 4사용
-        self.fullview = Image.new("RGB", (self.base_width, 1800+75+160), (255, 255, 255))
+        self.fullview = Image.new("RGB", (self.base_width, 1800 + 75 + 160), (255, 255, 255))
 
         self.tag = Image.open("03_resource/image/FullView.jpg")
         self.fullview.paste(self.tag, (0, 30))
@@ -667,7 +665,7 @@ class MakeImg:
         self.full_ptr += self.img.height + 80
 
         set_image = self.fullview
-        self.fullview = self.fullview.crop((0, 0, self.base_width, 1200+75+80))
+        self.fullview = self.fullview.crop((0, 0, self.base_width, 1200 + 75 + 80))
         self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
@@ -683,7 +681,7 @@ class MakeImg:
     def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
         detail_ptr = 0
-        self.detailview = Image.new("RGB", (self.base_width, 1650 + 150 + 80), (255, 255, 255))
+        self.detailview = Image.new("RGB", (self.base_width, 2200 + 150 + 120), (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100
@@ -691,27 +689,30 @@ class MakeImg:
         str_tmp = f"{self.path}/{itemnumber}_{color}_{self.A4}.jpg"
         self.img = Image.open(str_tmp)
         self.img = self.img.resize((550, 550))
-
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 40
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A5}.jpg")
         self.img = self.img.resize((550, 550))
-
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 40
 
-        try:
-            self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A6}.jpg")
-            self.img = self.img.resize((550, 550))
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A6}.jpg")
+        self.img = self.img.resize((550, 550))
+        self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        detail_ptr += self.img.height + 40
 
-            self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        check1 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_7.jpg")
+        if check1:
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
+            img = img.resize((550, 550))
+            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
-            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 2200 + 150 + 120))
+        else:
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
 
-        except:
-            self.detailview = self.detailview.crop((0, 0, self.base_width, 1100 + 150 + 40))
-            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
@@ -803,7 +804,7 @@ class MakeImg:
             img = img.resize((550, 550))
             self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
-            self.detailview = self.detailview.crop((0,0, self.base_width, 2200 + 150 + 120))
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 2200 + 150 + 120))
 
         else:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
