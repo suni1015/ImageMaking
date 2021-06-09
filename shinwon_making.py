@@ -227,10 +227,17 @@ class MakeImg:
             img = Image.open(f"{self.dir}/{top_code}/{top_code}_{self.color}_1.jpg")
             img2 = Image.open(f"{self.dir}/{bottom_code}/{bottom_code}_{self.color}_6.jpg")
 
+            product_image = Image.new("RGB", (900, 1620), (255, 255, 255))
+            product_image.paste(img2, (0, 720))
+            product_image.paste(img, (0, 0))
+            product_image.save(f"{self.path}/{itemnumber}_03.jpg")
+
+
             img = img.resize((300, 300))
             img2 = img2.resize((300, 300))
+            self.product_info.paste(img2, (0, 310))
             self.product_info.paste(img, (0, 70))
-            self.product_info.paste(img2, (0, 350))
+
 
         logo = Image.new("RGB", (0, 0), (255, 255, 255))
         # 브랜드 로고 자리
@@ -267,39 +274,23 @@ class MakeImg:
         draw.text((310, self.prd_ptr + 25), "사이즈", fill=(100, 100, 100), font=fnt)
         draw.text((310, self.prd_ptr + 50), "소재", fill=(100, 100, 100), font=fnt)
 
-        if len(name) < 20:
-            draw.text((310, 90), name, fill=(25, 25, 25), font=pdt_name)
+        w, h = pdt_name.getsize(name)
+        if w < 400:  # 상품이름이 너무길경우
+            draw.text((305, 90), name, fill=(25, 25, 25), font=pdt_name)
         else:
-            '''    주석처리된 부분은 else 문으로 대체완료
-                    반복 조건문으로 2차 대체 
-            if name[20] == " ":
-                draw.text((310, 75), name[0:20], fill=(25, 25, 25), font=pdt_name)
-                draw.text((310, 105), name[21:], fill=(25, 25, 25), font=pdt_name)
-                
-                elif name[19] == " ":
-                    draw.text((310, 75), name[0:19], fill=(25, 25, 25), font=pdt_name)
-                    draw.text((310, 105), name[20:], fill=(25, 25, 25), font=pdt_name)
-                elif name[18] == " ":
-                    draw.text((310, 75), name[0:18], fill=(25, 25, 25), font=pdt_name)
-                    draw.text((310, 105), name[19:], fill=(25, 25, 25), font=pdt_name)
-                elif name[17] == " ":
-                    draw.text((310, 75), name[0:17], fill=(25, 25, 25), font=pdt_name)
-                    draw.text((310, 105), name[18:], fill=(25, 25, 25), font=pdt_name)
-                elif name[16] == " ":
-                    draw.text((310, 75), name[0:16], fill=(25, 25, 25), font=pdt_name)
-                    draw.text((310, 105), name[17:], fill=(25, 25, 25), font=pdt_name)
-            '''
-            i = 19
+            i = len(name) - 1
             while True:
                 if name[i] == " ":
-                    break
+                    w, h = pdt_name.getsize(name[:i])
+                    if w < 400:
+                        break
                 i -= 1
-            draw.text((310, 75), name[:i], fill=(25, 25, 25), font=pdt_name)
-            draw.text((310, 105), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
+            draw.text((305, 90), name[:i], fill=(25, 25, 25), font=pdt_name)
+            draw.text((305, 120), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
 
         depart_line = Image.new("RGB", (500, 1), (230, 230, 230))
         for i in range(5):
-            self.product_info.paste(depart_line, (305, 172 + (i * 30)))
+            self.product_info.paste(depart_line, (305, 176 + (i * 30)))
         self.product_info.paste(depart_line, (305, self.prd_ptr - 15))
 
         self.prd_ptr = 150
@@ -374,11 +365,11 @@ class MakeImg:
         if not os.path.isdir("04_result"):
             os.makedirs("04_result")
 
-        self.color = color
+        self.color = color[0]
 
         return True
 
-    def checkfile_set(self, itemnumber):
+    def checkfile_set(self, itemnumber, color):
 
         item_top = itemnumber.split("_")[0]
         item_bottom = itemnumber.split("_")[1]
@@ -413,15 +404,18 @@ class MakeImg:
                     return False
         check = os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_1.jpg")
         check2 = os.path.isfile(f"{self.dir}/{itemnumber}/{itemnumber}_B.jpg")
+        '''
         if not check and not check2:
             print(f'Err : there is no {itemnumber}_1.jpg')
             self.no_file = self.no_file + itemnumber + "_1.jpg or " + f"{itemnumber}_B.jpg" + "\n"
             self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
             print(self.no_file)
             return False
-
+        '''
         if not os.path.isdir("04_result"):
             os.makedirs("04_result")
+
+        self.color = color[0]
 
         return True
 
@@ -784,8 +778,6 @@ class MakeImg:
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         detail_ptr += self.img.height + 40
 
-        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
-
         check1 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_7.jpg")
         check2 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_8.jpg")
         if check1 and check2:
@@ -808,6 +800,8 @@ class MakeImg:
 
         else:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
+
+        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
@@ -1031,14 +1025,14 @@ class MakeImg:
 
         self.FV_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_fv.jpg")
         self.DV_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_dv.jpg")
-        self.info_full_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_di.jpg")
+        self.info_full_top = Image.open(f"{self.dir}/{item_code_top}/{item_code_top}_02.jpg")
 
         try:
             self.FV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_fv_set.jpg")
         except:
             self.FV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_fv.jpg")
         self.DV_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_dv.jpg")
-        self.info_full_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_di.jpg")
+        self.info_full_bottom = Image.open(f"{self.dir}/{item_code_bottom}/{item_code_bottom}_02.jpg")
 
     def info_size(self, size_count):
 
@@ -1192,7 +1186,7 @@ class MakeImg:
             self.fullimage_ptr += image.height
 
         self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_result.jpg", quallity=100)
+        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineImg_man(self, item_code):
         self.fullimage = Image.new("RGB", (self.base_width,
@@ -1221,7 +1215,7 @@ class MakeImg:
                     r = False
 
         self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_result.jpg", quallity=100)
+        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineInfo(self):
         self.info_tip()
@@ -1233,7 +1227,7 @@ class MakeImg:
         self.info_full.paste(self.sizeview, (0, self.infoview.height))
         self.info_full.paste(self.tip_view, (0, self.infoview.height + self.sizeview.height))
 
-        self.info_full.save(f"{self.path}/{self.itemnumber}_di.jpg", quallity=100)
+        self.info_full.save(f"{self.path}/{self.itemnumber}_02.jpg", quallity=100)
 
     def combineSet(self, item_code):
         self.fullimage_material = [self.product_info, self.FV_top, self.DV_top, self.info_full_top, self.FV_bottom,
@@ -1241,7 +1235,7 @@ class MakeImg:
 
         self.fullimage = Image.new("RGB", (self.base_width,
                                            self.product_info.height + self.FV_top.height + self.DV_top.height + self.info_full_top.height + self.FV_bottom.height + self.DV_bottom.height + self.info_full_bottom.height),
-                                   (255, 255, 255), )
+                                   (255, 255, 255))
 
         self.fullimage_ptr = 0
 
@@ -1273,7 +1267,15 @@ class MakeImg:
         self.fullimage_ptr += self.info_full_bottom.height
 
         self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_result.jpg", quallity=100)
+        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
+
+        self.fullimage_2 = Image.new("RGB", (self.base_width, self.info_full_top.height + self.info_full_bottom.height),
+                                     (255, 255, 255))
+
+        self.fullimage_2.paste(self.info_full_top, (0, 0))
+        self.fullimage_2.paste(self.info_full_bottom, (0, self.info_full_top.height))
+
+        self.fullimage_2.save(f"{self.path}/{item_code}_02.jpg", quallity=100)
 
 
 if __name__ == '__main__':

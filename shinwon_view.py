@@ -196,7 +196,7 @@ class WindowClass(QMainWindow, form_class):
                 else:
                     self.fail_count += 1
             elif self.sw_obj.bSET_poombun == True:
-                if self.mkimg.checkfile_set(self.poombun):
+                if self.mkimg.checkfile_set(self.poombun, color):
                     self.Makeimage_set()
                     self.success_count += 1
                 else:
