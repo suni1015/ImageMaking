@@ -206,7 +206,7 @@ class MakeImg:
         # self.product_info.save("test1.jpg", quallity=95)
 
     def info_product_name_set(self, name, itemnumber, index):
-        self.product_info = Image.new("RGB", (self.base_width, 650), (255, 255, 255))
+        self.product_info = Image.new("RGB", (self.base_width, 700), (255, 255, 255))
         draw = ImageDraw.Draw(self.product_info)
 
         top_code = itemnumber.split("_")[0]
@@ -222,7 +222,7 @@ class MakeImg:
             except:
                 img = Image.open(f"{self.path}/{itemnumber}_B.jpg")
             img = img.resize((500, 500))
-            self.product_info.paste(img, (-100, 70))
+            self.product_info.paste(img, (-100, 90))
         else:
             img = Image.open(f"{self.dir}/{top_code}/{top_code}_{self.color}_1.jpg")
             img2 = Image.open(f"{self.dir}/{bottom_code}/{bottom_code}_{self.color}_6.jpg")
@@ -232,12 +232,10 @@ class MakeImg:
             product_image.paste(img, (0, 0))
             product_image.save(f"{self.path}/{itemnumber}_03.jpg")
 
-
             img = img.resize((300, 300))
             img2 = img2.resize((300, 300))
-            self.product_info.paste(img2, (0, 310))
-            self.product_info.paste(img, (0, 70))
-
+            self.product_info.paste(img2, (0, 330))
+            self.product_info.paste(img, (0, 90))
 
         logo = Image.new("RGB", (0, 0), (255, 255, 255))
         # 브랜드 로고 자리
@@ -255,18 +253,18 @@ class MakeImg:
             logo = logo.crop((250, 0, 750, 300))
             logo = logo.resize((167, 100))
 
-        self.product_info.paste(logo, (305, 0))
+        self.product_info.paste(logo, (305, 20))
 
-        draw.text((310, 150), "품번", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 180), "색상", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 210), "시즌", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 240), "세탁방법", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 270), "원산지", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 310), "[상의]", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 335), "사이즈", fill=(100, 100, 100), font=fnt)
-        draw.text((310, 360), "소재", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 170), "품번", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 200), "색상", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 230), "시즌", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 260), "세탁방법", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 290), "원산지", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 330), "[상의]", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 355), "사이즈", fill=(100, 100, 100), font=fnt)
+        draw.text((310, 380), "소재", fill=(100, 100, 100), font=fnt)
 
-        self.prd_ptr = 360
+        self.prd_ptr = 380
         for i in range(self.top_space - 2):
             self.prd_ptr += 25
 
@@ -276,7 +274,7 @@ class MakeImg:
 
         w, h = pdt_name.getsize(name)
         if w < 400:  # 상품이름이 너무길경우
-            draw.text((305, 90), name, fill=(25, 25, 25), font=pdt_name)
+            draw.text((305, 110), name, fill=(25, 25, 25), font=pdt_name)
         else:
             i = len(name) - 1
             while True:
@@ -285,15 +283,15 @@ class MakeImg:
                     if w < 400:
                         break
                 i -= 1
-            draw.text((305, 90), name[:i], fill=(25, 25, 25), font=pdt_name)
-            draw.text((305, 120), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
+            draw.text((305, 110), name[:i], fill=(25, 25, 25), font=pdt_name)
+            draw.text((305, 140), name[i + 1:], fill=(25, 25, 25), font=pdt_name)
 
         depart_line = Image.new("RGB", (500, 1), (230, 230, 230))
         for i in range(5):
-            self.product_info.paste(depart_line, (305, 176 + (i * 30)))
+            self.product_info.paste(depart_line, (305, 196 + (i * 30)))
         self.product_info.paste(depart_line, (305, self.prd_ptr - 15))
 
-        self.prd_ptr = 150
+        self.prd_ptr = 170
 
         index2 = index.split("\n")
 
