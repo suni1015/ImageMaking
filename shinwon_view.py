@@ -112,6 +112,11 @@ class WindowClass(QMainWindow, form_class):
 
         self.mkimg.clear_data()
 
+        if self.check_set.isChecked():
+            self.mkimg.set_index = True
+        else:
+            self.mkimg.set_index = False
+
         self.success_count = 0
         self.fail_count = 0
 
@@ -143,8 +148,10 @@ class WindowClass(QMainWindow, form_class):
             '''
             if len(poombun) == 9:
                 self.sw_obj.bSET_poombun = False
+
             elif len(poombun) == 19:
                 self.sw_obj.bSET_poombun = True
+
             else:
                 self.tb_poombun_info.append("ERR : 품번 길이 오류")
                 continue

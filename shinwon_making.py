@@ -36,6 +36,8 @@ class MakeImg:
 
         self.prd_index = True
 
+        self.set_index = False
+
         # ini
         self.ini_config = configparser.ConfigParser()
         self.init_INI()
@@ -460,7 +462,8 @@ class MakeImg:
         self.img = self.img.resize((700, 700))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         '''
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -512,8 +515,8 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color1}_2.jpg")
         self.img = self.img.resize((700, 700))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -576,7 +579,8 @@ class MakeImg:
         self.img = self.img.resize((700, 700))
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
 
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -606,8 +610,8 @@ class MakeImg:
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
         self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
-
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -630,8 +634,8 @@ class MakeImg:
         self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
         img = Image.open("03_resource/image/back_text.jpg")
         self.fullview.paste(img, (700 - img.width + 10, self.full_ptr + 485))
-
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         return self.fullview
 
@@ -658,7 +662,8 @@ class MakeImg:
 
         set_image = self.fullview
         self.fullview = self.fullview.crop((0, 0, self.base_width, 1200 + 75 + 80))
-        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+        if self.set_index:
+            self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
         if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
             img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
@@ -668,7 +673,8 @@ class MakeImg:
 
             if self.itemnumber[2] == "P":
                 self.fullview = set_image
-                self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+                if self.set_index:
+                    self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
     def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
@@ -703,8 +709,8 @@ class MakeImg:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 2200 + 150 + 120))
         else:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
-
-        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+        if self.set_index:
+            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
@@ -748,7 +754,8 @@ class MakeImg:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
             pass
 
-        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+        if self.set_index:
+            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
@@ -799,14 +806,15 @@ class MakeImg:
         else:
             self.detailview = self.detailview.crop((0, 0, self.base_width, 1650 + 150 + 80))
 
-        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+        if self.set_index:
+            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
     def makeDV_woman(self, itemnumber, color):  # 3 4 5 사용
 
         detail_ptr = 0
-        self.detailview = Image.new("RGB", (self.base_width, 1800 + 150 + 80), (255, 255, 255))
+        self.detailview = Image.new("RGB", (self.base_width, 3000 + 150 + 160), (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100
@@ -826,7 +834,31 @@ class MakeImg:
         self.img = self.img.resize((600, 600))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
-        self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
+        check1 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_6.jpg")
+        check2 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_7.jpg")
+        if check1 and check2:
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
+            img2 = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
+
+            img = img.resize((600, 600))
+            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+            detail_ptr += self.img.height + 40
+
+            img2 = img2.resize((550, 550))
+            self.detailview.paste(img2, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        elif check1:
+            img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
+
+            img = img.resize((550, 550))
+            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 2400 + 150 + 120))
+
+        else:
+            self.detailview = self.detailview.crop((0, 0, self.base_width, 1800 + 150 + 80))
+
+        if self.set_index:
+            self.detailview.save(f"{self.path}/{itemnumber}_dv.jpg", quallity=100)
 
         return self.detailview
 
