@@ -246,11 +246,11 @@ class MakeImg:
             logo = Image.open("03_resource/image/Brand_지이크.jpg")
             logo = logo.crop((380, 0, 620, 300))
             logo = logo.resize((80, 100))
-        elif self.itemnumber == "F":
+        elif self.itemnumber[0] == "F":
             logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
             logo = logo.crop((125, 0, 875, 300))
             logo = logo.resize((250, 100))
-        elif self.itemnumber == "Q":
+        elif self.itemnumber[0] == "Q":
             logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
             logo = logo.crop((250, 0, 750, 300))
             logo = logo.resize((167, 100))
@@ -664,17 +664,16 @@ class MakeImg:
         self.fullview = self.fullview.crop((0, 0, self.base_width, 1200 + 75 + 80))
         if self.set_index:
             self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+            if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
+                img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
+                img = img.resize((550, 550))
+                set_image.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+                set_image.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
-        if self.itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
-            img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
-            img = img.resize((550, 550))
-            set_image.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
-            set_image.save(f"{self.path}/{itemnumber}_fv_set.jpg", quallity=100)
-
-            if self.itemnumber[2] == "P":
-                self.fullview = set_image
-                if self.set_index:
-                    self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
+                if self.itemnumber[2] == "P":
+                    self.fullview = set_image
+                    if self.set_index:
+                        self.fullview.save(f"{self.path}/{itemnumber}_fv.jpg", quallity=100)
 
     def makeDV(self, itemnumber, color):  # 4 5 6 사용
 
@@ -833,24 +832,25 @@ class MakeImg:
         self.img = Image.open(f"{self.path}/{itemnumber}_{color}_5.jpg")
         self.img = self.img.resize((600, 600))
         self.detailview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+        detail_ptr += self.img.height + 40
 
         check1 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_6.jpg")
         check2 = os.path.isfile(f"{self.path}/{itemnumber}_{color}_7.jpg")
         if check1 and check2:
-            img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
+            img1 = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
             img2 = Image.open(f"{self.path}/{itemnumber}_{color}_7.jpg")
 
-            img = img.resize((600, 600))
-            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
-            detail_ptr += self.img.height + 40
+            img1 = img1.resize((600, 600))
+            self.detailview.paste(img1, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+            detail_ptr += img1.height + 40
 
-            img2 = img2.resize((550, 550))
+            img2 = img2.resize((600, 600))
             self.detailview.paste(img2, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
         elif check1:
-            img = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
+            img1 = Image.open(f"{self.path}/{itemnumber}_{color}_6.jpg")
 
-            img = img.resize((550, 550))
-            self.detailview.paste(img, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
+            img1 = img1.resize((600, 600))
+            self.detailview.paste(img1, (int((self.base_width / 2) - (self.img.width / 2)), detail_ptr))
 
             self.detailview = self.detailview.crop((0, 0, self.base_width, 2400 + 150 + 120))
 
@@ -1215,8 +1215,12 @@ class MakeImg:
             self.fullimage.paste(image, (0, self.fullimage_ptr))
             self.fullimage_ptr += image.height
 
-        self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
+        self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height),(255,255,255))
+
+        self.fullimage_extend.paste(self.fullimage, (80, 0))
+
+        self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
+        self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineImg_man(self, item_code):
         self.fullimage = Image.new("RGB", (self.base_width,
@@ -1244,8 +1248,12 @@ class MakeImg:
                     self.fullimage.paste(self.break_line, (0, self.fullimage_ptr - 1))
                     r = False
 
-        self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
+        self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height), (255, 255, 255))
+
+        self.fullimage_extend.paste(self.fullimage, (80, 0))
+
+        self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
+        self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineInfo(self):
         self.info_tip()
@@ -1296,8 +1304,11 @@ class MakeImg:
         self.fullimage.paste(self.info_full_bottom, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.info_full_bottom.height
 
-        self.fullimage.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
-        self.fullimage.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
+        self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height), (255, 255, 255))
+        self.fullimage_extend.paste(self.fullimage, (80, 0))
+
+        self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
+        self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
         self.fullimage_2 = Image.new("RGB", (self.base_width, self.info_full_top.height + self.info_full_bottom.height),
                                      (255, 255, 255))
