@@ -1215,7 +1215,7 @@ class MakeImg:
             self.fullimage.paste(image, (0, self.fullimage_ptr))
             self.fullimage_ptr += image.height
 
-        self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height),(255,255,255))
+        self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height), (255, 255, 255))
 
         self.fullimage_extend.paste(self.fullimage, (80, 0))
 
@@ -1317,6 +1317,54 @@ class MakeImg:
         self.fullimage_2.paste(self.info_full_bottom, (0, self.info_full_top.height))
 
         self.fullimage_2.save(f"{self.path}/{item_code}_02.jpg", quallity=100)
+
+    def thumbnail(self, color_list):
+        thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{color_list[0]}_{self.A1}.jpg")
+
+        mask_im = Image.new("L", thumbnail.size, 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.ellipse((329, 273, 329 + 70, 273 + 70), fill=255)
+
+        base_y = 517
+        if not len(color_list) ==1:
+            for color in color_list:
+                thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
+                thumbnail.paste(thumb, (491, base_y), mask_im)
+                base_y -= 80
+
+        # 브랜드별 로고
+        if self.itemnumber[0] == "B":
+            logo = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            logo = logo.crop((20, 80, 30 + 950, 90 + 140))
+            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+        elif self.itemnumber[0] == "S":
+            logo = Image.open("03_resource/image/Brand_씨.jpg")
+            logo = logo.crop((370, 30, 370 + 260, 30 + 180))
+            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+        elif self.itemnumber[0] == "T":
+            logo = Image.open("03_resource/image/Brand_비키.jpg")
+            logo = logo.crop((250, 60, 250 + 500, 60 + 170))
+            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+        elif self.itemnumber[0] == "V":
+            logo = Image.open("03_resource/image/Brand_이사베이.jpg")
+            logo = logo.crop((90, 50, 90 + 810, 50 + 180))
+            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+        elif self.itemnumber[0] == "P":
+            logo = Image.open("03_resource/image/Brand_지이크.jpg")
+            logo = logo.crop((370, 90, 370 + 260, 90 + 120))
+            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+        elif self.itemnumber[0] == "F":
+            logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
+            logo = logo.crop((110, 100, 110 + 750, 100 + 120))
+            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+        elif self.itemnumber[0] == "Q":
+            logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
+            logo = logo.crop((250, 100, 250 + 500, 100 + 110))
+            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+        thumbnail.paste(logo, (900 - logo.width, 0))
+
+
+        thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
 
 
 if __name__ == '__main__':

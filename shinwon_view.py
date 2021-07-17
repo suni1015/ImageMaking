@@ -319,7 +319,8 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.info_product(self.sw_obj.dic_product["소재"])
 
                 self.mkimg.combineImg(self.poombun)
-
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(color)
             return
 
     @pyqtSlot()
