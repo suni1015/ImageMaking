@@ -262,7 +262,7 @@
    <widget class="QCheckBox" name="check_thumb">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>460</x>
       <y>500</y>
       <width>111</width>
       <height>16</height>
