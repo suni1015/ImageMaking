@@ -108,7 +108,7 @@ class MakeImg:
 
         if self.itemnumber[0] == "P":
             logo = Image.open("03_resource/image/지이크(썸네일).png")
-            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
+            logo = logo.resize((int(logo.width / 8), int(logo.height / 8)))
         elif self.itemnumber[0] == "F":
             logo = Image.open("03_resource/image/파렌하이트(썸네일).png")
             logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
@@ -243,7 +243,7 @@ class MakeImg:
 
         if self.itemnumber[0] == "P":
             logo = Image.open("03_resource/image/지이크(썸네일).png")
-            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
+            logo = logo.resize((int(logo.width / 8), int(logo.height / 8)))
         elif self.itemnumber[0] == "F":
             logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
             logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
