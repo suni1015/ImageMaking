@@ -10,6 +10,7 @@ import os
 
 pdt_name = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 22, encoding="UTF-8")
 fnt = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 15, encoding="UTF-8")
+fnt_bold = ImageFont.truetype("03_resource/NotoSansCJKkr-Bold.otf", 15, encoding="UTF-8")
 fnt_FV = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 14, encoding="UTF-8")
 fnt3 = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 13, encoding="UTF-8")
 fnt_tip = ImageFont.truetype("03_resource/NotoSansCJKkr-Regular.otf", 12, encoding="UTF-8")
@@ -106,19 +107,17 @@ class MakeImg:
         # 브랜드 로고 자리
 
         if self.itemnumber[0] == "P":
-            logo = Image.open("03_resource/image/Brand_지이크.jpg")
-            logo = logo.crop((380, 0, 620, 300))
-            logo = logo.resize((80, 100))
+            logo = Image.open("03_resource/image/지이크(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "F":
-            logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
-            logo = logo.crop((125, 0, 875, 300))
-            logo = logo.resize((250, 100))
+            logo = Image.open("03_resource/image/파렌하이트(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "Q":
             logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
             logo = logo.crop((250, 0, 750, 300))
             logo = logo.resize((167, 100))
 
-        self.product_info.paste(logo, (305, 40))
+        self.product_info.paste(logo, (305, 110 - logo.height), logo)
 
         self.prd_ptr = 190
 
@@ -243,19 +242,17 @@ class MakeImg:
         # 브랜드 로고 자리
 
         if self.itemnumber[0] == "P":
-            logo = Image.open("03_resource/image/Brand_지이크.jpg")
-            logo = logo.crop((380, 0, 620, 300))
-            logo = logo.resize((80, 100))
+            logo = Image.open("03_resource/image/지이크(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "F":
             logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
-            logo = logo.crop((125, 0, 875, 300))
-            logo = logo.resize((250, 100))
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "Q":
             logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
             logo = logo.crop((250, 0, 750, 300))
             logo = logo.resize((167, 100))
 
-        self.product_info.paste(logo, (305, 20))
+        self.product_info.paste(logo, (305, 90 - logo.height), logo)
 
         draw.text((310, 170), "품번", fill=(100, 100, 100), font=fnt)
         draw.text((310, 200), "색상", fill=(100, 100, 100), font=fnt)
@@ -1171,17 +1168,37 @@ class MakeImg:
         for n in value_list:  # 사이즈 어깨넓이 등
             w, h = fnt.getsize(n)
 
-            if self.itemnumber[2] in ["F", "P"]:
+            size_inch = n.split("(")
+            if len(size_inch) > 1:
+                w1, h1 = fnt.getsize(size_inch[0])
+                w2, h2 = fnt.getsize(size_inch[1])
+
                 ImageDraw.Draw(self.sizeview).text(
-                    (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (w / 2)),
-                     (self.size_ptr + 25 - h)),
-                    n, font=fnt, fill=(60, 60, 60))
+                    (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
+                                (w1 + w2) / 2)),
+                     (self.size_ptr + 25 - h1)),
+                    size_inch[0], font=fnt, fill=(60, 60, 60))
+                ImageDraw.Draw(self.sizeview).text(
+                    (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
+                                (w1 + w2) / 2) + w1),
+                     (self.size_ptr + 25 - h1)),
+                    "(" + size_inch[1], font=fnt_bold, fill=(60, 60, 60))
+                num += 1
+
             else:
-                ImageDraw.Draw(self.sizeview).text(
-                    (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (w / 2)),
-                     (self.size_ptr + 25 - h)),
-                    n, font=fnt, fill=(60, 60, 60))
-            num += 1
+                if self.itemnumber[2] in ["F", "P"]:
+                    ImageDraw.Draw(self.sizeview).text(
+                        (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
+                                    w / 2)),
+                         (self.size_ptr + 25 - h)),
+                        n, font=fnt, fill=(60, 60, 60))
+                else:
+                    ImageDraw.Draw(self.sizeview).text(
+                        (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
+                                    w / 2)),
+                         (self.size_ptr + 25 - h)),
+                        n, font=fnt, fill=(60, 60, 60))
+                num += 1
         self.size_ptr += self.table_height
 
         # self.sizeview.save("test_size2.jpg", quallity=95)
@@ -1321,12 +1338,18 @@ class MakeImg:
     def thumbnail(self, color_list):
         thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{color_list[0]}_{self.A1}.jpg")
 
-        mask_im = Image.new("L", thumbnail.size, 0)
+        mask_im = Image.new("L", (thumbnail.width * 10, thumbnail.height * 10), 0)
         draw = ImageDraw.Draw(mask_im)
-        draw.ellipse((329, 273, 329 + 70, 273 + 70), fill=255)
+        draw.ellipse((329 * 10, 273 * 10, (329 + 70) * 10, (273 + 70) * 10), fill=255)
+        mask_im = mask_im.resize(thumbnail.size)
 
         base_y = 517
-        if not len(color_list) ==1:
+        if not len(color_list) == 1:
+            for color in color_list:
+                thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
+                thumbnail.paste(thumb, (491, base_y), mask_im)
+                base_y -= 80
+        elif self.itemnumber[0] in ["B", "S", "T", "V", "G"]:  # 여성의경우 1개여도 실행
             for color in color_list:
                 thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
                 thumbnail.paste(thumb, (491, base_y), mask_im)
@@ -1334,35 +1357,25 @@ class MakeImg:
 
         # 브랜드별 로고
         if self.itemnumber[0] == "B":
-            logo = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
-            logo = logo.crop((20, 80, 30 + 950, 90 + 140))
-            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+            logo = Image.open("03_resource/image/베스띠벨리(썸네일).png")
         elif self.itemnumber[0] == "S":
-            logo = Image.open("03_resource/image/Brand_씨.jpg")
-            logo = logo.crop((370, 30, 370 + 260, 30 + 180))
-            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+            logo = Image.open("03_resource/image/씨(썸네일).png")
         elif self.itemnumber[0] == "T":
-            logo = Image.open("03_resource/image/Brand_비키.jpg")
-            logo = logo.crop((250, 60, 250 + 500, 60 + 170))
-            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+            logo = Image.open("03_resource/image/비키(썸네일).png")
         elif self.itemnumber[0] == "V":
-            logo = Image.open("03_resource/image/Brand_이사베이.jpg")
-            logo = logo.crop((90, 50, 90 + 810, 50 + 180))
-            logo = logo.resize((int(logo.width / 3), int(logo.height / 3)))
+            logo = Image.open("03_resource/image/이사베이(썸네일).png")
         elif self.itemnumber[0] == "P":
-            logo = Image.open("03_resource/image/Brand_지이크.jpg")
-            logo = logo.crop((370, 90, 370 + 260, 90 + 120))
-            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+            logo = Image.open("03_resource/image/지이크(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "F":
-            logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
-            logo = logo.crop((110, 100, 110 + 750, 100 + 120))
-            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+            logo = Image.open("03_resource/image/파렌하이트(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "Q":
             logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
             logo = logo.crop((250, 100, 250 + 500, 100 + 110))
             logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
-        thumbnail.paste(logo, (900 - logo.width, 0))
 
+        thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
 
         thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
 

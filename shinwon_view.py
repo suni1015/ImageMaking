@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import os
 import re
+import threading
 
 from shinwon_data import Shinwon
 from shinwon_making import MakeImg
@@ -18,8 +19,9 @@ form_class = uic.loadUiType("./03_resource/ui_imageMaking.ui")[0]
 
 ###### CLASS ######
 class WindowClass(QMainWindow, form_class):
-
     filename = None
+    still = False
+    button = True
 
     def __init__(self):
 
@@ -37,10 +39,21 @@ class WindowClass(QMainWindow, form_class):
         self.btn_file_open.clicked.connect(self.OnfileOpen)
         self.btn_path.clicked.connect(self.OnSelectPath)
         self.btn_img_make_single.clicked.connect(self.Makeimage_single)
-        self.btn_img_make_multi.clicked.connect(self.Makeimage_multi)
+        self.btn_img_make_multi.clicked.connect(self.Makeimage_thread)
         self.edt_poombun.returnPressed.connect(self.OnEnterPoombun)
         self.edt_poombun.textChanged[str].connect(self.onChangedPoombun)
 
+    def button_on_off(self):
+        if self.button:
+            self.btn_file_open.setEnabled(False)
+            self.btn_img_make_multi.setEnabled(False)
+            self.btn_path.setEnabled(False)
+            self.button = False
+        else:
+            self.btn_file_open.setEnabled(True)
+            self.btn_img_make_multi.setEnabled(True)
+            self.btn_path.setEnabled(True)
+            self.button = True
     @pyqtSlot()
     def OnfileOpen(self):
 
@@ -109,8 +122,10 @@ class WindowClass(QMainWindow, form_class):
 
     @pyqtSlot()
     def Makeimage_multi(self):
+        self.still = True
 
         self.mkimg.clear_data()
+        self.mkimg.init_INI()
 
         if self.check_set.isChecked():
             self.mkimg.set_index = True
@@ -217,7 +232,21 @@ class WindowClass(QMainWindow, form_class):
 
         self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건\n")
 
+
+        self.still = False
+        self.button_on_off()
+
         return
+
+    def Makeimage_thread(self):
+        self.button_on_off()
+
+        th = threading.Thread(target=self.Makeimage_multi)
+        th.daemon = True
+        if not self.still == True:
+            th.start()
+        else:
+            print('still')
 
     @pyqtSlot()
     def Makeimage_single(self):
