@@ -251,7 +251,7 @@
      <rect>
       <x>230</x>
       <y>500</y>
-      <width>161</width>
+      <width>201</width>
       <height>16</height>
      </rect>
     </property>
@@ -262,9 +262,9 @@
    <widget class="QCheckBox" name="check_thumb">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>460</x>
       <y>500</y>
-      <width>161</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
@@ -279,7 +279,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
