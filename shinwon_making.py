@@ -1175,12 +1175,12 @@ class MakeImg:
 
                 ImageDraw.Draw(self.sizeview).text(
                     (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
-                                (w1 + w2) / 2)),
+                            (w1 + w2) / 2)),
                      (self.size_ptr + 25 - h1)),
                     size_inch[0], font=fnt, fill=(60, 60, 60))
                 ImageDraw.Draw(self.sizeview).text(
                     (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
-                                (w1 + w2) / 2) + w1),
+                            (w1 + w2) / 2) + w1),
                      (self.size_ptr + 25 - h1)),
                     "(" + size_inch[1], font=fnt_bold, fill=(60, 60, 60))
                 num += 1
@@ -1189,13 +1189,13 @@ class MakeImg:
                 if self.itemnumber[2] in ["F", "P"]:
                     ImageDraw.Draw(self.sizeview).text(
                         (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
-                                    w / 2)),
+                                w / 2)),
                          (self.size_ptr + 25 - h)),
                         n, font=fnt, fill=(60, 60, 60))
                 else:
                     ImageDraw.Draw(self.sizeview).text(
                         (((self.table_width / len(value_list) * num) - (self.table_width / len(value_list) / 2) - (
-                                    w / 2)),
+                                w / 2)),
                          (self.size_ptr + 25 - h)),
                         n, font=fnt, fill=(60, 60, 60))
                 num += 1
@@ -1335,25 +1335,26 @@ class MakeImg:
 
         self.fullimage_2.save(f"{self.path}/{item_code}_02.jpg", quallity=100)
 
-    def thumbnail(self, color_list):
+    def thumbnail(self, color_list, x, y):
         thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{color_list[0]}_{self.A1}.jpg")
 
         mask_im = Image.new("L", (thumbnail.width * 10, thumbnail.height * 10), 0)
         draw = ImageDraw.Draw(mask_im)
-        draw.ellipse((329 * 10, 273 * 10, (329 + 70) * 10, (273 + 70) * 10), fill=255)
+        draw.ellipse(((int(x) - 35) * 10, (int(y) - 35) * 10, (int(x) + 35) * 10, (int(y) + 35) * 10), fill=255)
         mask_im = mask_im.resize(thumbnail.size)
 
-        base_y = 517
+        base_y = 825 - int(y)
+        base_x = 855 - int(x)
         if not len(color_list) == 1:
             for color in color_list:
                 thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
-                thumbnail.paste(thumb, (491, base_y), mask_im)
-                base_y -= 80
+                thumbnail.paste(thumb, (base_x, base_y), mask_im)
+                base_y -= 75
         elif self.itemnumber[0] in ["B", "S", "T", "V", "G"]:  # 여성의경우 1개여도 실행
             for color in color_list:
                 thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
-                thumbnail.paste(thumb, (491, base_y), mask_im)
-                base_y -= 80
+                thumbnail.paste(thumb, (base_x, base_y), mask_im)
+                base_y -= 75
 
         # 브랜드별 로고
         if self.itemnumber[0] == "B":
@@ -1378,6 +1379,15 @@ class MakeImg:
         thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
 
         thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
+
+    def thumbnail_exam(self, x, y):
+
+        mask_im = Image.new("L", (9000, 9000), 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.ellipse(((int(x) - 35) * 10, (int(y) - 35) * 10, (int(x) + 35) * 10, (int(y) + 35) * 10), fill=255)
+        mask_im = mask_im.resize((900, 900))
+
+        mask_im.show()
 
 
 if __name__ == '__main__':
