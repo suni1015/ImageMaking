@@ -275,9 +275,9 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>430</x>
       <y>610</y>
-      <width>131</width>
+      <width>121</width>
       <height>101</height>
      </rect>
     </property>
@@ -339,7 +339,7 @@
         </font>
        </property>
        <property name="text">
-        <string>썸네일 추출 위치</string>
+        <string>컬러칩 샘플링</string>
        </property>
       </widget>
      </item>
