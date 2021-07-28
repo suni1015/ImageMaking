@@ -424,6 +424,8 @@ class WindowClass(QMainWindow, form_class):
 
                 self.mkimg.combineImg(self.poombun)
 
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(color, self.thumbnail_x.text(), self.thumbnail_y.text())
             return
 
     def thumbnail_exam(self):

@@ -1233,10 +1233,9 @@ class MakeImg:
             self.fullimage_ptr += image.height
 
         self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height), (255, 255, 255))
-
         self.fullimage_extend.paste(self.fullimage, (80, 0))
 
-        self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
+        self.fullimage_extend.save(f"./04_result/{item_code}.jpg", quallity=100)
         self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineImg_man(self, item_code):
@@ -1269,7 +1268,7 @@ class MakeImg:
 
         self.fullimage_extend.paste(self.fullimage, (80, 0))
 
-        self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
+        self.fullimage_extend.save(f"./04_result/{item_code}.jpg", quallity=100)
         self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
     def combineInfo(self):
@@ -1282,7 +1281,10 @@ class MakeImg:
         self.info_full.paste(self.sizeview, (0, self.infoview.height))
         self.info_full.paste(self.tip_view, (0, self.infoview.height + self.sizeview.height))
 
-        self.info_full.save(f"{self.path}/{self.itemnumber}_02.jpg", quallity=100)
+        extand_image = Image.new("RGB", (860, self.info_full.height), (255, 255, 255))
+        extand_image.paste(self.info_full, (80, 0))
+
+        extand_image.save(f"{self.path}/{self.itemnumber}_02.jpg", quallity=100)
 
     def combineSet(self, item_code):
         self.fullimage_material = [self.product_info, self.FV_top, self.DV_top, self.info_full_top, self.FV_bottom,
@@ -1327,7 +1329,7 @@ class MakeImg:
         self.fullimage_extend.save(f"./04_result/{item_code}_full_image.jpg", quallity=100)
         self.fullimage_extend.save(f"{self.path}/{item_code}_01.jpg", quallity=100)
 
-        self.fullimage_2 = Image.new("RGB", (self.base_width, self.info_full_top.height + self.info_full_bottom.height),
+        self.fullimage_2 = Image.new("RGB", (860, self.info_full_top.height + self.info_full_bottom.height),
                                      (255, 255, 255))
 
         self.fullimage_2.paste(self.info_full_top, (0, 0))
@@ -1388,6 +1390,53 @@ class MakeImg:
         mask_im = mask_im.resize((900, 900))
 
         mask_im.show()
+
+    def thumbnail_set(self, color_list, x, y):
+        if self.full_code_dir:
+
+            thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{self.A1}.jpg")
+
+        mask_im = Image.new("L", (thumbnail.width * 10, thumbnail.height * 10), 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.ellipse(((int(x) - 35) * 10, (int(y) - 35) * 10, (int(x) + 35) * 10, (int(y) + 35) * 10), fill=255)
+        mask_im = mask_im.resize(thumbnail.size)
+
+        base_y = 825 - int(y)
+        base_x = 855 - int(x)
+        if not len(color_list) == 1:
+            for color in color_list:
+                thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
+                thumbnail.paste(thumb, (base_x, base_y), mask_im)
+                base_y -= 75
+        elif self.itemnumber[0] in ["B", "S", "T", "V", "G"]:  # 여성의경우 1개여도 실행
+            for color in color_list:
+                thumb = Image.open(f"{self.path}/{self.itemnumber}_{color}_{self.A1}.jpg")
+                thumbnail.paste(thumb, (base_x, base_y), mask_im)
+                base_y -= 75
+
+        # 브랜드별 로고
+        if self.itemnumber[0] == "B":
+            logo = Image.open("03_resource/image/베스띠벨리(썸네일).png")
+        elif self.itemnumber[0] == "S":
+            logo = Image.open("03_resource/image/씨(썸네일).png")
+        elif self.itemnumber[0] == "T":
+            logo = Image.open("03_resource/image/비키(썸네일).png")
+        elif self.itemnumber[0] == "V":
+            logo = Image.open("03_resource/image/이사베이(썸네일).png")
+        elif self.itemnumber[0] == "P":
+            logo = Image.open("03_resource/image/지이크(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
+        elif self.itemnumber[0] == "F":
+            logo = Image.open("03_resource/image/파렌하이트(썸네일).png")
+            logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
+        elif self.itemnumber[0] == "Q":
+            logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
+            logo = logo.crop((250, 100, 250 + 500, 100 + 110))
+            logo = logo.resize((int(logo.width / 2), int(logo.height / 2)))
+
+        thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
+
+        thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
 
 
 if __name__ == '__main__':
