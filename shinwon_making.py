@@ -225,10 +225,13 @@ class MakeImg:
             img = img.resize((500, 500))
             self.product_info.paste(img, (-100, 90))
         else:
-            img = Image.open(f"{self.dir}/{top_code}/{top_code}_{self.color}_1.jpg")
+            try:
+                img = Image.open(f"{self.dir}/{top_code}/{top_code}_{self.color}_1.jpg")
+            except:
+                img = Image.open(f"{self.dir}/{top_code}/{top_code}_{self.color}_B.jpg")
             img2 = Image.open(f"{self.dir}/{bottom_code}/{bottom_code}_{self.color}_6.jpg")
 
-            product_image = Image.new("RGB", (900, 1620), (255, 255, 255))
+            product_image = Image.new("RGB", (900, 1500), (255, 255, 255))
             product_image.paste(img2, (0, 720))
             product_image.paste(img, (0, 0))
             product_image.save(f"{self.path}/{itemnumber}_03.jpg")
@@ -245,7 +248,7 @@ class MakeImg:
             logo = Image.open("03_resource/image/지이크(썸네일).png")
             logo = logo.resize((int(logo.width / 8), int(logo.height / 8)))
         elif self.itemnumber[0] == "F":
-            logo = Image.open("03_resource/image/Brand_파렌하이트.jpg")
+            logo = Image.open("03_resource/image/파렌하이트(썸네일).png")
             logo = logo.resize((int(logo.width / 7), int(logo.height / 7)))
         elif self.itemnumber[0] == "Q":
             logo = Image.open("03_resource/image/Brand_아이코닉.jpg")
@@ -1380,7 +1383,7 @@ class MakeImg:
 
         thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
 
-        thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
+        thumbnail.save(f"{self.path}/{self.itemnumber}.jpg")
 
     def thumbnail_exam(self, x, y):
 
@@ -1393,8 +1396,15 @@ class MakeImg:
 
     def thumbnail_set(self, color_list, x, y):
         if self.full_code_dir:
-
-            thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{self.A1}.jpg")
+            try:
+                thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{self.A1}.jpg")
+            except:
+                if self.A1 =="1":
+                    thumbnail = Image.open(f"{self.path}/{self.itemnumber}_B.jpg")
+                else:
+                    thumbnail = Image.open(f"{self.path}/{self.itemnumber}_1.jpg")
+        else:
+            thumbnail = Image.open(f"{self.path}/{self.itemnumber}_03.jpg")
 
         mask_im = Image.new("L", (thumbnail.width * 10, thumbnail.height * 10), 0)
         draw = ImageDraw.Draw(mask_im)
@@ -1436,7 +1446,7 @@ class MakeImg:
 
         thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
 
-        thumbnail.save(f"{self.path}/{self.itemnumber}_thumb.jpg")
+        thumbnail.save(f"{self.path}/{self.itemnumber}.jpg")
 
 
 if __name__ == '__main__':
