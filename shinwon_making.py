@@ -1312,7 +1312,7 @@ class MakeImg:
         self.fullimage.paste(self.DV_top, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.DV_top.height
 
-        self.fullimage.paste(self.info_full_top, (0, self.fullimage_ptr))
+        self.fullimage.paste(self.info_full_top, (-80, self.fullimage_ptr))
         self.fullimage_ptr += self.info_full_top.height
 
         self.fullimage.paste(self.FV_bottom, (0, self.fullimage_ptr))
@@ -1323,7 +1323,7 @@ class MakeImg:
         self.fullimage.paste(self.DV_bottom, (0, self.fullimage_ptr))
         self.fullimage_ptr += self.DV_bottom.height
 
-        self.fullimage.paste(self.info_full_bottom, (0, self.fullimage_ptr))
+        self.fullimage.paste(self.info_full_bottom, (-80, self.fullimage_ptr))
         self.fullimage_ptr += self.info_full_bottom.height
 
         self.fullimage_extend = Image.new("RGB", (860, self.fullimage.height), (255, 255, 255))
@@ -1399,12 +1399,16 @@ class MakeImg:
             try:
                 thumbnail = Image.open(f"{self.path}/{self.itemnumber}_{self.A1}.jpg")
             except:
-                if self.A1 =="1":
+                if self.A1 == "1":
                     thumbnail = Image.open(f"{self.path}/{self.itemnumber}_B.jpg")
                 else:
                     thumbnail = Image.open(f"{self.path}/{self.itemnumber}_1.jpg")
         else:
-            thumbnail = Image.open(f"{self.path}/{self.itemnumber}_03.jpg")
+            thumbnail = Image.new("RGB", (900, 900), (255, 255, 255))
+
+            img = Image.open(f"{self.path}/{self.itemnumber}_03.jpg")
+            img = img.resize((int(img.width / 5 * 3), int(img.height / 5 * 3)))
+            thumbnail.paste(img, (450 - int(img.width / 2), 0))
 
         mask_im = Image.new("L", (thumbnail.width * 10, thumbnail.height * 10), 0)
         draw = ImageDraw.Draw(mask_im)
@@ -1447,7 +1451,7 @@ class MakeImg:
         thumbnail.paste(logo, (900 - logo.width - 10, 10), logo)
 
         thumbnail.save(f"{self.path}/{self.itemnumber}.jpg")
-
+        print(thumbnail.width)
 
 if __name__ == '__main__':
     mkImage = MakeImg()
