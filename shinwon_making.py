@@ -84,19 +84,19 @@ class MakeImg:
         else:
             self.prd_index = True
 
-    def info_product_name_man(self, name, itemnumber, color):
+    def info_product_name_man(self, name, itemnumber, color, index):
         self.product_info = Image.new("RGB", (self.base_width, 565), (255, 255, 255))
         draw = ImageDraw.Draw(self.product_info)
 
         img = Image.open(f"{self.path}/{itemnumber}_{color}_{self.A1}.jpg")
 
-        if itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"] and not itemnumber[2] == "J":
-            if itemnumber[2] == "F":
-                img = img.resize((450, 450))
-                self.product_info.paste(img, (-75, 70))
-            else:
-                img = img.resize((330, 330))
-                self.product_info.paste(img, (-15, 100))
+        if index:
+            img = img.resize((330, 330))
+            self.product_info.paste(img, (-15, 100))
+
+        elif itemnumber[0] == "P" and not itemnumber[1] in ["A", "X", "Y", "Z"]:
+            img = img.resize((330, 330))
+            self.product_info.paste(img, (-15, 100))
         elif itemnumber[2] in ["P", "F"]:
             img = img.resize((450, 450))
             self.product_info.paste(img, (-75, 70))

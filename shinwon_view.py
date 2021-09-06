@@ -201,7 +201,7 @@ class WindowClass(QMainWindow, form_class):
             if not self.image_path == None:
                 self.mkimg.setPath(self.image_path, self.poombun, self.sw_obj.dic_product['성별'])
             else:
-                self.mkimg.setPath(self.path, self.poombun, self.sw_obj.dic_product['성별'])
+                self.mkimg.setPath(self.path, self.poombun, self.sw_obj.dic_product_set['성별'])
 
             # 추후 '컬럼' key 통일 시킨 후 아래 구분 구문 제거해도 됨.
             if self.sw_obj.bSET_poombun == False:
@@ -323,7 +323,7 @@ class WindowClass(QMainWindow, form_class):
                     else:
                         self.mkimg.makeDV(self.poombun, color[0])
 
-                    self.mkimg.info_product_name_man(product_name, self.poombun, color[0])
+                    self.mkimg.info_product_name_man(product_name, self.poombun, color[0], False)
                     self.mkimg.info_product_man(self.poombun)
                     self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                     self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -485,7 +485,7 @@ class WindowClass(QMainWindow, form_class):
                 else:
                     self.mkimg.makeFV_man_3(self.poombun, color[0])
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, color[0])
+                self.mkimg.info_product_name_man(product_name, self.poombun, color[0], True)
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
