@@ -589,7 +589,7 @@ class MakeImg:
         color = color.split("/")
         color2 = color.reverse()
 
-        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (self.fv_num+1) + 700 * (self.fv_num+1)),
+        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (self.fv_num+len(color)-1) + 700 * (self.fv_num+len(color)-1)),
                                   (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
@@ -1164,8 +1164,8 @@ class MakeImg:
             if self.itemnumber[2] == "A":
                 if self.itemnumber[3] == "F":
                     self.size_img = Image.open("03_resource/image/여성_스카프.jpg")
-                    self.size_img = self.size_img.resize((250, 250))
-                    self.size_img = self.size_img.crop((20, 40, 240, 210))
+                    self.size_img = self.size_img.resize((240, 240))
+                    self.size_img = self.size_img.crop((15, 40, 240, 210))
                 elif self.itemnumber[3] == "G":
                     self.size_img = Image.open("03_resource/image/가방.jpg")
                     self.size_img = self.size_img.crop((25, 30, 250, 220))
