@@ -342,7 +342,7 @@ class WindowClass(QMainWindow, form_class):
 
                 else:
                     if self.poombun[2] in ["A"]:
-                        self.mkimg.makeFV_acce_woman(self.poombun, self.color_full)
+                        self.mkimg.makeFV_acce_woman(self.poombun, value)
                     elif len(color) == 1:
                         self.mkimg.makeFV1(self.poombun, color[0], self.color_full)
                     elif len(color) == 2:
