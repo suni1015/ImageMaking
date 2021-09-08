@@ -199,9 +199,9 @@ class WindowClass(QMainWindow, form_class):
             dic_prod_info = self.sw_obj.get_product_info()
             # self.Makeimage()
             if not self.image_path == None:
-                self.mkimg.setPath(self.image_path, self.poombun, self.sw_obj.dic_product['성별'])
+                self.mkimg.setPath(self.image_path, self.poombun)
             else:
-                self.mkimg.setPath(self.path, self.poombun, self.sw_obj.dic_product_set['성별'])
+                self.mkimg.setPath(self.path, self.poombun)
 
             # 추후 '컬럼' key 통일 시킨 후 아래 구분 구문 제거해도 됨.
             if self.sw_obj.bSET_poombun == False:
@@ -214,7 +214,7 @@ class WindowClass(QMainWindow, form_class):
             color = comp.sub('', value)
             self.color = color.split("/")
             if self.sw_obj.bSET_poombun == False:  # 단품 제작
-                if self.mkimg.checkfile(self.poombun, color):
+                if self.mkimg.checkfile(self.poombun, self.color):
                     if self.format_radio_2.isChecked():
                         self.Makeimage_P_style()
                         self.success_count += 1
@@ -224,7 +224,7 @@ class WindowClass(QMainWindow, form_class):
                 else:
                     self.fail_count += 1
             elif self.sw_obj.bSET_poombun == True:  # 세트 제작
-                if self.mkimg.checkfile_set(self.poombun, color):
+                if self.mkimg.checkfile_set(self.poombun, self.color):
                     self.Makeimage_set()
                     self.success_count += 1
                 else:
@@ -233,12 +233,11 @@ class WindowClass(QMainWindow, form_class):
             verScrollBar.setValue(verScrollBar.maximum())
 
         self.tb_poombun_info.append("\nInfo : 이미지화를 완료했습니다.")
+
         self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건")
         self.tb_poombun_info.append(
             f"\n-경로없음-\n{self.mkimg.no_dir}\n-이미지없음-\n{self.mkimg.no_file}")
         # \n-실패한 품번-\n{self.mkimg.no_file_itemnumber}
-
-        self.tb_poombun_info.append(f"\n 완료: {self.success_count}건\n 오류: {self.fail_count}건\n")
 
         verScrollBar = self.tb_poombun_info.verticalScrollBar()
         verScrollBar.setValue(verScrollBar.maximum())
@@ -277,29 +276,30 @@ class WindowClass(QMainWindow, form_class):
                         self.Makeimage_WOMAN_style()
                     elif self.format_radio_6.isChecked():
                         self.Makeimage_acce_style()
-
-                if self.sw_obj.dic_product['성별'] == '남성':
-
-                    if self.poombun[2] in ["A"]:  # FV
-                        self.Makeimage_acce_style()
-
-                    elif self.poombun[0] == "P":
-
-                        if self.poombun[1] in ["A", "X", "Y", "Z"]:
-                            self.Makeimage_P_style_B()
-                        else:
-                            self.Makeimage_P_style()
-
-                    elif self.poombun[0] == "F":
-                        self.Makeimage_P_style()
-                    else:
-                        self.Makeimage_NONE_style()
-
+                    return
                 else:
-                    if self.poombun[2] in ["A"]:
-                        self.Makeimage_acce_style()
+                    if self.sw_obj.dic_product['성별'] == '남성':
+
+                        if self.poombun[2] in ["A"]:  # FV
+                            self.Makeimage_acce_style()
+
+                        elif self.poombun[0] == "P":
+
+                            if self.poombun[1] in ["A", "X", "Y", "Z"]:
+                                self.Makeimage_P_style_B()
+                            else:
+                                self.Makeimage_P_style()
+
+                        elif self.poombun[0] == "F":
+                            self.Makeimage_P_style()
+                        else:
+                            self.Makeimage_NONE_style()
+
                     else:
-                        self.Makeimage_WOMAN_style()
+                        if self.poombun[2] in ["A"]:
+                            self.Makeimage_acce_style()
+                        else:
+                            self.Makeimage_WOMAN_style()
 
             return
 
@@ -468,7 +468,7 @@ class WindowClass(QMainWindow, form_class):
 
                 product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
+                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -529,7 +529,7 @@ class WindowClass(QMainWindow, form_class):
 
                 product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
+                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -594,7 +594,7 @@ class WindowClass(QMainWindow, form_class):
 
                 product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
+                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
                 self.mkimg.info_product_man(self.poombun)
                 self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                 self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -650,11 +650,11 @@ class WindowClass(QMainWindow, form_class):
                 product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
                 if len(self.color) == 1:
-                    self.mkimg.makeFV1(self.poombun, self.color[0], self.self.color_full)
+                    self.mkimg.makeFV1(self.poombun, self.color[0], self.color_full)
                 elif len(self.color) == 2:
-                    self.mkimg.makeFV2(self.poombun, self.color[0], self.color[1], self.self.color_full)
+                    self.mkimg.makeFV2(self.poombun, self.color[0], self.color[1], self.color_full)
                 elif len(self.color) == 3:
-                    self.mkimg.makeFV3(self.poombun, self.color[0], self.color[1], self.color[2], self.self.color_full)
+                    self.mkimg.makeFV3(self.poombun, self.color[0], self.color[1], self.color[2], self.color_full)
 
                 self.mkimg.makeDV_woman(self.poombun, self.color[0])
 
@@ -708,9 +708,9 @@ class WindowClass(QMainWindow, form_class):
 
                 if self.sw_obj.dic_product['성별'] == '남성':
                     self.mkimg.makeFV_acce_man(self.poombun, self.color[0])
-                    self.mkimg.makeDV_acce(self.poombun, self.color[0])
+                    self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
 
-                    self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
+                    self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
                     self.mkimg.info_product_man(self.poombun)
                     self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
                     self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
@@ -727,8 +727,8 @@ class WindowClass(QMainWindow, form_class):
 
                     self.mkimg.combineImg_man(self.poombun)
                 else:
-                    self.mkimg.makeFV_acce_woman(self.poombun, self.color[0], self.color_full)
-                    self.mkimg.makeDV_acce(self.poombun, self.color[0])
+                    self.mkimg.makeFV_acce_woman(self.poombun, self.sw_obj.dic_product["컬러"])
+                    self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
 
                     self.mkimg.info_product_name(product_name)
                     self.mkimg.info_product(self.poombun)

@@ -328,11 +328,11 @@ class MakeImg:
 
         # self.product_info.save("test_man2.jpg")
 
-    def setPath(self, path, itemnumber, gender):
+    def setPath(self, path, itemnumber):
         self.dir = f"{path}"
         self.path = f"{path}/{itemnumber}"
         self.itemnumber = itemnumber
-        self.gender = gender
+
 
     def checkfile(self, itemnumber, color):
 
