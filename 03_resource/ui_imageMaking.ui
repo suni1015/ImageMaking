@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>787</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="font">
@@ -352,7 +352,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>600</y>
+      <y>630</y>
       <width>111</width>
       <height>128</height>
      </rect>
@@ -376,14 +376,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="format_radio_6">
+      <widget class="QRadioButton" name="format_radio_3">
        <property name="text">
         <string>지이크 B시즌</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="format_radio_3">
+      <widget class="QRadioButton" name="format_radio_4">
        <property name="text">
         <string>파렌하이트</string>
        </property>
@@ -393,7 +393,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="format_radio_4">
+      <widget class="QRadioButton" name="format_radio_5">
        <property name="text">
         <string>여성</string>
        </property>
@@ -403,7 +403,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="format_radio_5">
+      <widget class="QRadioButton" name="format_radio_6">
        <property name="text">
         <string>악세서리</string>
        </property>
