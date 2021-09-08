@@ -233,7 +233,7 @@
      <string>단품</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QRadioButton" name="radio_set">
@@ -351,10 +351,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>680</y>
+      <x>190</x>
+      <y>600</y>
       <width>111</width>
-      <height>62</height>
+      <height>128</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -372,6 +372,43 @@
       <widget class="QRadioButton" name="format_radio_2">
        <property name="text">
         <string>지이크</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="format_radio_6">
+       <property name="text">
+        <string>지이크 B시즌</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="format_radio_3">
+       <property name="text">
+        <string>파렌하이트</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="format_radio_4">
+       <property name="text">
+        <string>여성</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="format_radio_5">
+       <property name="text">
+        <string>악세서리</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
