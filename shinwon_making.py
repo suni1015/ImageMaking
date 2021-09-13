@@ -333,7 +333,6 @@ class MakeImg:
         self.path = f"{path}/{itemnumber}"
         self.itemnumber = itemnumber
 
-
     def checkfile(self, itemnumber, color):
 
         check = os.path.isdir(self.path)
@@ -421,6 +420,51 @@ class MakeImg:
 
         return True
 
+    def makeFV_woman(self, itemnumber, value):
+
+        color_full = value.split("/")
+        color_full2 = color_full.reverse()
+        comp = re.compile('[^a-zA-Z/]')
+        color = comp.sub('', value)
+        color = color.split("/")
+        color2 = color.reverse()
+
+        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (len(color) + 1) + 700 * (len(color) + 1)),
+                                  (255, 255, 255))
+        img = Image.new("RGB", (0, 0), (255, 255, 255))
+
+        if itemnumber[0] in ["B", "S", "T", "V", "G"]:
+            if itemnumber[0] == "B":
+                img = Image.open("03_resource/image/Brand_베스띠벨리.jpg")
+            elif itemnumber[0] == "S":
+                img = Image.open("03_resource/image/Brand_씨.jpg")
+            elif itemnumber[0] == "T":
+                img = Image.open("03_resource/image/Brand_비키.jpg")
+            elif itemnumber[0] == "V":
+                img = Image.open("03_resource/image/Brand_이사베이.jpg")
+            elif itemnumber[0] == "G":
+                img = img
+            img = img.resize((330, 100))
+
+            self.fullview.paste(img, (int((700 - img.width) / 2), 70))
+            self.full_ptr = 300
+
+        for n in color:
+            self.img = Image.open(f"{self.path}/{itemnumber}_{n}_1.jpg")
+            self.img = self.img.resize((700, 700))
+            self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+            w, h = fnt.getsize(color_full[color.index(n)])
+            ImageDraw.Draw(self.fullview).text(((self.base_width / 2) - (w / 2), self.full_ptr + self.img.height),
+                                               color_full[color.index(n)], font=fnt, fill=(25, 25, 25))
+            img = Image.open("03_resource/image/화살표.jpg")
+            self.fullview.paste(img, (int((self.base_width / 2) - (w / 2) - 14), self.full_ptr + self.img.height + 4))
+            self.full_ptr += self.img.height + 100
+
+        self.img = Image.open(f"{self.path}/{itemnumber}_{color[-1]}_2.jpg")
+        self.img = self.img.resize((700, 700))
+        self.fullview.paste(self.img, (int((self.base_width / 2) - (self.img.width / 2)), self.full_ptr))
+        self.full_ptr += self.img.height + 100
+
     def makeFV1(self, itemnumber, color, color_full):
         self.fullview = Image.new("RGB", (self.base_width, 330 + 1400 + 100), (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
@@ -485,7 +529,6 @@ class MakeImg:
 
             self.fullview.paste(img, (int((700 - img.width) / 2), 70))
             self.full_ptr = 300
-
 
         self.img = Image.open(f"{self.path}/{itemnumber}_{color2}_{self.A1}.jpg")
         self.img = self.img.resize((700, 700))
@@ -589,7 +632,8 @@ class MakeImg:
         color = color.split("/")
         color2 = color.reverse()
 
-        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (self.fv_num+len(color)-1) + 700 * (self.fv_num+len(color)-1)),
+        self.fullview = Image.new("RGB", (
+        self.base_width, 330 + 100 * (self.fv_num + len(color) - 1) + 700 * (self.fv_num + len(color) - 1)),
                                   (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
@@ -887,7 +931,9 @@ class MakeImg:
                 break
 
         detail_ptr = 0
-        self.detailview = Image.new("RGB", (self.base_width, img_size * len(number_list) + 150 + 40 * (len(number_list) - 1)), (255, 255, 255))
+        self.detailview = Image.new("RGB",
+                                    (self.base_width, img_size * len(number_list) + 150 + 40 * (len(number_list) - 1)),
+                                    (255, 255, 255))
         self.tag = Image.open("03_resource/image/DetailView.jpg")
         self.detailview.paste(self.tag, (0, 30))
         detail_ptr += 100

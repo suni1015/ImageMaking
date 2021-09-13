@@ -649,12 +649,7 @@ class WindowClass(QMainWindow, form_class):
 
                 product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                if len(self.color) == 1:
-                    self.mkimg.makeFV1(self.poombun, self.color[0], self.color_full)
-                elif len(self.color) == 2:
-                    self.mkimg.makeFV2(self.poombun, self.color[0], self.color[1], self.color_full)
-                elif len(self.color) == 3:
-                    self.mkimg.makeFV3(self.poombun, self.color[0], self.color[1], self.color[2], self.color_full)
+                self.mkimg.makeFV_woman(self.poombun, self.sw_obj.dic_product["컬러"])
 
                 self.mkimg.makeDV_woman(self.poombun, self.color[0])
 
