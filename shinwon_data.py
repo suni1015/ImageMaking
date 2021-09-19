@@ -397,7 +397,7 @@ class Shinwon:
         self.dic_product['상품특성'] = df_all.loc[row_condition == self.str_poombun, '상품특성'].values[0]
         self.dic_product['제조원'] = df_all.loc[row_condition == self.str_poombun, '제조원'].values[0]
         self.dic_product['제조월'] = df_all.loc[row_condition == self.str_poombun, '제조월'].values[0]
-        self.dic_product['기준\n사이즈'] = df_all.loc[row_condition == self.str_poombun, '기준\n사이즈'].values[0]
+        self.dic_product['기준\n사이즈'] = str(df_all.loc[row_condition == self.str_poombun, '기준\n사이즈'].values[0])
         self.dic_product['실측사이즈(cm)'] = df_all.loc[row_condition == self.str_poombun, '실측사이즈(cm)'].values[0]
 
         # 칼럼 이름이 없어서 수작업으로 파싱.

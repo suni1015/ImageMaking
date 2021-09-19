@@ -342,16 +342,6 @@ class MakeImg:
             self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
             return False
 
-        for number in self.A_list:
-            check = os.path.isfile(f"{self.path}/{itemnumber}_{color[0]}_{number}.jpg")
-            file_name = f"{itemnumber}_{color[0]}_{number}.jpg"
-            if not check:
-                print(f'Err : there is no {file_name}')
-                self.no_file = self.no_file + file_name + "\n"
-                self.no_file_itemnumber = self.no_file_itemnumber + itemnumber + "\n"
-                print(self.no_file)
-                return False
-
         if not len(color) == 1:
             for n in color:
                 check = os.path.isfile(f"{self.path}/{itemnumber}_{n}_{self.A1}.jpg")
@@ -429,7 +419,7 @@ class MakeImg:
         color = color.split("/")
         color2 = color.reverse()
 
-        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (len(color) + 1) + 700 * (len(color) + 1)),
+        self.fullview = Image.new("RGB", (self.base_width, 330 + 100 * (len(color)) + 700 * (len(color) + 1)),
                                   (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
@@ -620,7 +610,7 @@ class MakeImg:
 
     def makeFV_acce_woman(self, itemnumber, value):
         if self.itemnumber[3] in ["G"]:
-            number_list = list(range(2, 7))  # 풀뷰 사용할 넘버
+            number_list = list(range(2, 6))  # 풀뷰 사용할 넘버
             self.fv_num = 5
         else:
             number_list = list(range(2, 3))
@@ -633,7 +623,7 @@ class MakeImg:
         color2 = color.reverse()
 
         self.fullview = Image.new("RGB", (
-        self.base_width, 330 + 100 * (self.fv_num + len(color) - 1) + 700 * (self.fv_num + len(color) - 1)),
+        self.base_width, 330 + 100 * (len(number_list) + len(color)-1) + 700 * (len(number_list) + len(color))),
                                   (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
@@ -1215,6 +1205,9 @@ class MakeImg:
                 elif self.itemnumber[3] == "G":
                     self.size_img = Image.open("03_resource/image/가방.jpg")
                     self.size_img = self.size_img.crop((25, 30, 250, 220))
+                elif self.itemnumber[3] == "P":
+                    self.size_img =Image.open("03_resource/image/공통_양말.jpg")
+
 
             elif self.itemnumber[2] in ["F", "P"]:
                 self.size_img = Image.open("03_resource/image/여성_팬츠.jpg")
@@ -1248,6 +1241,9 @@ class MakeImg:
                 elif self.itemnumber[3] == "G":
                     self.size_img = Image.open("03_resource/image/가방.jpg")
                     self.size_img = self.size_img.crop((25, 30, 250, 220))
+
+                elif self.itemnumber[3] == "P":
+                    self.size_img =Image.open("03_resource/image/공통_양말.jpg")
 
             elif self.itemnumber[2] in ["B", "C", "U", "I"]:
                 self.size_img = Image.open("03_resource/image/상의.jpg")

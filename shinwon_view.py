@@ -215,12 +215,7 @@ class WindowClass(QMainWindow, form_class):
             self.color = color.split("/")
             if self.sw_obj.bSET_poombun == False:  # 단품 제작
                 if self.mkimg.checkfile(self.poombun, self.color):
-                    if self.format_radio_2.isChecked():
-                        self.Makeimage_P_style()
-                        self.success_count += 1
-                    else:
-                        self.Makeimage_single()
-                        self.success_count += 1
+                    self.Makeimage_single()
                 else:
                     self.fail_count += 1
             elif self.sw_obj.bSET_poombun == True:  # 세트 제작
@@ -301,6 +296,7 @@ class WindowClass(QMainWindow, form_class):
                         else:
                             self.Makeimage_WOMAN_style()
 
+            self.success_count += 1
             return
 
         except FileNotFoundError as ex:
@@ -308,11 +304,9 @@ class WindowClass(QMainWindow, form_class):
             error = str(ex).split("/")
             self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
 
-            self.success_count -= 1
-            self.fail_count += 1
-
             # error = str(ex).split("'")
             # self.tb_poombun_info.append(f"'{error[1]} 가 없습니다")
+            self.fail_count += 1
             return
 
     @pyqtSlot()
@@ -377,222 +371,275 @@ class WindowClass(QMainWindow, form_class):
             return
 
     def Makeimage_P_style_B(self):
-        try:
-            if len(self.poombun) != 9:
-                # self.tb_poombun_info.clear()
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
-            else:
-                if self.poombun[2] in ["J", "V"]:
-                    self.mkimg.makeFV_man(self.poombun, self.color[0])
-                    self.mkimg.makeDV(self.poombun, self.color[0])
-                else:
-                    self.mkimg.makeFV_man_3(self.poombun, self.color[0])
-                    self.mkimg.makeDV3(self.poombun, self.color[0])
 
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
-
-                # float (nan)
-
-                self.mkimg.combineInfo()
-
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
-
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
-
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
-                self.mkimg.info_product_man(self.poombun)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
-                self.mkimg.info_product_man(season)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
-
-                list_material = self.sw_obj.dic_product["소재"].split("\n")
-
-                self.mkimg.product_index()
-                for i in list_material:
-                    self.mkimg.info_product_man(i)
-                self.mkimg.product_index()
-
-                self.mkimg.combineImg_man(self.poombun)
-
-                if self.check_thumb.isChecked():
-                    self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
-
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
             return
+        else:
+            if self.poombun[2] in ["J", "V"]:
+                self.mkimg.makeFV_man(self.poombun, self.color[0])
+                self.mkimg.makeDV(self.poombun, self.color[0])
+            else:
+                self.mkimg.makeFV_man_3(self.poombun, self.color[0])
+                self.mkimg.makeDV3(self.poombun, self.color[0])
 
-        except FileNotFoundError as ex:
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
 
-            error = str(ex).split("/")
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
+            # float (nan)
 
-            self.success_count -= 1
-            self.fail_count += 1
+            self.mkimg.combineInfo()
 
-            # error = str(ex).split("'")
-            # self.tb_poombun_info.append(f"'{error[1]} 가 없습니다")
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+
+            self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], True)
+            self.mkimg.info_product_man(self.poombun)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product_man(season)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+
+            list_material = self.sw_obj.dic_product["소재"].split("\n")
+
+            self.mkimg.product_index()
+            for i in list_material:
+                self.mkimg.info_product_man(i)
+            self.mkimg.product_index()
+
+            self.mkimg.combineImg_man(self.poombun)
+
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
+
             return
 
     def Makeimage_P_style(self):
-        try:
-            if len(self.poombun) != 9:
-                # self.tb_poombun_info.clear()
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
+
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            self.mkimg.makeFV_man_2(self.poombun, self.color[0])
+            self.mkimg.makeDV2(self.poombun, self.color[0])
+
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+
+            # float (nan)
+
+            self.mkimg.combineInfo()
+
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
             else:
-                self.mkimg.makeFV_man_2(self.poombun, self.color[0])
-                self.mkimg.makeDV2(self.poombun, self.color[0])
+                season = "가을/겨울"
 
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                # float (nan)
+            self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
+            self.mkimg.info_product_man(self.poombun)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product_man(season)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
 
-                self.mkimg.combineInfo()
+            list_material = self.sw_obj.dic_product["소재"].split("\n")
 
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
+            self.mkimg.product_index()
+            for i in list_material:
+                self.mkimg.info_product_man(i)
+            self.mkimg.product_index()
 
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+            self.mkimg.combineImg_man(self.poombun)
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
-                self.mkimg.info_product_man(self.poombun)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
-                self.mkimg.info_product_man(season)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
 
-                list_material = self.sw_obj.dic_product["소재"].split("\n")
+        return
 
-                self.mkimg.product_index()
-                for i in list_material:
-                    self.mkimg.info_product_man(i)
-                self.mkimg.product_index()
-
-                self.mkimg.combineImg_man(self.poombun)
-
-                if self.check_thumb.isChecked():
-                    self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
-
-            return
-
-        except FileNotFoundError as ex:
-
-            error = str(ex).split("/")
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
-
-            self.success_count -= 1
-            self.fail_count += 1
-
-            # error = str(ex).split("'")
-            # self.tb_poombun_info.append(f"'{error[1]} 가 없습니다")
-            return
 
     def Makeimage_F_style(self):
-        try:
-            if len(self.poombun) != 9:
-                # self.tb_poombun_info.clear()
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            self.mkimg.makeFV_man_2(self.poombun, self.color[0])
+            self.mkimg.makeDV2(self.poombun, self.color[0])
+
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+
+            # float (nan)
+
+            self.mkimg.combineInfo()
+
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
             else:
-                self.mkimg.makeFV_man_2(self.poombun, self.color[0])
-                self.mkimg.makeDV2(self.poombun, self.color[0])
+                season = "가을/겨울"
 
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
 
-                # float (nan)
+            self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
+            self.mkimg.info_product_man(self.poombun)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product_man(season)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
 
-                self.mkimg.combineInfo()
+            list_material = self.sw_obj.dic_product["소재"].split("\n")
 
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
+            self.mkimg.product_index()
+            for i in list_material:
+                self.mkimg.info_product_man(i)
+            self.mkimg.product_index()
 
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+            self.mkimg.combineImg_man(self.poombun)
 
-                self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
-                self.mkimg.info_product_man(self.poombun)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
-                self.mkimg.info_product_man(season)
-                self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
-                self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
 
-                list_material = self.sw_obj.dic_product["소재"].split("\n")
+        return
 
-                self.mkimg.product_index()
-                for i in list_material:
-                    self.mkimg.info_product_man(i)
-                self.mkimg.product_index()
-
-                self.mkimg.combineImg_man(self.poombun)
-
-                if self.check_thumb.isChecked():
-                    self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
-
-            return
-
-        except FileNotFoundError as ex:
-
-            error = str(ex).split("/")
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
-
-            self.success_count -= 1
-            self.fail_count += 1
-
-            # error = str(ex).split("'")
-            # self.tb_poombun_info.append(f"'{error[1]} 가 없습니다")
-            return
 
     def Makeimage_NONE_style(self):
-        try:
-            if len(self.poombun) != 9:
-                # self.tb_poombun_info.clear()
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
+        if len(self.poombun) != 9:
+            # self.tb_poombun_info.clear()
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            if self.poombun[2] in ["F", "P"]:
+                self.mkimg.makeFV_man_2(self.poombun, self.color[0])
             else:
-                if self.poombun[2] in ["F", "P"]:
-                    self.mkimg.makeFV_man_2(self.poombun, self.color[0])
-                else:
-                    self.mkimg.makeFV_man(self.poombun, self.color[0])
+                self.mkimg.makeFV_man(self.poombun, self.color[0])
 
-                self.mkimg.makeDV(self.poombun, self.color[0])
+            self.mkimg.makeDV(self.poombun, self.color[0])
 
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
 
-                # float (nan)
+            # float (nan)
 
-                self.mkimg.combineInfo()
+            self.mkimg.combineInfo()
 
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
 
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+
+            self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
+            self.mkimg.info_product_man(self.poombun)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product_man(season)
+            self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
+
+            list_material = self.sw_obj.dic_product["소재"].split("\n")
+
+            self.mkimg.product_index()
+            for i in list_material:
+                self.mkimg.info_product_man(i)
+            self.mkimg.product_index()
+
+            self.mkimg.combineImg_man(self.poombun)
+
+            if self.check_thumb.isChecked():
+                self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
+
+        return
+
+
+    def Makeimage_WOMAN_style(self):
+        if len(self.poombun) != 9:
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+
+            self.mkimg.combineInfo()
+
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+
+            self.mkimg.makeFV_woman(self.poombun, self.sw_obj.dic_product["컬러"])
+
+            self.mkimg.makeDV_woman(self.poombun, self.color[0])
+
+            self.mkimg.info_product_name(product_name)
+            self.mkimg.info_product(self.poombun)
+            self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
+            self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
+            self.mkimg.info_product(season)
+            self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
+            self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
+
+            self.mkimg.info_product(self.sw_obj.dic_product["소재"])
+
+            self.mkimg.combineImg(self.poombun)
+
+        if self.check_thumb.isChecked():
+            self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
+
+        return
+
+
+    def Makeimage_acce_style(self):
+        if len(self.poombun) != 9:
+            self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
+            return
+        else:
+            self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
+            self.mkimg.info_size(self.sw_obj.size_count + 1)
+            self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
+            for n in range(0, self.sw_obj.size_count):
+                self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
+
+            self.mkimg.combineInfo()
+
+            if "S/S" in self.sw_obj.dic_product["시즌"]:
+                season = "봄/여름"
+            else:
+                season = "가을/겨울"
+
+            product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
+
+            if self.sw_obj.dic_product['성별'] == '남성':
+                self.mkimg.makeFV_acce_man(self.poombun, self.color[0])
+                self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
 
                 self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
                 self.mkimg.info_product_man(self.poombun)
@@ -610,48 +657,9 @@ class WindowClass(QMainWindow, form_class):
                 self.mkimg.product_index()
 
                 self.mkimg.combineImg_man(self.poombun)
-
-                if self.check_thumb.isChecked():
-                    self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
-
-            return
-
-        except FileNotFoundError as ex:
-
-            error = str(ex).split("/")
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
-
-            self.success_count -= 1
-            self.fail_count += 1
-
-            # error = str(ex).split("'")
-            # self.tb_poombun_info.append(f"'{error[1]} 가 없습니다")
-            return
-
-    def Makeimage_WOMAN_style(self):
-        try:
-            if len(self.poombun) != 9:
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
             else:
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
-
-                self.mkimg.combineInfo()
-
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
-
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
-
-                self.mkimg.makeFV_woman(self.poombun, self.sw_obj.dic_product["컬러"])
-
-                self.mkimg.makeDV_woman(self.poombun, self.color[0])
+                self.mkimg.makeFV_acce_woman(self.poombun, self.sw_obj.dic_product["컬러"])
+                self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
 
                 self.mkimg.info_product_name(product_name)
                 self.mkimg.info_product(self.poombun)
@@ -668,91 +676,7 @@ class WindowClass(QMainWindow, form_class):
             if self.check_thumb.isChecked():
                 self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
 
-            return
-
-        except FileNotFoundError as ex:
-
-            error = str(ex).split("/")
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
-
-            self.success_count -= 1
-            self.fail_count += 1
-
-            return
-
-    def Makeimage_acce_style(self):
-        try:
-            if len(self.poombun) != 9:
-                self.tb_poombun_info.append(f"{self.poombun}의 품번이 유효하지 않습니다")
-                return
-            else:
-                self.mkimg.makeInfo(self.sw_obj.dic_product["상품특성"], self.sw_obj.dic_product["상품특성 값"])
-                self.mkimg.info_size(self.sw_obj.size_count + 1)
-                self.mkimg.size_insert(self.sw_obj.dic_product["실측사이즈(cm)"])
-                for n in range(0, self.sw_obj.size_count):
-                    self.mkimg.size_insert(str(self.sw_obj.dic_product[f"사이즈{n}"]))
-
-                self.mkimg.combineInfo()
-
-                if "S/S" in self.sw_obj.dic_product["시즌"]:
-                    season = "봄/여름"
-                else:
-                    season = "가을/겨울"
-
-                product_name = self.sw_obj.dic_product["상품명"].replace(f"({self.poombun})", "")
-
-                if self.sw_obj.dic_product['성별'] == '남성':
-                    self.mkimg.makeFV_acce_man(self.poombun, self.color[0])
-                    self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
-
-                    self.mkimg.info_product_name_man(product_name, self.poombun, self.color[0], False)
-                    self.mkimg.info_product_man(self.poombun)
-                    self.mkimg.info_product_man(self.sw_obj.dic_product["컬러"])
-                    self.mkimg.info_product_man(self.sw_obj.dic_product["기준\n사이즈"])
-                    self.mkimg.info_product_man(season)
-                    self.mkimg.info_product_man(self.sw_obj.dic_product["세탁방법"])
-                    self.mkimg.info_product_man(self.sw_obj.dic_product["원산지"])
-
-                    list_material = self.sw_obj.dic_product["소재"].split("\n")
-
-                    self.mkimg.product_index()
-                    for i in list_material:
-                        self.mkimg.info_product_man(i)
-                    self.mkimg.product_index()
-
-                    self.mkimg.combineImg_man(self.poombun)
-                else:
-                    self.mkimg.makeFV_acce_woman(self.poombun, self.sw_obj.dic_product["컬러"])
-                    self.mkimg.makeDV_acce(self.poombun, self.color[0], self.sw_obj.dic_product['성별'])
-
-                    self.mkimg.info_product_name(product_name)
-                    self.mkimg.info_product(self.poombun)
-                    self.mkimg.info_product(self.sw_obj.dic_product["컬러"])
-                    self.mkimg.info_product(self.sw_obj.dic_product["기준\n사이즈"])
-                    self.mkimg.info_product(season)
-                    self.mkimg.info_product(self.sw_obj.dic_product["세탁방법"])
-                    self.mkimg.info_product(self.sw_obj.dic_product["원산지"])
-
-                    self.mkimg.info_product(self.sw_obj.dic_product["소재"])
-
-                    self.mkimg.combineImg(self.poombun)
-
-                if self.check_thumb.isChecked():
-                    self.mkimg.thumbnail(self.color, self.thumbnail_x.text(), self.thumbnail_y.text())
-
-            return
-
-        except FileNotFoundError as ex:
-
-            error = str(ex).split("/")
-
-            self.tb_poombun_info.append(f"'{error[-1]} 가 없습니다")
-
-            self.success_count -= 1
-
-            self.fail_count += 1
-
-            return
+        return
 
     def thumbnail_exam(self):
         self.mkimg.thumbnail_exam(self.thumbnail_x.text(), self.thumbnail_y.text())
