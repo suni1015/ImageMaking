@@ -623,7 +623,7 @@ class MakeImg:
         color2 = color.reverse()
 
         self.fullview = Image.new("RGB", (
-        self.base_width, 330 + 100 * (len(number_list) + len(color)-1) + 700 * (len(number_list) + len(color))),
+            self.base_width, 330 + 100 * (len(number_list) + len(color) - 1) + 700 * (len(number_list) + len(color))),
                                   (255, 255, 255))
         img = Image.new("RGB", (0, 0), (255, 255, 255))
 
@@ -1206,8 +1206,11 @@ class MakeImg:
                     self.size_img = Image.open("03_resource/image/가방.jpg")
                     self.size_img = self.size_img.crop((25, 30, 250, 220))
                 elif self.itemnumber[3] == "P":
-                    self.size_img =Image.open("03_resource/image/공통_양말.jpg")
-
+                    self.size_img = Image.open("03_resource/image/공통_양말.jpg")
+                    self.size_img = self.size_img.crop((0, 40, 245, 225))
+                elif self.itemnumber[3] == "S":
+                    self.size_img = Image.open("03_resource/image/여성_신발.jpg")
+                    self.size_img = self.size_img.crop((14, 40, 300, 274))
 
             elif self.itemnumber[2] in ["F", "P"]:
                 self.size_img = Image.open("03_resource/image/여성_팬츠.jpg")
@@ -1237,13 +1240,14 @@ class MakeImg:
 
                 elif self.itemnumber[3] == "S":
                     self.size_img = Image.open("03_resource/image/신발.jpg")
-
+                    self.size_img = self.size_img.crop((5, 50, 309, 264))
                 elif self.itemnumber[3] == "G":
                     self.size_img = Image.open("03_resource/image/가방.jpg")
                     self.size_img = self.size_img.crop((25, 30, 250, 220))
 
                 elif self.itemnumber[3] == "P":
-                    self.size_img =Image.open("03_resource/image/공통_양말.jpg")
+                    self.size_img = Image.open("03_resource/image/공통_양말.jpg")
+                    self.size_img = self.size_img.crop((0, 40, 245, 225))
 
             elif self.itemnumber[2] in ["B", "C", "U", "I"]:
                 self.size_img = Image.open("03_resource/image/상의.jpg")
