@@ -3,7 +3,6 @@
 *.iml
 *.pyc
 *.spec
-*.jpg
 *.xlsx
 01_data
 02_release/
