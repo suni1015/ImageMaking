@@ -3,6 +3,8 @@ View 클래스
 
 """
 import sys
+import time
+
 import qdarkgraystyle
 from PyQt5 import QtGui, QtCore, uic, QtWidgets
 from PyQt5.QtWidgets import *
@@ -152,6 +154,7 @@ class WindowClass(QMainWindow, form_class):
         count = 0
         self.tb_poombun_info.append("\nInfo : 이미지화를 시작합니다.")
         for poombun in list_poombun:
+            time.sleep(0.01)
             count = count + 1
             self.tb_poombun_info.append("\nImage making" + str(count))
             var_tf = self.isNaN(poombun)
